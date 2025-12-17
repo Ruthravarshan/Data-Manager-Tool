@@ -114,7 +114,6 @@ clinical-cosmos-app/
 - `npm run dev` - Start development server
 - `npm run build` - Build for production
 - `npm run preview` - Preview production build
-- `npm run lint` - Run ESLint
 
 ## 🌐 Accessing the Application
 
@@ -192,4 +191,4 @@ For issues or questions, please open an issue on the GitHub repository.
 
 ---
 
-**Built with ❤️ for Clinical Research Teams**
+**Built with for Clinical Research Teams**

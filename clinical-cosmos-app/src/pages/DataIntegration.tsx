@@ -1,4 +1,4 @@
-import { useState } from 'react';
+
 import {
     Database, CalendarClock, Activity, PlusCircle,
     ServerCog, History, SlidersVertical, Mail,
@@ -12,57 +12,79 @@ function cn(...inputs: ClassValue[]) {
     return twMerge(clsx(inputs));
 }
 
-const integrations = [
-    {
-        id: 1,
-        name: "EDC Data Feed",
-        vendor: "Medidata Rave",
-        type: "API",
-        frequency: "Daily at 2:00 AM",
-        lastSync: "2023-04-04 02:00:15",
-        status: "Active",
-        statusColor: "bg-green-50 text-green-700 border-green-200",
-        typeColor: "bg-purple-50 text-purple-700 border-purple-200"
-    },
-    {
-        id: 2,
-        name: "Central Lab Results",
-        vendor: "Labcorp",
-        type: "SFTP",
-        frequency: "Every 12 hours",
-        lastSync: "2023-04-04 14:00:03",
-        status: "Active",
-        statusColor: "bg-green-50 text-green-700 border-green-200",
-        typeColor: "bg-amber-50 text-amber-700 border-amber-200"
-    },
-    {
-        id: 3,
-        name: "Imaging Data",
-        vendor: "Calyx",
-        type: "S3",
-        frequency: "Weekly on Monday",
-        lastSync: "2023-04-01 08:30:22",
-        status: "Inactive",
-        statusColor: "bg-gray-50 text-gray-700 border-gray-200",
-        typeColor: "bg-green-50 text-green-700 border-green-200"
-    },
-    {
-        id: 4,
-        name: "CTMS Data",
-        vendor: "Veeva Vault CTMS",
-        type: "API",
-        frequency: "Daily at 6:00 AM",
-        lastSync: "2023-04-04 06:00:05",
-        status: "Error",
-        statusColor: "bg-red-50 text-red-700 border-red-200",
-        typeColor: "bg-purple-50 text-purple-700 border-purple-200",
-        error: "API authentication failed. Check credentials."
-    }
-];
+import { useEffect, useState } from 'react';
+import { integrationService } from '../services/api';
 
 export default function DataIntegration() {
     const [activeTab, setActiveTab] = useState('data-sources');
     const [activeSubTab, setActiveSubTab] = useState('integration-sources');
+    const [integrations, setIntegrations] = useState<any[]>([]);
+    const [loading, setLoading] = useState(true);
+
+    useEffect(() => {
+        const fetchIntegrations = async () => {
+            try {
+                const data = await integrationService.getIntegrations();
+                // Map backend data to frontend format if necessary, or ensure backend matches
+                // For now assuming we might need to map or just use compatible data
+                // Adding some mock data logic for fallback if API fails
+                setIntegrations(data);
+            } catch (error) {
+                console.error("Failed to fetch integrations", error);
+                setIntegrations([
+                    {
+                        id: 1,
+                        name: "EDC Data Feed",
+                        vendor: "Medidata Rave",
+                        type: "API",
+                        frequency: "Daily at 2:00 AM",
+                        lastSync: "2023-04-04 02:00:15",
+                        status: "Active",
+                        statusColor: "bg-green-50 text-green-700 border-green-200",
+                        typeColor: "bg-purple-50 text-purple-700 border-purple-200"
+                    },
+                    {
+                        id: 2,
+                        name: "Central Lab Results",
+                        vendor: "Labcorp",
+                        type: "SFTP",
+                        frequency: "Every 12 hours",
+                        lastSync: "2023-04-04 14:00:03",
+                        status: "Active",
+                        statusColor: "bg-green-50 text-green-700 border-green-200",
+                        typeColor: "bg-amber-50 text-amber-700 border-amber-200"
+                    },
+                    {
+                        id: 3,
+                        name: "Imaging Data",
+                        vendor: "Calyx",
+                        type: "S3",
+                        frequency: "Weekly on Monday",
+                        lastSync: "2023-04-01 08:30:22",
+                        status: "Inactive",
+                        statusColor: "bg-gray-50 text-gray-700 border-gray-200",
+                        typeColor: "bg-green-50 text-green-700 border-green-200"
+                    },
+                    {
+                        id: 4,
+                        name: "CTMS Data",
+                        vendor: "Veeva Vault CTMS",
+                        type: "API",
+                        frequency: "Daily at 6:00 AM",
+                        lastSync: "2023-04-04 06:00:05",
+                        status: "Error",
+                        statusColor: "bg-red-50 text-red-700 border-red-200",
+                        typeColor: "bg-purple-50 text-purple-700 border-purple-200",
+                        error: "API authentication failed. Check credentials."
+                    }
+                ]);
+            } finally {
+                setLoading(false);
+            }
+        };
+        fetchIntegrations();
+    }, []);
+
 
     return (
         <div className="p-6">
@@ -99,128 +121,132 @@ export default function DataIntegration() {
 
                 {activeTab === 'data-sources' && (
                     <div className="rounded-lg border bg-white shadow-sm">
-                        <div className="p-6 flex flex-col space-y-6">
-                            <div className="flex items-center justify-between">
-                                <div className="flex items-center gap-2">
-                                    <Database className="h-5 w-5 text-blue-600" />
-                                    <div>
-                                        <h3 className="text-2xl font-semibold leading-none tracking-tight">Data Source Manager</h3>
-                                        <p className="text-sm text-gray-500 mt-1">Configure and manage data integrations from external sources</p>
+                        {loading ? (
+                            <div className="p-8 text-center text-gray-500">Loading integrations...</div>
+                        ) : (
+                            <div className="p-6 flex flex-col space-y-6">
+                                <div className="flex items-center justify-between">
+                                    <div className="flex items-center gap-2">
+                                        <Database className="h-5 w-5 text-blue-600" />
+                                        <div>
+                                            <h3 className="text-2xl font-semibold leading-none tracking-tight">Data Source Manager</h3>
+                                            <p className="text-sm text-gray-500 mt-1">Configure and manage data integrations from external sources</p>
+                                        </div>
                                     </div>
-                                </div>
-                                <button className="inline-flex items-center justify-center whitespace-nowrap text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-blue-600 text-white hover:bg-blue-700 h-9 rounded-md px-3 gap-1">
-                                    <PlusCircle className="h-4 w-4" />
-                                    <span>Add Integration</span>
-                                </button>
-                            </div>
-
-                            {/* Sub Tabs */}
-                            <div className="bg-blue-50 p-1 rounded-md grid grid-cols-4 w-full max-w-lg mx-auto">
-                                {[
-                                    { id: 'integration-sources', label: 'Integration Sources', icon: ServerCog },
-                                    { id: 'integration-logs', label: 'Integration Logs', icon: History },
-                                    { id: 'monitor-ai', label: 'Monitor.AI', icon: SlidersVertical },
-                                    { id: 'notifications', label: 'Notifications', icon: Mail },
-                                ].map((tab) => (
-                                    <button
-                                        key={tab.id}
-                                        onClick={() => setActiveSubTab(tab.id)}
-                                        className={cn(
-                                            "flex items-center justify-center px-3 py-1.5 text-sm font-medium rounded-sm transition-all gap-1",
-                                            activeSubTab === tab.id
-                                                ? "bg-white text-blue-700 shadow-sm"
-                                                : "text-blue-600 hover:bg-blue-100 hover:text-blue-800"
-                                        )}
-                                    >
-                                        <tab.icon className="h-4 w-4" />
-                                        <span className="truncate">{tab.label}</span>
+                                    <button className="inline-flex items-center justify-center whitespace-nowrap text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-blue-600 text-white hover:bg-blue-700 h-9 rounded-md px-3 gap-1">
+                                        <PlusCircle className="h-4 w-4" />
+                                        <span>Add Integration</span>
                                     </button>
-                                ))}
-                            </div>
-
-                            {activeSubTab === 'integration-sources' && (
-                                <div className="space-y-4">
-                                    {/* Alert */}
-                                    <div className="relative w-full rounded-lg border p-4 bg-red-50 border-red-200 text-red-800 flex items-start gap-4">
-                                        <TriangleAlert className="h-4 w-4 mt-1" />
-                                        <div className="text-sm">
-                                            One or more integrations have errors. Please check the integration details.
-                                        </div>
-                                    </div>
-
-                                    {/* Filters and Actions */}
-                                    <div className="flex items-center justify-between mb-4">
-                                        <div className="flex gap-2">
-                                            <button className="flex h-10 items-center justify-between rounded-md border border-gray-300 bg-white px-3 py-2 text-sm w-[160px] text-gray-500">
-                                                <span>All Types</span>
-                                                <ChevronDown className="h-4 w-4 opacity-50" />
-                                            </button>
-                                            <button className="flex h-10 items-center justify-between rounded-md border border-gray-300 bg-white px-3 py-2 text-sm w-[160px] text-gray-500">
-                                                <span>All Statuses</span>
-                                                <ChevronDown className="h-4 w-4 opacity-50" />
-                                            </button>
-                                        </div>
-                                        <button className="inline-flex items-center justify-center gap-2 whitespace-nowrap text-sm font-medium border border-gray-300 bg-white hover:bg-gray-100 h-9 rounded-md px-3 text-gray-700">
-                                            <Download className="h-4 w-4" />
-                                            Export Configuration
-                                        </button>
-                                    </div>
-
-                                    {/* Table */}
-                                    <div className="relative w-full overflow-auto">
-                                        <table className="w-full text-sm text-left">
-                                            <thead className="bg-blue-50 text-blue-900 font-semibold border-b border-blue-100">
-                                                <tr>
-                                                    <th className="h-12 px-4 align-middle">Name</th>
-                                                    <th className="h-12 px-4 align-middle">Vendor</th>
-                                                    <th className="h-12 px-4 align-middle">Type</th>
-                                                    <th className="h-12 px-4 align-middle">Frequency</th>
-                                                    <th className="h-12 px-4 align-middle">Last Sync</th>
-                                                    <th className="h-12 px-4 align-middle">Status</th>
-                                                    <th className="h-12 px-4 align-middle text-right">Actions</th>
-                                                </tr>
-                                            </thead>
-                                            <tbody>
-                                                {integrations.map((item) => (
-                                                    <tr key={item.id} className="border-b border-gray-100 hover:bg-blue-50/50 transition-colors">
-                                                        <td className="p-4 font-medium text-blue-800">{item.name}</td>
-                                                        <td className="p-4 font-medium">{item.vendor}</td>
-                                                        <td className="p-4">
-                                                            <span className={cn("inline-flex items-center rounded-full border px-2.5 py-0.5 text-xs font-semibold", item.typeColor)}>
-                                                                {item.type}
-                                                            </span>
-                                                        </td>
-                                                        <td className="p-4">{item.frequency}</td>
-                                                        <td className="p-4 font-mono text-xs">{item.lastSync}</td>
-                                                        <td className="p-4">
-                                                            <span className={cn("inline-flex items-center rounded-full border px-2.5 py-0.5 text-xs font-semibold", item.statusColor)}>
-                                                                {item.status}
-                                                            </span>
-                                                            {item.error && (
-                                                                <p className="text-xs text-red-600 mt-1">{item.error}</p>
-                                                            )}
-                                                        </td>
-                                                        <td className="p-4 text-right">
-                                                            <div className="flex justify-end items-center space-x-2">
-                                                                <button className="p-2 border border-gray-200 rounded-md hover:bg-gray-100 text-gray-500" title="Start manual data load">
-                                                                    <RefreshCw className="h-4 w-4" />
-                                                                </button>
-                                                                <button className="p-2 border border-gray-200 rounded-md hover:bg-gray-100 text-gray-500" title="Pause/Activate">
-                                                                    {item.status === 'Inactive' ? <PlayCircle className="h-4 w-4" /> : <PauseCircle className="h-4 w-4" />}
-                                                                </button>
-                                                                <button className="p-2 hover:bg-gray-100 rounded-md text-gray-500">
-                                                                    <MoreHorizontal className="h-4 w-4" />
-                                                                </button>
-                                                            </div>
-                                                        </td>
-                                                    </tr>
-                                                ))}
-                                            </tbody>
-                                        </table>
-                                    </div>
                                 </div>
-                            )}
-                        </div>
+
+                                {/* Sub Tabs */}
+                                <div className="bg-blue-50 p-1 rounded-md grid grid-cols-4 w-full max-w-lg mx-auto">
+                                    {[
+                                        { id: 'integration-sources', label: 'Integration Sources', icon: ServerCog },
+                                        { id: 'integration-logs', label: 'Integration Logs', icon: History },
+                                        { id: 'monitor-ai', label: 'Monitor.AI', icon: SlidersVertical },
+                                        { id: 'notifications', label: 'Notifications', icon: Mail },
+                                    ].map((tab) => (
+                                        <button
+                                            key={tab.id}
+                                            onClick={() => setActiveSubTab(tab.id)}
+                                            className={cn(
+                                                "flex items-center justify-center px-3 py-1.5 text-sm font-medium rounded-sm transition-all gap-1",
+                                                activeSubTab === tab.id
+                                                    ? "bg-white text-blue-700 shadow-sm"
+                                                    : "text-blue-600 hover:bg-blue-100 hover:text-blue-800"
+                                            )}
+                                        >
+                                            <tab.icon className="h-4 w-4" />
+                                            <span className="truncate">{tab.label}</span>
+                                        </button>
+                                    ))}
+                                </div>
+
+                                {activeSubTab === 'integration-sources' && (
+                                    <div className="space-y-4">
+                                        {/* Alert */}
+                                        <div className="relative w-full rounded-lg border p-4 bg-red-50 border-red-200 text-red-800 flex items-start gap-4">
+                                            <TriangleAlert className="h-4 w-4 mt-1" />
+                                            <div className="text-sm">
+                                                One or more integrations have errors. Please check the integration details.
+                                            </div>
+                                        </div>
+
+                                        {/* Filters and Actions */}
+                                        <div className="flex items-center justify-between mb-4">
+                                            <div className="flex gap-2">
+                                                <button className="flex h-10 items-center justify-between rounded-md border border-gray-300 bg-white px-3 py-2 text-sm w-[160px] text-gray-500">
+                                                    <span>All Types</span>
+                                                    <ChevronDown className="h-4 w-4 opacity-50" />
+                                                </button>
+                                                <button className="flex h-10 items-center justify-between rounded-md border border-gray-300 bg-white px-3 py-2 text-sm w-[160px] text-gray-500">
+                                                    <span>All Statuses</span>
+                                                    <ChevronDown className="h-4 w-4 opacity-50" />
+                                                </button>
+                                            </div>
+                                            <button className="inline-flex items-center justify-center gap-2 whitespace-nowrap text-sm font-medium border border-gray-300 bg-white hover:bg-gray-100 h-9 rounded-md px-3 text-gray-700">
+                                                <Download className="h-4 w-4" />
+                                                Export Configuration
+                                            </button>
+                                        </div>
+
+                                        {/* Table */}
+                                        <div className="relative w-full overflow-auto">
+                                            <table className="w-full text-sm text-left">
+                                                <thead className="bg-blue-50 text-blue-900 font-semibold border-b border-blue-100">
+                                                    <tr>
+                                                        <th className="h-12 px-4 align-middle">Name</th>
+                                                        <th className="h-12 px-4 align-middle">Vendor</th>
+                                                        <th className="h-12 px-4 align-middle">Type</th>
+                                                        <th className="h-12 px-4 align-middle">Frequency</th>
+                                                        <th className="h-12 px-4 align-middle">Last Sync</th>
+                                                        <th className="h-12 px-4 align-middle">Status</th>
+                                                        <th className="h-12 px-4 align-middle text-right">Actions</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    {integrations.map((item) => (
+                                                        <tr key={item.id} className="border-b border-gray-100 hover:bg-blue-50/50 transition-colors">
+                                                            <td className="p-4 font-medium text-blue-800">{item.name}</td>
+                                                            <td className="p-4 font-medium">{item.vendor}</td>
+                                                            <td className="p-4">
+                                                                <span className={cn("inline-flex items-center rounded-full border px-2.5 py-0.5 text-xs font-semibold", item.typeColor)}>
+                                                                    {item.type}
+                                                                </span>
+                                                            </td>
+                                                            <td className="p-4">{item.frequency}</td>
+                                                            <td className="p-4 font-mono text-xs">{item.lastSync}</td>
+                                                            <td className="p-4">
+                                                                <span className={cn("inline-flex items-center rounded-full border px-2.5 py-0.5 text-xs font-semibold", item.statusColor)}>
+                                                                    {item.status}
+                                                                </span>
+                                                                {item.error && (
+                                                                    <p className="text-xs text-red-600 mt-1">{item.error}</p>
+                                                                )}
+                                                            </td>
+                                                            <td className="p-4 text-right">
+                                                                <div className="flex justify-end items-center space-x-2">
+                                                                    <button className="p-2 border border-gray-200 rounded-md hover:bg-gray-100 text-gray-500" title="Start manual data load">
+                                                                        <RefreshCw className="h-4 w-4" />
+                                                                    </button>
+                                                                    <button className="p-2 border border-gray-200 rounded-md hover:bg-gray-100 text-gray-500" title="Pause/Activate">
+                                                                        {item.status === 'Inactive' ? <PlayCircle className="h-4 w-4" /> : <PauseCircle className="h-4 w-4" />}
+                                                                    </button>
+                                                                    <button className="p-2 hover:bg-gray-100 rounded-md text-gray-500">
+                                                                        <MoreHorizontal className="h-4 w-4" />
+                                                                    </button>
+                                                                </div>
+                                                            </td>
+                                                        </tr>
+                                                    ))}
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                )}
+                            </div>
+                        )}
                     </div>
                 )}
 

@@ -4,8 +4,35 @@ import {
     ChevronRight, Eye, CircleAlert, CircleDashed, Database, Link2, FileSpreadsheet
 } from 'lucide-react';
 import { Link } from 'react-router-dom';
+import { useEffect, useState } from 'react';
+import { dashboardService } from '../services/api';
 
 export default function Dashboard() {
+    const [activeTab, setActiveTab] = useState('tasks');
+    const [metrics, setMetrics] = useState<any[]>([]);
+    const [loading, setLoading] = useState(true);
+
+    useEffect(() => {
+        const fetchMetrics = async () => {
+            try {
+                const data = await dashboardService.getMetrics();
+                setMetrics(data);
+            } catch (error) {
+                console.error("Failed to fetch metrics", error);
+                // Fallback to mock data if API fails (for demo purposes if backend isn't running)
+                setMetrics([
+                    { "key": "data_quality", "value": "86%", "label": "Overall data quality score", "trend": "up" },
+                    { "key": "operational", "value": "72%", "label": "Site operational efficiency", "trend": "stable" },
+                    { "key": "safety", "value": "91%", "label": "Protocol safety adherence", "trend": "up" },
+                    { "key": "compliance", "value": "83%", "label": "Regulatory compliance score", "trend": "down" },
+                ]);
+            } finally {
+                setLoading(false);
+            }
+        };
+        fetchMetrics();
+    }, []);
+
     return (
         <div className="p-6">
             <div className="container mx-auto py-6 space-y-6">
@@ -73,10 +100,29 @@ export default function Dashboard() {
 
                 {/* Quality Metrics Grid */}
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-                    <MetricCard title="Data Quality" score="86%" label="Overall data quality score" icon={CircleCheck} color="blue" />
-                    <MetricCard title="Operational" score="72%" label="Site operational efficiency" icon={Activity} color="indigo" />
-                    <MetricCard title="Safety" score="91%" label="Protocol safety adherence" icon={Bell} color="emerald" />
-                    <MetricCard title="Compliance" score="83%" label="Regulatory compliance score" icon={Award} color="amber" />
+                    {loading ? (
+                        <div className="col-span-4 text-center py-4">Loading metrics...</div>
+                    ) : (
+                        metrics.map((metric) => {
+                            let icon = Activity;
+                            let color = "blue";
+                            if (metric.key === 'data_quality') { icon = CircleCheck; color = "blue"; }
+                            if (metric.key === 'operational') { icon = Activity; color = "indigo"; }
+                            if (metric.key === 'safety') { icon = Bell; color = "emerald"; }
+                            if (metric.key === 'compliance') { icon = Award; color = "amber"; }
+
+                            return (
+                                <MetricCard
+                                    key={metric.key}
+                                    title={metric.key.replace('_', ' ').replace(/\b\w/g, (l: string) => l.toUpperCase())}
+                                    score={metric.value}
+                                    label={metric.label}
+                                    icon={icon}
+                                    color={color}
+                                />
+                            );
+                        })
+                    )}
                 </div>
 
                 {/* Main Content Layout */}
@@ -165,16 +211,59 @@ export default function Dashboard() {
                                 <h3 className="font-semibold tracking-tight text-lg">Recent Activities</h3>
                             </div>
                             <div className="p-6 pt-3">
-                                <div className="space-y-3">
-                                    <TaskItem id="T-123" priority="High" priorityColor="red" title="Review protocol deviation in Subject 1078" due="May 2, 2025" assignee="J. Wilson" status="In Progress" statusColor="blue" />
-                                    <TaskItem id="T-124" priority="Medium" priorityColor="amber" title="Verify vital signs data queries from Site 3" due="May 5, 2025" assignee="M. Johnson" status="Pending" statusColor="gray" />
-                                    <TaskItem id="T-125" priority="High" priorityColor="red" title="Reconcile liver enzyme test discrepancies in Lab Results" due="May 1, 2025" assignee="A. Martinez" status="Overdue" statusColor="red" />
-                                    <TaskItem id="T-126" priority="Low" priorityColor="blue" title="Update risk-based monitoring plan for Boston site" due="May 10, 2025" assignee="S. Patel" status="Completed" statusColor="green" />
+                                {/* Tab Navigation */}
+                                <div className="h-10 items-center justify-center rounded-md bg-blue-50 p-1 text-blue-600 grid grid-cols-3 mb-3">
+                                    <button
+                                        onClick={() => setActiveTab('tasks')}
+                                        className={`inline-flex items-center justify-center whitespace-nowrap rounded-sm px-3 py-1.5 text-sm font-medium ring-offset-background transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 ${activeTab === 'tasks' ? 'bg-white text-blue-700 shadow-sm' : 'hover:bg-blue-100 hover:text-blue-800'}`}
+                                    >
+                                        Tasks
+                                    </button>
+                                    <button
+                                        onClick={() => setActiveTab('queries')}
+                                        className={`inline-flex items-center justify-center whitespace-nowrap rounded-sm px-3 py-1.5 text-sm font-medium ring-offset-background transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 ${activeTab === 'queries' ? 'bg-white text-blue-700 shadow-sm' : 'hover:bg-blue-100 hover:text-blue-800'}`}
+                                    >
+                                        Queries
+                                    </button>
+                                    <button
+                                        onClick={() => setActiveTab('signals')}
+                                        className={`inline-flex items-center justify-center whitespace-nowrap rounded-sm px-3 py-1.5 text-sm font-medium ring-offset-background transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 ${activeTab === 'signals' ? 'bg-white text-blue-700 shadow-sm' : 'hover:bg-blue-100 hover:text-blue-800'}`}
+                                    >
+                                        Signals
+                                    </button>
                                 </div>
+
+                                {/* Tab Content */}
+                                <div className="space-y-3">
+                                    {activeTab === 'tasks' && (
+                                        <>
+                                            {RECENT_TASKS.map((task) => (
+                                                <TaskItem key={task.id} {...task} />
+                                            ))}
+                                        </>
+                                    )}
+
+                                    {activeTab === 'queries' && (
+                                        <>
+                                            {RECENT_QUERIES.map((query) => (
+                                                <QueryItem key={query.id} {...query} />
+                                            ))}
+                                        </>
+                                    )}
+
+                                    {activeTab === 'signals' && (
+                                        <>
+                                            {RECENT_SIGNALS.map((signal) => (
+                                                <SignalItem key={signal.id} {...signal} />
+                                            ))}
+                                        </>
+                                    )}
+                                </div>
+
                                 <div className="flex justify-center mt-2">
-                                    <Link to="/tasks">
+                                    <Link to={activeTab === 'tasks' ? "/tasks" : activeTab === 'signals' ? "/signal-detection" : "#"}>
                                         <button className="inline-flex items-center justify-center gap-2 whitespace-nowrap text-sm font-medium ring-offset-background transition-colors hover:bg-accent hover:text-accent-foreground h-9 rounded-md px-3 border border-input mt-2">
-                                            View All Tasks
+                                            View All {activeTab.charAt(0).toUpperCase() + activeTab.slice(1)}
                                         </button>
                                     </Link>
                                 </div>
@@ -444,6 +533,90 @@ function IntegrationItem({ name, status, time, count, label }: any) {
             <div className="text-right">
                 <span className="text-xs font-medium text-neutral-700">{count}</span>
                 <p className="text-xs text-neutral-500">{label}</p>
+            </div>
+        </div>
+    )
+}
+
+// Mock Data
+const RECENT_TASKS = [
+    { id: "T-123", priority: "High", priorityColor: "red", title: "Review protocol deviation in Subject 1078", due: "May 2, 2025", assignee: "J. Wilson", status: "In Progress", statusColor: "blue" },
+    { id: "T-124", priority: "Medium", priorityColor: "amber", title: "Verify vital signs data queries from Site 3", due: "May 5, 2025", assignee: "M. Johnson", status: "Pending", statusColor: "gray" },
+    { id: "T-125", priority: "High", priorityColor: "red", title: "Reconcile liver enzyme test discrepancies in Lab Results", due: "May 1, 2025", assignee: "A. Martinez", status: "Overdue", statusColor: "red" },
+    { id: "T-126", priority: "Low", priorityColor: "blue", title: "Update risk-based monitoring plan for Boston site", due: "May 10, 2025", assignee: "S. Patel", status: "Completed", statusColor: "green" },
+];
+
+const RECENT_QUERIES = [
+    { id: "Q-402", priority: "High", priorityColor: "red", title: "Missing DOB for Subject 201-004", due: "2 days", assignee: "Site Coordinator", status: "Open", statusColor: "blue" },
+    { id: "Q-405", priority: "Medium", priorityColor: "amber", title: "Lab Reference Range mismatch", due: "5 days", assignee: "Data Manager", status: "Answered", statusColor: "purple" },
+    { id: "Q-409", priority: "High", priorityColor: "red", title: "Concomitant Medication dose missing", due: "1 day", assignee: "PI", status: "Open", statusColor: "blue" },
+    { id: "Q-411", priority: "Low", priorityColor: "blue", title: "Visit date prior to consent date check", due: "7 days", assignee: "CRA", status: "Closed", statusColor: "green" },
+];
+
+const RECENT_SIGNALS = [
+    { id: "SIG-01", priority: "Critical", priorityColor: "red", title: "QTc prolongation >15ms", due: "Immediate", assignee: "Safety Lead", status: "New", statusColor: "blue" },
+    { id: "SIG-03", priority: "High", priorityColor: "orange", title: "Liver Enzyme Elevation Cluster", due: "24h", assignee: "Medical Monitor", status: "Review", statusColor: "amber" },
+    { id: "SIG-07", priority: "Medium", priorityColor: "amber", title: "Anomalous BP Readings at Site 12", due: "3 days", assignee: "Central Monitor", status: "Assigned", statusColor: "blue" },
+    { id: "SIG-12", priority: "Low", priorityColor: "blue", title: "Protocol Deviation Trend - Visit Windows", due: "1 week", assignee: "Study Manager", status: "Triaged", statusColor: "green" },
+];
+
+function QueryItem({ id, priority, priorityColor, title, due, assignee, status, statusColor }: any) {
+    return (
+        <div className="flex items-center justify-between p-3 border rounded-lg hover:bg-slate-50">
+            <div className="flex items-center">
+                <div className="mr-3">
+                    <div className={`bg-${priorityColor}-100 p-2 rounded-full`}>
+                        <MessagesSquare className={`h-5 w-5 text-${priorityColor}-600`} />
+                    </div>
+                </div>
+                <div>
+                    <div className="flex items-center">
+                        <span className="text-sm font-medium">{id}</span>
+                        <div className={`inline-flex items-center rounded-full border px-2.5 py-0.5 font-semibold ml-2 text-xs bg-${priorityColor}-100 text-${priorityColor}-800`}>
+                            {priority}
+                        </div>
+                    </div>
+                    <p className="text-sm text-gray-700">{title}</p>
+                    <div className="flex items-center mt-1 text-xs text-gray-500">
+                        <span>Due: {due}</span>
+                        <span className="mx-2">•</span>
+                        <span>Assigned to: {assignee}</span>
+                    </div>
+                </div>
+            </div>
+            <div className={`inline-flex items-center rounded-full border px-2.5 py-0.5 text-xs font-semibold bg-${statusColor}-50 text-${statusColor}-800 border-${statusColor}-200`}>
+                {status}
+            </div>
+        </div>
+    )
+}
+
+function SignalItem({ id, priority, priorityColor, title, due, assignee, status, statusColor }: any) {
+    return (
+        <div className="flex items-center justify-between p-3 border rounded-lg hover:bg-slate-50">
+            <div className="flex items-center">
+                <div className="mr-3">
+                    <div className={`bg-${priorityColor}-100 p-2 rounded-full`}>
+                        <Activity className={`h-5 w-5 text-${priorityColor}-600`} />
+                    </div>
+                </div>
+                <div>
+                    <div className="flex items-center">
+                        <span className="text-sm font-medium">{id}</span>
+                        <div className={`inline-flex items-center rounded-full border px-2.5 py-0.5 font-semibold ml-2 text-xs bg-${priorityColor}-100 text-${priorityColor}-800`}>
+                            {priority}
+                        </div>
+                    </div>
+                    <p className="text-sm text-gray-700">{title}</p>
+                    <div className="flex items-center mt-1 text-xs text-gray-500">
+                        <span>Due: {due}</span>
+                        <span className="mx-2">•</span>
+                        <span>Assigned to: {assignee}</span>
+                    </div>
+                </div>
+            </div>
+            <div className={`inline-flex items-center rounded-full border px-2.5 py-0.5 text-xs font-semibold bg-${statusColor}-50 text-${statusColor}-800 border-${statusColor}-200`}>
+                {status}
             </div>
         </div>
     )

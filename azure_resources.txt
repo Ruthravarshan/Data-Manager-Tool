@@ -1,0 +1,69 @@
+AZURE RESOURCES FOR CLINICAL COSMOS APP
+
+1. HOSTING (IMMEDIATE DEPLOYMENT - FRONTEND)
+---------------------------------------------
+- Azure Static Web Apps
+  * Purpose: Hosting the React/Vite frontend.
+  * Why: Built-in support for single-page apps (SPA), global distribution, and free SSL.
+  * SKU: Standard (for production) or Free (for prototype/dev).
+
+2. BACKEND & API (FUNCTIONAL PROTOTYPE)
+---------------------------------------
+- Azure App Service (Web Apps) or Azure Functions
+  * Purpose: Hosting the API logic that will replace the current mock data.
+  * Why: App Service for full control over a Node.js/Python server, or Functions for a serverless event-driven architecture (cost-effective for prototypes).
+  * SKU: B1 (Basic) for development/prototype.
+
+3. DATABASE (DATA STORAGE)
+--------------------------
+- Azure Cosmos DB (Core/NoSQL API)
+  * Purpose: Storing clinical trial data, study configurations, and audit logs.
+  * Why: Flexible schema for JSON data, high availability, and global scale (fits the "Cosmos" theme and modern app architecture).
+  * SKU: Serverless (pay-per-request) is ideal for prototypes with unpredictable traffic.
+
+- Azure SQL Database (Alternative)
+  * Purpose: If relational data structure is strictly required for trial data management.
+
+4. AI & INTELLIGENT SERVICES (CRITICAL FOR "DATA MANAGER AI")
+-------------------------------------------------------------
+- Azure OpenAI Service
+  * Purpose: Powering the "Data Manager AI", "Central Monitor AI", and chatbot features.
+  * Models: GPT-4o or GPT-4-Turbo for complex reasoning; gpt-35-turbo for faster, lighter tasks.
+
+- Azure AI Search (formerly Cognitive Search)
+  * Purpose: Implementing RAG (Retrieval-Augmented Generation) if the AI needs to search through uploaded PDF protocols or study documents.
+
+5. DATA INTEGRATION (FOR "DATA INTEGRATION" TAB)
+------------------------------------------------
+- Azure Data Factory (ADF)
+  * Purpose: Orchestrating the "Daily" and "Weekly" syncs mentioned in the integration page (Medidata Rave, Labcorp, etc.).
+  * Why: Built-in connectors for SFTP, S3, REST APIs, and SQL.
+
+- Azure Logic Apps
+  * Purpose: Lightweight automation for triggering notifications or simple API-based workflows.
+
+6. STORAGE
+----------
+- Azure Storage Account (Blob Storage)
+  * Purpose: Storing raw files (PDFs, Excel data exports, images).
+  * Usage: Storing the "Integration Logs" and "Imaging Data" (S3 alternative).
+
+7. SECURITY & IDENTITY
+----------------------
+- Microsoft Entra ID (formerly Azure Active Directory)
+  * Purpose: User authentication and role-based access control (RBAC) for the application.
+  
+- Azure Key Vault
+  * Purpose: Securely storing API keys (OpenAI keys, database connection strings) so they aren't hardcoded in the app.
+
+8. MONITORING & OPERATIONS
+--------------------------
+- Azure Monitor & Application Insights
+  * Purpose: Tracking application performance, frontend errors, and API failures.
+
+-------------------------------------------------------------------------
+RECOMMENDED INITIAL SETUP FOR PROTOTYPE (MINIMAL VIABLE INFRASTRUCTURE):
+1. Azure Static Web App (Frontend)
+2. Azure Functions (Backend API)
+3. Azure Cosmos DB (Database)
+4. Azure OpenAI Service (AI Features)
