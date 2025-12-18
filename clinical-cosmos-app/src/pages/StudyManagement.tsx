@@ -1,6 +1,6 @@
 import { Search, Filter, Plus, ChevronLeft, Calendar, Users, Activity, Building2, AlertCircle, FileText, FlaskConical, Upload, Eye, Edit2, Trash2, X, Download, ArrowUpRight, MoreHorizontal } from 'lucide-react';
 import { useEffect, useState } from 'react';
-import { api, studyService, documentService } from '../services/api';
+import { studyService, documentService } from '../services/api';
 
 
 function StudyDetail({ study, onBack }: { study: any, onBack: () => void }) {
@@ -576,22 +576,9 @@ export default function StudyManagement() {
             setStudies(data);
         } catch (error) {
             console.error("Failed to fetch studies", error);
-            // Fallback to mock data
-            setStudies([
-                {
-                    id: "ST-001",
-                    title: "Diabetes Type 2 Study",
-                    protocol: "DT2-2024-PH3",
-                    phase: "Phase III",
-                    status: "Active",
-                    sites: 28,
-                    subjects: 342,
-                    startDate: "Jan 15, 2024",
-                    description: "Investigating efficacy of GLP-1 receptor agonists in glycemic control for T2DM patients",
-                    completion: 45
-                },
-                // ... (other mock data could be here)
-            ]);
+            // If backend fails, we show empty or alert, don't revert to static mock data 
+            // as it confuses the user thinking the create failed.
+            alert("Failed to load studies from backend. Please ensure backend is running.");
         } finally {
             setLoading(false);
         }
@@ -610,11 +597,16 @@ export default function StudyManagement() {
             if (selectedFile && newStudy.id) {
                 // In a real app, you'd likely link this upload to the study ID
                 // For now, we just upload it as per the service we built
-                await studyService.uploadProtocol(newStudy.id, selectedFile);
+                try {
+                    await studyService.uploadProtocol(newStudy.id, selectedFile);
+                } catch (uploadError) {
+                    console.error("File upload failed but study created", uploadError);
+                    alert("Study created but file upload failed.");
+                }
             }
 
             // 3. Refresh and close
-            fetchStudies();
+            await fetchStudies(); // Ensure fetch completes before closing
             setIsModalOpen(false);
             // Reset form
             setFormData({

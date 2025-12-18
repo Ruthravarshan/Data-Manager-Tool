@@ -3,6 +3,8 @@ from fastapi.middleware.cors import CORSMiddleware
 
 app = FastAPI(title="Clinical Cosmos API")
 
+from fastapi.staticfiles import StaticFiles
+
 # Configure CORS
 app.add_middleware(
     CORSMiddleware,
@@ -11,6 +13,9 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+# Mount Static Files
+app.mount("/static", StaticFiles(directory="static"), name="static")
 
 @app.get("/")
 def read_root():

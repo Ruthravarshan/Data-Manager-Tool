@@ -4,7 +4,7 @@ from typing import List
 from app.database import get_db
 from app.models import Study
 from app.schemas import Study as StudySchema, StudyCreate
-from app.azure_service import upload_file_to_blob
+from app.file_service import save_upload_file
 import uuid
 
 router = APIRouter(prefix="/api/studies", tags=["studies"])
@@ -28,8 +28,8 @@ def upload_study_protocol(study_id: str, file: UploadFile = File(...), db: Sessi
     if not study:
         raise HTTPException(status_code=404, detail="Study not found")
     
-    content = file.file.read()
-    file_url = upload_file_to_blob(content, file.filename)
+    
+    file_url = save_upload_file(file)
     
     study.file_url = file_url
     db.commit()
@@ -52,8 +52,8 @@ def upload_document(study_id: str, source: str = "Manual upload", file: UploadFi
     if not study:
         raise HTTPException(status_code=404, detail="Study not found")
     
-    content = file.file.read()
-    file_url = upload_file_to_blob(content, file.filename)
+    
+    file_url = save_upload_file(file)
     
     file_type = file.filename.split('.')[-1].lower() if '.' in file.filename else 'unknown'
     
