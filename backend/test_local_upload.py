@@ -40,6 +40,13 @@ def test_upload():
         print(f"Response: {data}")
         file_url = data['file_url']
         
+        # Expecting /static/trials/{study_id}/...
+        expected_path = f"/static/trials/{study_id}/"
+        if expected_path in file_url:
+            print(f"SUCCESS: File URL is in '{expected_path}'!")
+        else:
+            print(f"FAILURE: File URL '{file_url}' does NOT contain '{expected_path}'")
+
         # 4. Verify URL is reachable
         print(f"Verifying URL access: {file_url}")
         file_resp = requests.get(file_url)

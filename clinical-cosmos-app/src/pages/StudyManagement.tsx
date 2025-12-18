@@ -553,13 +553,16 @@ export default function StudyManagement() {
     const [isModalOpen, setIsModalOpen] = useState(false);
 
     // Form State
-    const [formData, setFormData] = useState({
+    const [formData, setFormData] = useState<any>({
         title: '',
         protocol_id: '',
         phase: '',
         status: 'Planned',
         description: '',
         start_date: '',
+        end_date: '',
+        therapeutic_area: '',
+        indication: '',
         sites_count: 0,
         subjects_count: 0,
         completion_percentage: 0
@@ -714,8 +717,23 @@ export default function StudyManagement() {
                                                         >
                                                             View
                                                         </button>
-                                                        <button className="text-gray-400 hover:text-gray-600">
-                                                            <MoreHorizontal className="h-5 w-5" />
+                                                        <button
+                                                            onClick={async (e) => {
+                                                                e.stopPropagation();
+                                                                if (confirm('Are you sure you want to delete this study? This action cannot be undone and will delete all associated files.')) {
+                                                                    try {
+                                                                        await studyService.deleteStudy(study.id);
+                                                                        fetchStudies();
+                                                                    } catch (error) {
+                                                                        console.error("Delete failed", error);
+                                                                        alert("Failed to delete study");
+                                                                    }
+                                                                }
+                                                            }}
+                                                            className="text-gray-400 hover:text-red-600 transition-colors"
+                                                            title="Delete Study"
+                                                        >
+                                                            <Trash2 className="h-5 w-5" />
                                                         </button>
                                                     </td>
                                                 </tr>
@@ -800,112 +818,136 @@ export default function StudyManagement() {
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                                 <div>
                                     <label className="block text-sm font-semibold text-gray-900 mb-1">Therapeutic Area</label>
-                                    <input
+                                    <select
                                         className="w-full border border-gray-300 rounded-md px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none"
-                                        placeholder="e.g., Oncology"
-                                    // value={formData.therapeutic_area || ''} 
-                                    // onChange={(e) => setFormData({...formData, therapeutic_area: e.target.value})}
-                                    />
-                                    <p className="text-xs text-gray-500 mt-1">The medical specialty or area (e.g., Oncology, Cardiology, CNS)</p>
+                                        value={formData.therapeutic_area || ''}
+                                        onChange={(e) => setFormData({ ...formData, therapeutic_area: e.target.value })}
+                                    >
+                                        <option value="">Select Area</option>
+                                        <option>Oncology</option>
+                                        <option>Cardiology</option>
+                                        <option>Endocrinology</option>
+                                        <option>Neurology</option>
+                                        <option>Immunology</option>
+                                        <option>Infectious Diseases</option>
+                                    </select>
                                 </div>
                                 <div>
                                     <label className="block text-sm font-semibold text-gray-900 mb-1">Indication</label>
                                     <input
                                         className="w-full border border-gray-300 rounded-md px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none"
-                                        placeholder="e.g., Type 2 Diabetes"
-                                    // value={formData.indication || ''}
-                                    // onChange={(e) => setFormData({...formData, indication: e.target.value})}
+                                        placeholder="e.g. Type 2 Diabetes"
+                                        value={formData.indication || ''}
+                                        onChange={(e) => setFormData({ ...formData, indication: e.target.value })}
                                     />
-                                    <p className="text-xs text-gray-500 mt-1">The specific condition being treated or investigated</p>
                                 </div>
                             </div>
 
-                            {/* Row 4: Status */}
-                            <div>
-                                <label className="block text-sm font-semibold text-gray-900 mb-1">Status</label>
-                                <select
-                                    className="w-full border border-gray-300 rounded-md px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none"
-                                    value={formData.status}
-                                    onChange={(e) => setFormData({ ...formData, status: e.target.value })}
-                                >
-                                    <option>Planned</option>
-                                    <option>Startup</option>
-                                    <option>Active</option>
-                                    <option>Recruiting</option>
-                                    <option>Completed</option>
-                                </select>
-                                <p className="text-xs text-gray-500 mt-1">Current operational status of the clinical trial</p>
-                            </div>
-
-                            {/* Row 5: Start Date & End Date */}
+                            {/* Row 4: Dates */}
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                                 <div>
                                     <label className="block text-sm font-semibold text-gray-900 mb-1">Start Date</label>
                                     <input
                                         type="date"
                                         className="w-full border border-gray-300 rounded-md px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none"
-                                        value={formData.start_date || ''}
+                                        value={formData.start_date}
                                         onChange={(e) => setFormData({ ...formData, start_date: e.target.value })}
+                                        required
                                     />
-                                    <p className="text-xs text-gray-500 mt-1">The anticipated or actual start date of the study</p>
                                 </div>
                                 <div>
-                                    <label className="block text-sm font-semibold text-gray-900 mb-1">End Date (if known)</label>
+                                    <label className="block text-sm font-semibold text-gray-900 mb-1">End Date (Estimated)</label>
                                     <input
                                         type="date"
                                         className="w-full border border-gray-300 rounded-md px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none"
-                                    // value={formData.end_date || ''}
-                                    // onChange={(e) => setFormData({...formData, end_date: e.target.value})}
+                                        value={formData.end_date || ''}
+                                        onChange={(e) => setFormData({ ...formData, end_date: e.target.value })}
                                     />
-                                    <p className="text-xs text-gray-500 mt-1">Projected completion date (must be after start date)</p>
                                 </div>
                             </div>
 
-                            {/* Row 6: Description */}
+                            {/* Row 5: Metrics (Sites & Subjects) */}
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                <div>
+                                    <label className="block text-sm font-semibold text-gray-900 mb-1">Planned Sites</label>
+                                    <input
+                                        type="number"
+                                        className="w-full border border-gray-300 rounded-md px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none"
+                                        placeholder="0"
+                                        value={formData.sites_count}
+                                        onChange={(e) => setFormData({ ...formData, sites_count: parseInt(e.target.value) || 0 })}
+                                    />
+                                </div>
+                                <div>
+                                    <label className="block text-sm font-semibold text-gray-900 mb-1">Planned Subjects</label>
+                                    <input
+                                        type="number"
+                                        className="w-full border border-gray-300 rounded-md px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none"
+                                        placeholder="0"
+                                        value={formData.subjects_count}
+                                        onChange={(e) => setFormData({ ...formData, subjects_count: parseInt(e.target.value) || 0 })}
+                                    />
+                                </div>
+                            </div>
+
+                            {/* Description */}
                             <div>
                                 <label className="block text-sm font-semibold text-gray-900 mb-1">Description</label>
                                 <textarea
                                     className="w-full border border-gray-300 rounded-md px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none"
-                                    rows={4}
-                                    placeholder="Brief description of the study objectives and design"
+                                    rows={3}
+                                    placeholder="Brief description of the study objectives..."
                                     value={formData.description}
                                     onChange={(e) => setFormData({ ...formData, description: e.target.value })}
                                 />
-                                <p className="text-xs text-gray-500 mt-1">Provide details about the study objectives, design, and important methodology information.</p>
                             </div>
 
-                            {/* Document Upload (Preserved) */}
-                            <div className="border-t pt-4">
-                                <label className="block text-sm font-semibold text-gray-900 mb-2">Upload Protocol Document (Optional)</label>
+                            {/* File Upload */}
+                            <div>
+                                <label className="block text-sm font-semibold text-gray-900 mb-1">Study Protocol (PDF)</label>
                                 <div className="border-2 border-dashed border-gray-300 rounded-lg p-6 text-center hover:bg-gray-50 transition-colors">
                                     <input
                                         type="file"
-                                        id="file-upload"
+                                        accept=".pdf"
                                         className="hidden"
-                                        accept=".pdf,.doc,.docx"
+                                        id="protocol-upload"
                                         onChange={(e) => setSelectedFile(e.target.files ? e.target.files[0] : null)}
                                     />
-                                    <label htmlFor="file-upload" className="cursor-pointer flex flex-col items-center">
-                                        <Upload className="h-8 w-8 text-gray-400 mb-2" />
-                                        <span className="text-sm text-blue-600 font-medium">Click to upload</span>
-                                        <span className="text-xs text-gray-500 mt-1">
-                                            {selectedFile ? selectedFile.name : "or drag and drop PDF"}
-                                        </span>
+                                    <label htmlFor="protocol-upload" className="cursor-pointer">
+                                        <Upload className="h-8 w-8 mx-auto text-gray-400 mb-2" />
+                                        <p className="text-sm text-gray-600 font-medium">Click to upload protocol document</p>
+                                        <p className="text-xs text-gray-400 mt-1">PDF files only (max 10MB)</p>
                                     </label>
+                                    {selectedFile && (
+                                        <div className="mt-3 flex items-center justify-center gap-2 text-sm text-blue-600 bg-blue-50 py-1 px-3 rounded-full inline-flex">
+                                            <FileText className="h-4 w-4" />
+                                            {selectedFile.name}
+                                            <button
+                                                type="button"
+                                                onClick={(e) => {
+                                                    e.preventDefault();
+                                                    setSelectedFile(null);
+                                                }}
+                                                className="ml-2 hover:text-blue-800"
+                                            >
+                                                <X className="h-3 w-3" />
+                                            </button>
+                                        </div>
+                                    )}
                                 </div>
                             </div>
 
-                            <div className="flex justify-end gap-3 pt-4">
+                            <div className="flex justify-end gap-3 pt-4 border-t">
                                 <button
                                     type="button"
                                     onClick={() => setIsModalOpen(false)}
-                                    className="px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md hover:bg-gray-50 shadow-sm"
+                                    className="px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-100 rounded-md transition-colors"
                                 >
                                     Cancel
                                 </button>
                                 <button
                                     type="submit"
-                                    className="px-4 py-2 text-sm font-medium text-white bg-blue-600 rounded-md hover:bg-blue-700 shadow-sm"
+                                    className="px-4 py-2 text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 rounded-md shadow-sm transition-colors"
                                 >
                                     Create Study
                                 </button>

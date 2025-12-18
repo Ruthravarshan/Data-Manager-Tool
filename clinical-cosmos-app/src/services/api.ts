@@ -32,6 +32,10 @@ export const studyService = {
             },
         });
         return response.data;
+    },
+    deleteStudy: async (studyId: string) => {
+        const response = await api.delete(`/studies/${studyId}`);
+        return response.data;
     }
 };
 

@@ -22,6 +22,23 @@ def create_study(study: StudyCreate, db: Session = Depends(get_db)):
     db.refresh(db_study)
     return db_study
 
+from app.file_service import delete_study_files
+
+@router.delete("/{study_id}")
+def delete_study(study_id: str, db: Session = Depends(get_db)):
+    study = db.query(Study).filter(Study.id == study_id).first()
+    if not study:
+        raise HTTPException(status_code=404, detail="Study not found")
+    
+    # Delete from DB
+    db.delete(study)
+    db.commit()
+    
+    # Delete associated files
+    delete_study_files(study_id)
+    
+    return {"message": "Study deleted successfully"}
+
 @router.post("/{study_id}/upload")
 def upload_study_protocol(study_id: str, file: UploadFile = File(...), db: Session = Depends(get_db)):
     study = db.query(Study).filter(Study.id == study_id).first()
@@ -29,7 +46,7 @@ def upload_study_protocol(study_id: str, file: UploadFile = File(...), db: Sessi
         raise HTTPException(status_code=404, detail="Study not found")
     
     
-    file_url = save_upload_file(file)
+    file_url = save_upload_file(file, study_id=study_id)
     
     study.file_url = file_url
     db.commit()
@@ -53,7 +70,7 @@ def upload_document(study_id: str, source: str = "Manual upload", file: UploadFi
         raise HTTPException(status_code=404, detail="Study not found")
     
     
-    file_url = save_upload_file(file)
+    file_url = save_upload_file(file, study_id=study_id)
     
     file_type = file.filename.split('.')[-1].lower() if '.' in file.filename else 'unknown'
     
