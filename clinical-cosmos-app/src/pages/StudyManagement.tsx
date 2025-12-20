@@ -1,4 +1,4 @@
-import { Search, Filter, Plus, ChevronLeft, Calendar, Users, Activity, Building2, AlertCircle, FileText, FlaskConical, Upload, Eye, Edit2, Trash2, X, Download, ArrowUpRight, MoreHorizontal } from 'lucide-react';
+import { Search, Filter, Plus, ChevronLeft, Calendar, Users, Activity, Building2, AlertCircle, FileText, FlaskConical, Upload, Eye, Edit2, Trash2, X, Download, ArrowUpRight } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import { studyService, documentService } from '../services/api';
 
@@ -591,17 +591,27 @@ export default function StudyManagement() {
         e.preventDefault();
         try {
             // 1. Create the study
-            const newStudy = await studyService.createStudy({
+            // Sanitize payload: convert empty strings to null for optional fields
+            const payload = {
                 ...formData,
-                start_date: new Date().toISOString().split('T')[0] // today's date
-            });
+                start_date: formData.start_date || new Date().toISOString().split('T')[0],
+                end_date: formData.end_date || null,
+                therapeutic_area: formData.therapeutic_area || null,
+                indication: formData.indication || null,
+                description: formData.description || null,
+                sites_count: Number(formData.sites_count) || 0,
+                subjects_count: Number(formData.subjects_count) || 0
+            };
+
+            const newStudy = await studyService.createStudy(payload);
 
             // 2. Upload file if selected
             if (selectedFile && newStudy.id) {
                 // In a real app, you'd likely link this upload to the study ID
                 // For now, we just upload it as per the service we built
                 try {
-                    await studyService.uploadProtocol(newStudy.id, selectedFile);
+                    // Use documentService so it shows up in the documents list
+                    await documentService.uploadDocument(newStudy.id, selectedFile);
                 } catch (uploadError) {
                     console.error("File upload failed but study created", uploadError);
                     alert("Study created but file upload failed.");
