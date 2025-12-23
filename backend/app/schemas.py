@@ -61,10 +61,56 @@ class IntegrationBase(BaseModel):
     type: str
     frequency: str
     status: str
+    folder_path: Optional[str] = None
+
+class IntegrationCreate(IntegrationBase):
+    pass
+
+class IntegrationUpdate(BaseModel):
+    name: Optional[str] = None
+    vendor: Optional[str] = None
+    type: Optional[str] = None
+    frequency: Optional[str] = None
+    status: Optional[str] = None
+    last_sync: Optional[datetime] = None
+    folder_path: Optional[str] = None
 
 class Integration(IntegrationBase):
     id: int
     last_sync: datetime
+    folder_path: Optional[str] = None
     
     class Config:
         orm_mode = True
+
+class DataFileBase(BaseModel):
+    filename: str
+    prefix: Optional[str] = None
+    section: Optional[str] = None
+    file_path: str
+    file_size: int
+    timestamp: Optional[str] = None
+    status: str = "Imported"
+
+class DataFileCreate(DataFileBase):
+    pass
+
+class DataFile(DataFileBase):
+    id: int
+    integration_id: Optional[int] = None
+    created_at: datetime
+    last_updated: datetime
+    
+    class Config:
+        orm_mode = True
+
+class ScanFolderRequest(BaseModel):
+    folder_path: str
+
+class ScanFolderResponse(BaseModel):
+    total_files: int
+    imported_files: int
+    unclassified_files: int
+    duplicate_files: int
+    files: List[DataFile]
+    warnings: List[str]

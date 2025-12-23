@@ -72,9 +72,48 @@ def seed_data():
     if db.query(IntegrationSource).count() == 0:
         print("Seeding Integrations...")
         integrations = [
-            IntegrationSource(name="Medidata Rave", vendor="Medidata", type="EDC", frequency="Daily", status="Active"),
-            IntegrationSource(name="Parexel Informatics", vendor="Parexel", type="CTMS", frequency="Daily", status="Active"),
-            IntegrationSource(name="LabCorp Central Labs", vendor="LabCorp", type="Lab", frequency="Weekly", status="Warning")
+            IntegrationSource(
+                name="EDC Data Feed",
+                vendor="Medidata Rave",
+                type="API",
+                frequency="Daily at 2:00 AM",
+                status="Active"
+            ),
+            IntegrationSource(
+                name="Central Lab Results",
+                vendor="Labcorp",
+                type="SFTP",
+                frequency="Every 12 hours",
+                status="Active"
+            ),
+            IntegrationSource(
+                name="Imaging Data",
+                vendor="Calyx",
+                type="S3",
+                frequency="Weekly on Monday",
+                status="Inactive"
+            ),
+            IntegrationSource(
+                name="CTMS Data",
+                vendor="Veeva Vault CTMS",
+                type="API",
+                frequency="Daily at 6:00 AM",
+                status="Error"
+            ),
+            IntegrationSource(
+                name="Clinical Pharmacy Integration",
+                vendor="Parexel Informatics",
+                type="SFTP",
+                frequency="Hourly",
+                status="Active"
+            ),
+            IntegrationSource(
+                name="Safety Data Feed",
+                vendor="SAE Central",
+                type="API",
+                frequency="Real-time",
+                status="Active"
+            )
         ]
         db.add_all(integrations)
         db.commit()

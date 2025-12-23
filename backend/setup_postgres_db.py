@@ -2,7 +2,7 @@ from sqlalchemy import create_engine, text
 import os
 
 # Connect to 'postgres' db to create new db
-DATABASE_URL = "postgresql://postgres:postgres@localhost:5432/postgres"
+DATABASE_URL = "postgresql://postgres:2664@localhost:5432/postgres"
 NEW_DB = "clinical_cosmos"
 
 def create_database():

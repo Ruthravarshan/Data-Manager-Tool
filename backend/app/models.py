@@ -48,6 +48,22 @@ class IntegrationSource(Base):
     frequency = Column(String)
     last_sync = Column(DateTime, default=datetime.utcnow)
     status = Column(String)
+    folder_path = Column(String, nullable=True)  # Path to data source folder
+
+class DataFile(Base):
+    __tablename__ = "data_files"
+
+    id = Column(Integer, primary_key=True, index=True)
+    filename = Column(String, index=True)
+    prefix = Column(String, index=True)  # e.g., ae, dm, sv
+    section = Column(String, index=True)  # e.g., AE, DM, SV
+    file_path = Column(String)
+    file_size = Column(Integer)  # in bytes
+    timestamp = Column(String, nullable=True)  # extracted from filename
+    status = Column(String, default="Imported")  # Imported, Duplicate, Unclassified
+    integration_id = Column(Integer, ForeignKey("integrations.id"), nullable=True)
+    created_at = Column(DateTime, default=datetime.utcnow)
+    last_updated = Column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
 
 class Metric(Base):
     __tablename__ = "metrics"
