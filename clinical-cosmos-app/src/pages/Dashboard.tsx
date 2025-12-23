@@ -5,11 +5,16 @@ import {
 } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { useEffect, useState } from 'react';
-import { dashboardService } from '../services/api';
+import { useNavigate } from 'react-router-dom';
+import { dashboardService, studyService, activityService } from '../services/api';
 
 export default function Dashboard() {
+    const navigate = useNavigate();
     const [activeTab, setActiveTab] = useState('tasks');
     const [metrics, setMetrics] = useState<any[]>([]);
+    const [activeStudiesCount, setActiveStudiesCount] = useState<number>(0);
+    const [studies, setStudies] = useState<any[]>([]);
+    const [recentActivities, setRecentActivities] = useState<any[]>([]);
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
@@ -31,6 +36,51 @@ export default function Dashboard() {
             }
         };
         fetchMetrics();
+    }, []);
+
+    useEffect(() => {
+        const fetchActiveStudiesCount = async () => {
+            try {
+                const count = await studyService.getActiveStudiesCount();
+                setActiveStudiesCount(count);
+            } catch (error) {
+                console.error("Failed to fetch active studies count", error);
+                // Fallback to 0 if API fails
+                setActiveStudiesCount(0);
+            }
+        };
+        fetchActiveStudiesCount();
+    }, []);
+
+    useEffect(() => {
+        const fetchStudies = async () => {
+            try {
+                const data = await studyService.getStudies();
+                setStudies(data);
+            } catch (error) {
+                console.error("Failed to fetch studies", error);
+                // Fallback to empty array if API fails
+                setStudies([]);
+            }
+        };
+        fetchStudies();
+    }, []);
+
+    useEffect(() => {
+        const fetchRecentActivities = async () => {
+            try {
+                const data = await activityService.getRecentActivities(10);
+                setRecentActivities(data);
+            } catch (error) {
+                console.error("Failed to fetch recent activities", error);
+                // Fallback to empty array if API fails
+                setRecentActivities([]);
+            }
+        };
+        fetchRecentActivities();
+        // Refresh activities every 5 seconds
+        const interval = setInterval(fetchRecentActivities, 5000);
+        return () => clearInterval(interval);
     }, []);
 
     return (
@@ -58,7 +108,7 @@ export default function Dashboard() {
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
                     <StatCard
                         title="Active Studies"
-                        value="4"
+                        value={activeStudiesCount.toString()}
                         icon={FlaskConical}
                         color="blue"
                         subtext="1 new this month"
@@ -145,40 +195,60 @@ export default function Dashboard() {
                                 </div>
                             </div>
                             <div className="p-6 pt-0 space-y-2">
-                                <StudyItem
-                                    title="Diabetes Type 2 Study"
-                                    description="Investigating efficacy of GLP-1 receptor agonists in glycemic control for T2DM patients"
-                                    phase="Phase III" sites="28 sites" subjects="342 subjects"
-                                    risk="Low Risk" riskColor="green"
-                                    progress={76}
-                                />
-                                <StudyItem
-                                    title="Rheumatoid Arthritis Study"
-                                    description="Evaluation of JAK inhibitor in moderate to severe rheumatoid arthritis"
-                                    phase="Phase II" sites="15 sites" subjects="187 subjects"
-                                    risk="Medium Risk" riskColor="amber"
-                                    progress={45}
-                                />
-                                <StudyItem
-                                    title="Advanced Breast Cancer"
-                                    description="CDK4/6 inhibitor combination therapy in HR+/HER2- advanced breast cancer"
-                                    phase="Phase III" sites="32 sites" subjects="274 subjects"
-                                    risk="High Risk" riskColor="red"
-                                    progress={28}
-                                />
-                                <StudyItem
-                                    title="Alzheimer's Disease"
-                                    description="Beta-amyloid monoclonal antibody for early-stage Alzheimer's disease"
-                                    phase="Phase II" sites="12 sites" subjects="156 subjects"
-                                    risk="Low Risk" riskColor="green"
-                                    progress={64}
-                                />
+                                {studies.length > 0 ? (
+                                    studies.map((study) => (
+                                        <StudyItem
+                                            key={study.id}
+                                            title={study.title}
+                                            description={study.description}
+                                            phase={study.phase}
+                                            sites={`${study.sites_count} sites`}
+                                            subjects={`${study.subjects_count} subjects`}
+                                            risk="Medium Risk"
+                                            riskColor="amber"
+                                            progress={study.completion_percentage || 0}
+                                        />
+                                    ))
+                                ) : (
+                                    <>
+                                        <StudyItem
+                                            title="Diabetes Type 2 Study"
+                                            description="Investigating efficacy of GLP-1 receptor agonists in glycemic control for T2DM patients"
+                                            phase="Phase III" sites="28 sites" subjects="342 subjects"
+                                            risk="Low Risk" riskColor="green"
+                                            progress={76}
+                                        />
+                                        <StudyItem
+                                            title="Rheumatoid Arthritis Study"
+                                            description="Evaluation of JAK inhibitor in moderate to severe rheumatoid arthritis"
+                                            phase="Phase II" sites="15 sites" subjects="187 subjects"
+                                            risk="Medium Risk" riskColor="amber"
+                                            progress={45}
+                                        />
+                                        <StudyItem
+                                            title="Advanced Breast Cancer"
+                                            description="CDK4/6 inhibitor combination therapy in HR+/HER2- advanced breast cancer"
+                                            phase="Phase III" sites="32 sites" subjects="274 subjects"
+                                            risk="High Risk" riskColor="red"
+                                            progress={28}
+                                        />
+                                        <StudyItem
+                                            title="Alzheimer's Disease"
+                                            description="Beta-amyloid monoclonal antibody for early-stage Alzheimer's disease"
+                                            phase="Phase II" sites="12 sites" subjects="156 subjects"
+                                            risk="Low Risk" riskColor="green"
+                                            progress={64}
+                                        />
+                                    </>
+                                )}
                             </div>
                             <div className="flex items-center p-6 pt-0 pb-3">
-                                <button className="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 border border-input bg-background hover:bg-accent hover:text-accent-foreground h-10 px-4 py-2 w-full">
-                                    <FlaskConical className="mr-2 h-4 w-4" />
-                                    Create New Study
-                                </button>
+                                <Link to="/study-management" className="w-full">
+                                    <button className="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 border border-input bg-background hover:bg-accent hover:text-accent-foreground h-10 px-4 py-2 w-full">
+                                        <FlaskConical className="mr-2 h-4 w-4" />
+                                        Create New Study
+                                    </button>
+                                </Link>
                             </div>
                         </div>
 
@@ -214,6 +284,12 @@ export default function Dashboard() {
                                 {/* Tab Navigation */}
                                 <div className="h-10 items-center justify-center rounded-md bg-blue-50 p-1 text-blue-600 grid grid-cols-3 mb-3">
                                     <button
+                                        onClick={() => setActiveTab('activities')}
+                                        className={`inline-flex items-center justify-center whitespace-nowrap rounded-sm px-3 py-1.5 text-sm font-medium ring-offset-background transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 ${activeTab === 'activities' ? 'bg-white text-blue-700 shadow-sm' : 'hover:bg-blue-100 hover:text-blue-800'}`}
+                                    >
+                                        All Activities
+                                    </button>
+                                    <button
                                         onClick={() => setActiveTab('tasks')}
                                         className={`inline-flex items-center justify-center whitespace-nowrap rounded-sm px-3 py-1.5 text-sm font-medium ring-offset-background transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 ${activeTab === 'tasks' ? 'bg-white text-blue-700 shadow-sm' : 'hover:bg-blue-100 hover:text-blue-800'}`}
                                     >
@@ -225,16 +301,24 @@ export default function Dashboard() {
                                     >
                                         Queries
                                     </button>
-                                    <button
-                                        onClick={() => setActiveTab('signals')}
-                                        className={`inline-flex items-center justify-center whitespace-nowrap rounded-sm px-3 py-1.5 text-sm font-medium ring-offset-background transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 ${activeTab === 'signals' ? 'bg-white text-blue-700 shadow-sm' : 'hover:bg-blue-100 hover:text-blue-800'}`}
-                                    >
-                                        Signals
-                                    </button>
                                 </div>
 
                                 {/* Tab Content */}
                                 <div className="space-y-3">
+                                    {activeTab === 'activities' && (
+                                        <>
+                                            {recentActivities.length > 0 ? (
+                                                recentActivities.map((activity) => (
+                                                    <ActivityItem key={activity.id} {...activity} />
+                                                ))
+                                            ) : (
+                                                <div className="text-center text-sm text-neutral-500 py-4">
+                                                    No recent activities
+                                                </div>
+                                            )}
+                                        </>
+                                    )}
+
                                     {activeTab === 'tasks' && (
                                         <>
                                             {RECENT_TASKS.map((task) => (
@@ -247,14 +331,6 @@ export default function Dashboard() {
                                         <>
                                             {RECENT_QUERIES.map((query) => (
                                                 <QueryItem key={query.id} {...query} />
-                                            ))}
-                                        </>
-                                    )}
-
-                                    {activeTab === 'signals' && (
-                                        <>
-                                            {RECENT_SIGNALS.map((signal) => (
-                                                <SignalItem key={signal.id} {...signal} />
                                             ))}
                                         </>
                                     )}
@@ -464,6 +540,57 @@ function TaskItem({ id, priority, priorityColor, title, due, assignee, status, s
             </div>
             <div className={`inline-flex items-center rounded-full border px-2.5 py-0.5 text-xs font-semibold bg-${statusColor}-50 text-${statusColor}-800 border-${statusColor}-200`}>
                 {status}
+            </div>
+        </div>
+    )
+}
+
+function ActivityItem({ action_type, description, user_name, timestamp, related_entity_type }: any) {
+    const getActionIcon = (type: string) => {
+        if (type.includes('study')) return <FlaskConical className="h-5 w-5 text-blue-600" />;
+        if (type.includes('query')) return <MessagesSquare className="h-5 w-5 text-indigo-600" />;
+        if (type.includes('task')) return <ListChecks className="h-5 w-5 text-emerald-600" />;
+        if (type.includes('document')) return <FileText className="h-5 w-5 text-purple-600" />;
+        if (type.includes('dq')) return <CircleCheck className="h-5 w-5 text-amber-600" />;
+        return <Activity className="h-5 w-5 text-blue-600" />;
+    };
+
+    const getActionLabel = (type: string) => {
+        return type.replace('_', ' ').replace(/\b\w/g, (l: string) => l.toUpperCase());
+    };
+
+    const formatTime = (timestamp: string) => {
+        const date = new Date(timestamp);
+        const now = new Date();
+        const diffMs = now.getTime() - date.getTime();
+        const diffMins = Math.floor(diffMs / 60000);
+        const diffHours = Math.floor(diffMins / 60);
+        const diffDays = Math.floor(diffHours / 24);
+
+        if (diffMins < 1) return 'Just now';
+        if (diffMins < 60) return `${diffMins}m ago`;
+        if (diffHours < 24) return `${diffHours}h ago`;
+        if (diffDays < 7) return `${diffDays}d ago`;
+        return date.toLocaleDateString();
+    };
+
+    return (
+        <div className="flex items-start gap-3 p-3 border rounded-lg hover:bg-slate-50">
+            <div className="mt-1">
+                {getActionIcon(action_type)}
+            </div>
+            <div className="flex-1">
+                <div className="flex items-center justify-between">
+                    <div>
+                        <p className="text-sm font-medium text-gray-900">{getActionLabel(action_type)}</p>
+                        <p className="text-xs text-gray-600 mt-0.5">{description}</p>
+                    </div>
+                </div>
+                <div className="flex items-center gap-2 mt-1 text-xs text-gray-500">
+                    <span>{user_name}</span>
+                    <span>•</span>
+                    <span>{formatTime(timestamp)}</span>
+                </div>
             </div>
         </div>
     )

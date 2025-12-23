@@ -19,6 +19,10 @@ export const studyService = {
         const response = await api.get('/studies/');
         return response.data;
     },
+    getActiveStudiesCount: async () => {
+        const response = await api.get('/studies/count/active');
+        return response.data.count;
+    },
     createStudy: async (studyData: any) => {
         const response = await api.post('/studies/', studyData);
         return response.data;
@@ -70,6 +74,29 @@ export const documentService = {
 export const integrationService = {
     getIntegrations: async () => {
         const response = await api.get('/integrations/');
+        return response.data;
+    }
+};
+
+export const activityService = {
+    logActivity: async (activity: {
+        action_type: string;
+        description: string;
+        user_name?: string;
+        related_entity_id?: string;
+        related_entity_type?: string;
+    }) => {
+        const response = await api.post('/activities/', activity);
+        return response.data;
+    },
+
+    getRecentActivities: async (limit: number = 10) => {
+        const response = await api.get(`/activities/recent?limit=${limit}`);
+        return response.data;
+    },
+
+    getAllActivities: async (skip: number = 0, limit: number = 100) => {
+        const response = await api.get(`/activities/?skip=${skip}&limit=${limit}`);
         return response.data;
     }
 };

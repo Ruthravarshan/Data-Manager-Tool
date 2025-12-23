@@ -56,3 +56,13 @@ class Metric(Base):
     value = Column(String)
     label = Column(String)
     trend = Column(String, nullable=True)
+class Activity(Base):
+    __tablename__ = "activities"
+
+    id = Column(Integer, primary_key=True, index=True)
+    action_type = Column(String, index=True)  # e.g., "study_created", "query_raised", "task_closed"
+    description = Column(String)
+    user_name = Column(String, default="User")  # Can be enhanced with actual user tracking
+    timestamp = Column(DateTime, default=datetime.utcnow, index=True)
+    related_entity_id = Column(String, nullable=True)  # Study ID, Query ID, Task ID, etc.
+    related_entity_type = Column(String, nullable=True)  # 'study', 'query', 'task', 'document'

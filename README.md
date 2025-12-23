@@ -21,5 +21,6 @@ uvicorn app.main:app --reload
 
 ```bash
 cd clinical-cosmos-app
+npm install
 npm run dev
 ```

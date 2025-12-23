@@ -68,3 +68,16 @@ class Integration(IntegrationBase):
     
     class Config:
         orm_mode = True
+class ActivityCreate(BaseModel):
+    action_type: str
+    description: str
+    user_name: Optional[str] = "User"
+    related_entity_id: Optional[str] = None
+    related_entity_type: Optional[str] = None
+
+class Activity(ActivityCreate):
+    id: int
+    timestamp: datetime
+    
+    class Config:
+        orm_mode = True
