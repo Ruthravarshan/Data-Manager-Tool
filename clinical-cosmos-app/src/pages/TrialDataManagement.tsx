@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import Papa from 'papaparse';
 import {
     FileText, Download, ChevronDown, Database,
     Activity, Users, FileSpreadsheet, ClipboardList,
@@ -43,7 +44,7 @@ export default function TrialDataManagement() {
     const [loading, setLoading] = useState(false);
     const [refreshing, setRefreshing] = useState(false);
     const [selectedFile, setSelectedFile] = useState<any | null>(null);
-    const [previewData, setPreviewData] = useState<any[]>([]);
+    const [previewData, setPreviewData] = useState<{ columns: string[]; rows: any[] } | null>(null);
     const [showPreview, setShowPreview] = useState(false);
 
     // Fetch data files and sections
@@ -105,14 +106,19 @@ export default function TrialDataManagement() {
     };
 
     // Handle preview
-    const handlePreview = (file: any) => {
+    const handlePreview = async (file: any) => {
         setSelectedFile(file);
-        // Mock preview data - in production would parse Excel file
-        setPreviewData([
-            { row: 1, data: 'Sample data would load from file' },
-            { row: 2, data: 'First 10 rows displayed' },
-            { row: 3, data: 'Actual file preview coming soon' },
-        ]);
+        try {
+            // Use backend preview API for both CSV and Excel
+            const response = await fetch(`http://localhost:8000/api/preview?filename=${encodeURIComponent(file.filename)}&nrows=10`);
+            if (!response.ok) {
+                throw new Error('Failed to fetch preview');
+            }
+            const data = await response.json();
+            setPreviewData(data);
+        } catch (err) {
+            setPreviewData({ columns: [], rows: [{ error: 'Failed to load file preview.' }] });
+        }
         setShowPreview(true);
     };
 
@@ -130,9 +136,14 @@ export default function TrialDataManagement() {
 
     // Handle download
     const handleDownload = (file: any) => {
-        // In production, this would download the actual file
-        console.log('Downloading:', file.filename);
-        alert(`Download functionality for ${file.filename} would be implemented with backend file serving`);
+        // Use full backend URL for download
+        const url = `http://localhost:8000/data_source/${encodeURIComponent(file.filename)}`;
+        const link = document.createElement('a');
+        link.href = url;
+        link.download = file.filename;
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
     };
 
     return (
@@ -418,8 +429,34 @@ export default function TrialDataManagement() {
                                         <li><span className="text-gray-500">Section:</span> {selectedFile.section}</li>
                                     </ul>
                                     <p className="font-medium text-gray-900 mt-4">Preview Data (First 10 rows):</p>
-                                    <div className="bg-white p-3 rounded border border-gray-200 font-mono text-xs">
-                                        <p className="text-gray-500">Preview functionality for Excel files would display data here in production</p>
+                                    <div className="bg-white p-3 rounded border border-gray-200 font-mono text-xs overflow-auto">
+                                        {previewData && previewData.rows && previewData.rows.length > 0 && !previewData.rows[0].error ? (
+                                            <>
+                                                <div className="mb-2 text-blue-700 font-semibold">Columns: {previewData.columns.join(', ')}</div>
+                                                <table className="min-w-full text-xs">
+                                                    <thead>
+                                                        <tr>
+                                                            {previewData.columns.map((col) => (
+                                                                <th key={col} className="px-2 py-1 border-b text-left">{col}</th>
+                                                            ))}
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        {previewData.rows.slice(0, 10).map((row, idx) => (
+                                                            <tr key={idx}>
+                                                                {previewData.columns.map((col, i) => (
+                                                                    <td key={i} className="px-2 py-1 border-b">{row[col]}</td>
+                                                                ))}
+                                                            </tr>
+                                                        ))}
+                                                    </tbody>
+                                                </table>
+                                            </>
+                                        ) : previewData && previewData.rows && previewData.rows[0]?.error ? (
+                                            <p className="text-red-500">{previewData.rows[0].error || 'No preview available.'}</p>
+                                        ) : (
+                                            <p className="text-gray-500">No preview available.</p>
+                                        )}
                                     </div>
                                 </div>
                             </div>
@@ -430,9 +467,14 @@ export default function TrialDataManagement() {
                                 >
                                     Close
                                 </button>
-                                <button className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700">
+                                <a
+                                    href={selectedFile ? `http://localhost:8000/data_source/${encodeURIComponent(selectedFile.filename)}` : '#'}
+                                    download={selectedFile ? selectedFile.filename : undefined}
+                                    className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 text-center"
+                                    style={{ textDecoration: 'none' }}
+                                >
                                     Download
-                                </button>
+                                </a>
                             </div>
                         </div>
                     </div>

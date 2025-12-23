@@ -35,7 +35,7 @@ class Document(DocumentBase):
     upload_date: datetime
 
     class Config:
-        orm_mode = True
+        from_attributes = True
 
 class Study(StudyBase):
     id: str
@@ -43,7 +43,7 @@ class Study(StudyBase):
     documents: List[Document] = []
     
     class Config:
-        orm_mode = True
+        from_attributes = True
 
 class MetricBase(BaseModel):
     key: str
@@ -53,7 +53,7 @@ class MetricBase(BaseModel):
 
 class Metric(MetricBase):
     class Config:
-        orm_mode = True
+        from_attributes = True
 
 class IntegrationBase(BaseModel):
     name: str
@@ -81,7 +81,7 @@ class Integration(IntegrationBase):
     folder_path: Optional[str] = None
     
     class Config:
-        orm_mode = True
+        from_attributes = True
 
 class DataFileBase(BaseModel):
     filename: str
@@ -100,9 +100,9 @@ class DataFile(DataFileBase):
     integration_id: Optional[int] = None
     created_at: datetime
     last_updated: datetime
-    
+
     class Config:
-        orm_mode = True
+        from_attributes = True
 
 class ScanFolderRequest(BaseModel):
     folder_path: str

@@ -23,8 +23,8 @@ PREFIX_TO_SECTION = {
     'ex': 'EX (Exposure)',
 }
 
-VALID_EXTENSIONS = {'.xlsx', '.xls'}
-FILE_PATTERN = r'^([a-z]+)_raw_(\d{8}_\d{6})\.(xlsx|xls)$'
+VALID_EXTENSIONS = {'.xlsx', '.xls', '.csv'}
+FILE_PATTERN = r'^([a-z]+)_raw_(\d{8}_\d{6})\.(xlsx|xls|csv)$'
 
 
 class FileClassificationResult:
@@ -95,7 +95,7 @@ def classify_file(file_path: str) -> FileClassificationResult:
                 filename=filename,
                 file_size=file_size,
                 status='Unclassified',
-                error=f"Invalid file type: {ext}. Only .xlsx and .xls files are supported"
+                error=f"Invalid file type: {ext}. Only .xlsx, .xls, and .csv files are supported"
             )
         
         # Parse filename
@@ -138,41 +138,41 @@ def scan_folder(folder_path: str) -> Tuple[List[FileClassificationResult], List[
             warnings.append(f"Folder does not exist: {folder_path}")
             return results, warnings
         
-        # Scan for Excel files
-        excel_files = []
+        # Scan for data files (Excel and CSV)
+        data_files = []
         try:
             for filename in os.listdir(folder_path):
                 file_path = os.path.join(folder_path, filename)
                 if os.path.isfile(file_path):
                     _, ext = os.path.splitext(filename)
                     if ext.lower() in VALID_EXTENSIONS:
-                        excel_files.append(file_path)
+                        data_files.append(file_path)
         except Exception as e:
             warnings.append(f"Error scanning folder: {str(e)}")
             return results, warnings
-        
-        if not excel_files:
-            warnings.append(f"No Excel files found in folder: {folder_path}")
+
+        if not data_files:
+            warnings.append(f"No Excel or CSV files found in folder: {folder_path}")
             return results, warnings
-        
+
         # Classify each file
         seen_filenames = {}
-        for file_path in sorted(excel_files):
+        for file_path in sorted(data_files):
             result = classify_file(file_path)
-            
+
             # Check for duplicates
             if result.filename in seen_filenames:
                 result.status = 'Duplicate'
                 warnings.append(f"Duplicate file found: {result.filename}")
             else:
                 seen_filenames[result.filename] = True
-            
+
             results.append(result)
-            
+
             # Log warnings for unclassified files
             if result.error:
                 warnings.append(f"{result.filename}: {result.error}")
-        
+
         return results, warnings
     
     except Exception as e:
