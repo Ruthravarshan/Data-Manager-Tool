@@ -1,6 +1,7 @@
 .venv/
 .env
 .vscode/
-ref/
-scraped_pages/
+
+ref2/
+
 azure_resources.txt

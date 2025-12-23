@@ -1,6 +1,6 @@
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
-from app.models import Base, Study, Metric
+from app.models import Base, Study, Metric, DataQualityIssue
 from app.database import DATABASE_URL
 from datetime import date
 import uuid
@@ -67,6 +67,42 @@ def seed_data():
     else:
         print("Studies already exist. Skipping.")
 
+    # 1b. Seed Data Quality Issues (non-hardcoded, randomized)
+    import random
+    from datetime import datetime, timedelta
+    issue_types = ["Missing Data", "Inconsistent Data", "Outlier", "Protocol Deviation"]
+    categories = ["DQ", "Reconciliation"]
+    statuses = ["Detected", "Reviewing", "Resolved"]
+    severities = ["High", "Medium", "Low"]
+    domains = ["DM", "LB", "VS", "AE", "EX"]
+    def random_date(start, end):
+        return start + timedelta(days=random.randint(0, (end - start).days))
+
+    studies = db.query(Study).all()
+    if db.query(DataQualityIssue).count() == 0 and studies:
+        print("Seeding Data Quality Issues...")
+        issues = []
+        for study in studies:
+            for i in range(random.randint(2, 5)):
+                issue_id = f"{random.choice(['DQ', 'DR'])}-{str(uuid.uuid4())[:4].upper()}"
+                issue = DataQualityIssue(
+                    id=issue_id,
+                    study_id=study.id,
+                    type=random.choice(issue_types),
+                    category=random.choice(categories),
+                    title=f"{random.choice(['Missing dates', 'Lab results inconsistent', 'Unexpected value', 'Deviation from protocol'])} in {random.choice(domains)} domain",
+                    status=random.choice(statuses),
+                    severity=random.choice(severities),
+                    domain=random.choice(domains),
+                    created=random_date(datetime(2024, 1, 1), datetime(2025, 12, 1)),
+                )
+                issues.append(issue)
+        db.add_all(issues)
+        db.commit()
+        print(f"Added {len(issues)} data quality issues.")
+    else:
+        print("Data Quality Issues already exist or no studies found. Skipping.")
+
     # 2. Seed Integrations
     from app.models import IntegrationSource
     if db.query(IntegrationSource).count() == 0:
@@ -125,6 +161,37 @@ def seed_data():
         print(f"Added {len(metrics)} metrics.")
     else:
         print("Metrics already exist. Skipping.")
+
+    # 5. Seed Agents
+    from app.models import Agent, ActivityLog
+    if db.query(Agent).count() == 0:
+        print("Seeding Agents...")
+        agents = [
+            Agent(name="Data Fetch Agent", role="Data Manager.AI", status="active", type="Data Fetch Agent", description="Listening for data refresh events from all integrated sources", records_processed=0, issues_found=0, icon="Box"),
+            Agent(name="DQ Processing", role="Data Manager.AI", status="active", type="DQ Processing", description="Running data quality checks across all SDTM domains", records_processed=45, issues_found=40, icon="Cpu"),
+            Agent(name="Reconciliation", role="Data Manager.AI", status="active", type="Reconciliation", description="Cross-checking data consistency between sources", records_processed=0, issues_found=0, icon="Scale"),
+            Agent(name="Protocol Check", role="Data Manager.AI", status="active", type="Protocol Check", description="Verifying adherence to protocol procedures", records_processed=16, issues_found=1, icon="ClipboardCheck"),
+            Agent(name="Task Manager", role="Data Manager.AI", status="active", type="Task Manager", description="Creating tasks based on detected issues", records_processed=0, issues_found=1, icon="ListTodo"),
+        ]
+        db.add_all(agents)
+        db.commit()
+        print(f"Added {len(agents)} Agents.")
+        
+        # Add some initial logs
+        logs = [
+            ActivityLog(agent_name="Protocol Check", message="Monitoring protocol adherence for Diabetes Type 2 Study (PRO001)", level="info", timestamp=datetime.now() - timedelta(minutes=45)),
+            ActivityLog(agent_name="Protocol Check", message="Monitoring protocol adherence for all trials", level="info", timestamp=datetime.now() - timedelta(minutes=45)),
+            ActivityLog(agent_name="Data Fetch Agent", message="Fetched 1 records from integrated sources for all trials", level="info", timestamp=datetime.now() - timedelta(minutes=40)),
+            ActivityLog(agent_name="DQ Processing", message="Analyzing data for all trials (1 records), found 1 issues", level="warning", timestamp=datetime.now() - timedelta(minutes=35)),
+            ActivityLog(agent_name="Data Fetch Agent", message="Fetched 1 records from integrated sources for Diabetes Type 2 Study (PRO001)", level="info", timestamp=datetime.now() - timedelta(minutes=10)),
+            ActivityLog(agent_name="DQ Processing", message="Analyzing data for Diabetes Type 2 Study (PRO001) (100 records), found 40 issues", level="error", timestamp=datetime.now() - timedelta(minutes=5))
+        ]
+        db.add_all(logs)
+        db.commit()
+        print(f"Added {len(logs)} Activity Logs.")
+
+    else:
+        print("Agents already exist. Skipping.")
 
     print("Database seeding completed!")
 
