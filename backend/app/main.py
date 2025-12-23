@@ -19,8 +19,11 @@ app.add_middleware(
 static_dir = os.path.join(os.path.dirname(os.path.dirname(__file__)), "static")
 app.mount("/static", StaticFiles(directory=static_dir), name="static")
 
+
 # Serve data_source folder for direct file access (download/preview)
-data_source_dir = os.path.join(os.path.dirname(os.path.dirname(__file__)), "data_source")
+# The correct data_source directory is a sibling to 'backend', not inside it
+root_dir = os.path.dirname(os.path.dirname(os.path.dirname(__file__)))
+data_source_dir = os.path.join(root_dir, "data_source")
 if os.path.exists(data_source_dir):
     app.mount("/data_source", StaticFiles(directory=data_source_dir), name="data_source")
 
