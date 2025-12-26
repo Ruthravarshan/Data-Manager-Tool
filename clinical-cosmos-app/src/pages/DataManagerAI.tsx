@@ -4,7 +4,7 @@ import {
     Box, Scale, ClipboardCheck, ListTodo, AlertTriangle, FileText, CheckCircle,
     Search, ArrowUpDown, User, ClipboardList, Plus, Filter, Calendar,
     UserPlus, KeyRound, Lock, Network, List, Settings,
-    Bell, Info, CalendarClock, MessageSquare, Database, Activity, Beaker
+    Bell, Info, CalendarClock, MessageSquare, Database, Activity, Beaker, Bot
 } from 'lucide-react';
 import { useState, useEffect } from 'react';
 import { dataManagerService } from '../services/api';
@@ -854,8 +854,8 @@ export default function DataManagerAI() {
                                                         </div>
                                                         <h4 className="font-semibold text-gray-900">{step.title}</h4>
                                                         <span className={`text-xs px-2 py-1 rounded-full mt-2 font-medium ${step.status === 'Active' ? 'bg-green-100 text-green-700' :
-                                                                step.status === 'Processing' ? 'bg-blue-100 text-blue-700' :
-                                                                    'bg-gray-100 text-gray-600'
+                                                            step.status === 'Processing' ? 'bg-blue-100 text-blue-700' :
+                                                                'bg-gray-100 text-gray-600'
                                                             }`}>
                                                             {step.status}
                                                         </span>
@@ -1097,6 +1097,18 @@ export default function DataManagerAI() {
                                 </div>
                             </div>
                         )}
+                    </div>
+                )
+            }
+            {
+                !isChatbotVisible && (
+                    <div className="fixed bottom-6 right-6 z-50">
+                        <button
+                            onClick={() => setIsChatbotVisible(true)}
+                            className="h-14 w-14 bg-blue-600 rounded-full shadow-lg flex items-center justify-center text-white hover:bg-blue-700 transition-all hover:scale-110 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+                        >
+                            <Bot className="h-8 w-8" />
+                        </button>
                     </div>
                 )
             }
