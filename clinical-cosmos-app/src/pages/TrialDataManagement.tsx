@@ -58,6 +58,17 @@ export default function TrialDataManagement() {
                 ]);
                 setDataFiles(filesData || []);
                 setSections(sectionsData || []);
+                
+                // Auto-select first section if current selection is invalid or empty
+                if (sectionsData && sectionsData.length > 0) {
+                     // Check if activeSubTab is in the new list, if not, switch to first
+                     if (!sectionsData.includes(activeSubTab)) {
+                         setActiveSubTab(sectionsData[0]);
+                     }
+                } else if (!sectionsData || sectionsData.length === 0) {
+                    // No sections available
+                    setActiveSubTab('');
+                }
             } catch (error) {
                 console.error('Failed to fetch data files:', error);
                 setDataFiles([]);
@@ -67,7 +78,14 @@ export default function TrialDataManagement() {
             }
         };
         fetchData();
-    }, []);
+    }, []); // Keep empty dependency to run once on mount, but fetching logic includes setting state
+
+    // Effect to ensure active tab is valid when sections change (e.g. after delete)
+    useEffect(() => {
+        if (sections.length > 0 && !sections.includes(activeSubTab)) {
+             setActiveSubTab(sections[0]);
+        }
+    }, [sections, activeSubTab]);
 
     // Get files for current section
     const currentSectionFiles = dataFiles.filter(f => f.section === activeSubTab);
@@ -261,7 +279,16 @@ export default function TrialDataManagement() {
                             {/* Domains Sub-Tabs */}
                             <div className="border-b border-gray-200">
                                 <div className="flex flex-wrap gap-2 mb-4 overflow-x-auto pb-2">
-                                    {Object.entries(sectionMetadata).map(([section, meta]) => (
+                                    {sections.map((section) => {
+                                        // Lookup metadata or provide default
+                                        const meta = sectionMetadata[section] || {
+                                            name: section.split(' ')[0], // Try to grab "TU" from "TU (Tumor)" or just use full name if no space
+                                            icon: Database, // Default icon
+                                            description: 'Clinical trial data section'
+                                        };
+                                        const count = dataFiles.filter(f => f.section === section).length;
+                                        
+                                        return (
                                         <button
                                             key={section}
                                             onClick={() => setActiveSubTab(section)}
@@ -275,13 +302,18 @@ export default function TrialDataManagement() {
                                         >
                                             <meta.icon className="h-3.5 w-3.5" />
                                             {meta.name}
-                                            {currentSectionFiles.length > 0 && activeSubTab === section && (
+                                            {count > 0 && activeSubTab === section && (
                                                 <span className="ml-1 px-1.5 py-0.5 text-xs bg-blue-100 text-blue-700 rounded-full">
-                                                    {currentSectionFiles.length}
+                                                    {count}
                                                 </span>
                                             )}
                                         </button>
-                                    ))}
+                                    )})}
+                                    {sections.length === 0 && (
+                                        <div className="text-sm text-gray-500 italic px-2 py-1">
+                                            No sections found. Import data to see categories.
+                                        </div>
+                                    )}
                                 </div>
                             </div>
 

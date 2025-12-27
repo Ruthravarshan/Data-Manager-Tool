@@ -21,10 +21,13 @@ PREFIX_TO_SECTION = {
     'vs': 'VS (Vitals)',
     'lb': 'LB (Laboratory)',
     'ex': 'EX (Exposure)',
+    'pk': 'PK (Pharmacokinetics)',
+    'tu': 'TU (Tumor Identification)',
+    'rs': 'RS (Response)',
 }
 
 VALID_EXTENSIONS = {'.xlsx', '.xls', '.csv'}
-FILE_PATTERN = r'^([a-z]+)_raw_(\d{8}_\d{6})\.(xlsx|xls|csv)$'
+FILE_PATTERN = r'^([a-z0-9]+)_raw_(\d{8}(?:_\d{6})?)(?:_.*)?\.(xlsx|xls|csv)$'
 
 
 class FileClassificationResult:
@@ -50,7 +53,7 @@ def parse_filename(filename: str) -> Tuple[Optional[str], Optional[str], Optiona
     Expected format: <prefix>_raw_<timestamp>.<ext>
     Example: ae_raw_20251126_074704.xlsx
     """
-    match = re.match(FILE_PATTERN, filename.lower())
+    match = re.search(FILE_PATTERN, filename.lower())
     
     if not match:
         return None, None, None, f"Invalid filename format: {filename}"
@@ -58,11 +61,20 @@ def parse_filename(filename: str) -> Tuple[Optional[str], Optional[str], Optiona
     prefix = match.group(1)
     timestamp = match.group(2)
     
-    # Check if prefix is known
-    if prefix not in PREFIX_TO_SECTION:
-        return prefix, None, timestamp, f"Unknown prefix: {prefix}"
+    # Clean up prefix: remove 'raw' matches, remove digits
+    clean_prefix = prefix
+    if clean_prefix.startswith("raw"):
+        clean_prefix = clean_prefix[3:]
+    clean_prefix = re.sub(r'\d+$', '', clean_prefix)
     
-    section = PREFIX_TO_SECTION[prefix]
+    # Check if prefix is known
+    if clean_prefix not in PREFIX_TO_SECTION:
+        # Dynamic section creation: Use uppercase prefix
+        # This allows new sections like TU, PK, RS to be created automatically
+        section_name = clean_prefix.upper()
+        return prefix, section_name, timestamp, None
+    
+    section = PREFIX_TO_SECTION[clean_prefix]
     return prefix, section, timestamp, None
 
 

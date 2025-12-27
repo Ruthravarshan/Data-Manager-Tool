@@ -67,18 +67,21 @@ PREFIX_TO_SECTION = {
     "vs": "VS (Vitals)",
     "lb": "LB (Laboratory)",
     "ex": "EX (Exposure)",
+    "pk": "PK (Pharmacokinetics)",
+    "tu": "TU (Tumor Identification)",
+    "rs": "RS (Response)",
 }
 
 UNCLASSIFIED_SECTION = "Unclassified"
 
 # More tolerant filename pattern (CSV):
 # <prefix>_raw_<date>[ _<time> ][ _anythingElse ].csv
-# - prefix: letters only
+# - prefix: letters/digits (to support rawlb1, etc.)
 # - raw: case-insensitive
 # - date: yyyymmdd
 # - time: hhmmss (optional)
 FILENAME_PATTERN = re.compile(
-    r"""^(?P<prefix>[A-Za-z]+)          # prefix
+    r"""^(?P<prefix>[A-Za-z0-9]+)       # prefix (letters + digits allowed)
          _(?P<raw>raw)                  # literal 'raw' (case-insensitive)
          _(?P<date>\d{8})               # date yyyymmdd
          (?:_(?P<time>\d{6}))?          # optional time hhmmss
@@ -113,7 +116,17 @@ def parse_filename(fname: str) -> Tuple[Optional[str], Optional[str], Optional[s
 def map_prefix_to_section(prefix: Optional[str]) -> str:
     if prefix is None:
         return UNCLASSIFIED_SECTION
-    return PREFIX_TO_SECTION.get(prefix, UNCLASSIFIED_SECTION)
+    
+    # Clean up: strip leading 'raw' and trailing digits
+    # e.g. 'rawlb1' -> 'lb'
+    clean = prefix
+    if clean.startswith("raw"):
+        clean = clean[3:]
+    
+    # Remove trailing digits
+    clean = re.sub(r'\d+$', '', clean)
+    
+    return PREFIX_TO_SECTION.get(clean, UNCLASSIFIED_SECTION)
 
 def copy_file(src: str, dst_dir: str) -> str:
     ensure_dir(dst_dir)
