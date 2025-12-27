@@ -48,6 +48,7 @@ class IntegrationSource(Base):
     frequency = Column(String)
     last_sync = Column(DateTime, default=datetime.utcnow)
     status = Column(String)
+    protocol_id = Column(String, nullable=True) # E.g., PRO001
     folder_path = Column(String, nullable=True)  # Path to data source folder
 
 class DataFile(Base):

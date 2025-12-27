@@ -28,13 +28,14 @@ export default function DataIntegration() {
     const [showStatusDropdown, setShowStatusDropdown] = useState(false);
     const typeDropdownRef = useRef<HTMLDivElement>(null);
     const statusDropdownRef = useRef<HTMLDivElement>(null);
-    
+
     // Modal state
     const [showAddModal, setShowAddModal] = useState(false);
     const [formData, setFormData] = useState({
         name: '',
         type: 'API',
         vendor: '',
+        protocolId: '',
         frequency: 'Daily at 2:00 AM',
         folderPath: '',
         launchImmediately: false
@@ -76,7 +77,7 @@ export default function DataIntegration() {
                 integrationService.getIntegrationTypes(),
                 integrationService.getIntegrationStatuses()
             ]);
-            
+
             setIntegrations(integrationData);
             setAvailableTypes(typesData || []);
             setAvailableStatuses(statusesData || []);
@@ -210,17 +211,19 @@ export default function DataIntegration() {
                 vendor: formData.vendor,
                 frequency: formData.frequency,
                 status: 'Active',
+                protocol_id: formData.protocolId || null,
                 folder_path: formData.folderPath || null
             });
 
             // Refresh the list
             await fetchData(typeFilter, statusFilter);
-            
+
             // Reset form
             setFormData({
                 name: '',
                 type: 'API',
                 vendor: '',
+                protocolId: '',
                 frequency: 'Daily at 2:00 AM',
                 folderPath: '',
                 launchImmediately: false
@@ -249,7 +252,7 @@ export default function DataIntegration() {
             const result = await integrationService.scanFolder(integrationId);
             setScanSuccess(prev => ({ ...prev, [integrationId]: true }));
             console.log('Folder scan result:', result);
-            
+
             // Show success message for 3 seconds
             setTimeout(() => {
                 setScanSuccess(prev => ({ ...prev, [integrationId]: false }));
@@ -359,7 +362,7 @@ export default function DataIntegration() {
                                             <div className="flex gap-2">
                                                 {/* Type Filter Dropdown */}
                                                 <div ref={typeDropdownRef} className="relative">
-                                                    <button 
+                                                    <button
                                                         onClick={() => setShowTypeDropdown(!showTypeDropdown)}
                                                         className="flex h-10 items-center justify-between rounded-md border border-gray-300 bg-white px-3 py-2 text-sm w-[160px] text-gray-700 hover:bg-gray-50"
                                                     >
@@ -395,7 +398,7 @@ export default function DataIntegration() {
 
                                                 {/* Status Filter Dropdown */}
                                                 <div ref={statusDropdownRef} className="relative">
-                                                    <button 
+                                                    <button
                                                         onClick={() => setShowStatusDropdown(!showStatusDropdown)}
                                                         className="flex h-10 items-center justify-between rounded-md border border-gray-300 bg-white px-3 py-2 text-sm w-[160px] text-gray-700 hover:bg-gray-50"
                                                     >
@@ -468,7 +471,7 @@ export default function DataIntegration() {
                                                             </td>
                                                             <td className="p-4 text-right">
                                                                 <div className="flex justify-end items-center space-x-2">
-                                                                    <button 
+                                                                    <button
                                                                         onClick={() => handleScanFolder(item.id)}
                                                                         disabled={scanningId === item.id}
                                                                         className="p-2 border border-green-200 rounded-md hover:bg-green-50 text-green-600 disabled:opacity-50"
@@ -647,6 +650,21 @@ export default function DataIntegration() {
                                     value={formData.name}
                                     onChange={handleFormChange}
                                     placeholder="e.g., Primary EDC Data Feed"
+                                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                />
+                            </div>
+
+                            {/* Protocol ID */}
+                            <div>
+                                <label className="block text-sm font-medium text-gray-700 mb-2">
+                                    Protocol ID
+                                </label>
+                                <input
+                                    type="text"
+                                    name="protocolId"
+                                    value={formData.protocolId}
+                                    onChange={handleFormChange}
+                                    placeholder="e.g., PRO001"
                                     className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                                 />
                             </div>

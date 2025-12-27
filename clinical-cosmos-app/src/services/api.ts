@@ -75,32 +75,37 @@ export const integrationService = {
         const response = await api.get(`/integrations/?${params.toString()}`);
         return response.data;
     },
-    
+
     getIntegrationTypes: async () => {
         const response = await api.get('/integrations/filters/types');
         return response.data;
     },
-    
+
     getIntegrationStatuses: async () => {
         const response = await api.get('/integrations/filters/statuses');
         return response.data;
     },
-    
+
+    getProtocols: async () => {
+        const response = await api.get('/integrations/filters/protocols');
+        return response.data;
+    },
+
     createIntegration: async (integrationData: any) => {
         const response = await api.post('/integrations/', integrationData);
         return response.data;
     },
-    
+
     updateIntegration: async (integrationId: number, integrationData: any) => {
         const response = await api.put(`/integrations/${integrationId}`, integrationData);
         return response.data;
     },
-    
+
     deleteIntegration: async (integrationId: number) => {
         const response = await api.delete(`/integrations/${integrationId}`);
         return response.data;
     },
-    
+
     scanFolder: async (integrationId: number) => {
         const response = await api.post(`/data-files/scan/${integrationId}`);
         return response.data;
@@ -108,7 +113,7 @@ export const integrationService = {
 };
 
 export const dataFileService = {
-    getDataFiles: async (section?: string, status?: string, integrationId?: number) => {
+    getDataFiles: async (section?: string, status?: string, integrationId?: number, protocolId?: string) => {
         const params = new URLSearchParams();
         if (section) {
             params.append('section', section);
@@ -119,15 +124,18 @@ export const dataFileService = {
         if (integrationId) {
             params.append('integration_id', integrationId.toString());
         }
+        if (protocolId) {
+            params.append('protocol_id', protocolId);
+        }
         const response = await api.get(`/data-files/?${params.toString()}`);
         return response.data;
     },
-    
+
     getSections: async () => {
         const response = await api.get('/data-files/sections');
         return response.data;
     },
-    
+
     deleteDataFile: async (fileId: number) => {
         const response = await api.delete(`/data-files/${fileId}`);
         return response.data;

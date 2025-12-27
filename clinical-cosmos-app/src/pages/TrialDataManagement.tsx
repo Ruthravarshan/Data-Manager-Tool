@@ -8,7 +8,7 @@ import {
 } from 'lucide-react';
 import { clsx, type ClassValue } from "clsx";
 import { twMerge } from "tailwind-merge";
-import { dataFileService } from '../services/api';
+import { dataFileService, integrationService } from '../services/api';
 
 function cn(...inputs: ClassValue[]) {
     return twMerge(clsx(inputs));
@@ -41,30 +41,50 @@ export default function TrialDataManagement() {
     const [activeSubTab, setActiveSubTab] = useState('DM (Demographics)');
     const [dataFiles, setDataFiles] = useState<any[]>([]);
     const [sections, setSections] = useState<string[]>([]);
+    const [protocols, setProtocols] = useState<string[]>([]);
+    const [selectedProtocol, setSelectedProtocol] = useState<string>('');
     const [loading, setLoading] = useState(false);
     const [refreshing, setRefreshing] = useState(false);
     const [selectedFile, setSelectedFile] = useState<any | null>(null);
     const [previewData, setPreviewData] = useState<{ columns: string[]; rows: any[] } | null>(null);
     const [showPreview, setShowPreview] = useState(false);
 
-    // Fetch data files and sections
+    // Fetch protocols on mount
+    useEffect(() => {
+        const fetchProtocols = async () => {
+            try {
+                const protocolsData = await integrationService.getProtocols();
+                setProtocols(protocolsData || []);
+                // Auto-select first protocol if available
+                if (protocolsData && protocolsData.length > 0) {
+                    setSelectedProtocol(protocolsData[0]);
+                }
+            } catch (error) {
+                console.error('Failed to fetch protocols:', error);
+                setProtocols([]);
+            }
+        };
+        fetchProtocols();
+    }, []);
+
+    // Fetch data files and sections when protocol changes
     useEffect(() => {
         const fetchData = async () => {
             try {
                 setLoading(true);
                 const [filesData, sectionsData] = await Promise.all([
-                    dataFileService.getDataFiles(),
+                    dataFileService.getDataFiles(undefined, undefined, undefined, selectedProtocol || undefined),
                     dataFileService.getSections()
                 ]);
                 setDataFiles(filesData || []);
                 setSections(sectionsData || []);
-                
+
                 // Auto-select first section if current selection is invalid or empty
                 if (sectionsData && sectionsData.length > 0) {
-                     // Check if activeSubTab is in the new list, if not, switch to first
-                     if (!sectionsData.includes(activeSubTab)) {
-                         setActiveSubTab(sectionsData[0]);
-                     }
+                    // Check if activeSubTab is in the new list, if not, switch to first
+                    if (!sectionsData.includes(activeSubTab)) {
+                        setActiveSubTab(sectionsData[0]);
+                    }
                 } else if (!sectionsData || sectionsData.length === 0) {
                     // No sections available
                     setActiveSubTab('');
@@ -77,13 +97,15 @@ export default function TrialDataManagement() {
                 setLoading(false);
             }
         };
-        fetchData();
-    }, []); // Keep empty dependency to run once on mount, but fetching logic includes setting state
+        if (selectedProtocol) {
+            fetchData();
+        }
+    }, [selectedProtocol]);
 
     // Effect to ensure active tab is valid when sections change (e.g. after delete)
     useEffect(() => {
         if (sections.length > 0 && !sections.includes(activeSubTab)) {
-             setActiveSubTab(sections[0]);
+            setActiveSubTab(sections[0]);
         }
     }, [sections, activeSubTab]);
 
@@ -174,10 +196,18 @@ export default function TrialDataManagement() {
                         <p className="text-gray-500">View and analyze clinical trial data across multiple sources</p>
                     </div>
                     <div className="flex items-center gap-4 w-full sm:w-auto">
-                        <button className="flex h-10 items-center justify-between rounded-md border border-gray-300 bg-white px-3 py-2 text-sm w-full sm:w-[180px] text-gray-700 hover:bg-gray-50">
-                            <span className="font-medium">PRO001</span>
-                            <ChevronDown className="h-4 w-4 opacity-50" />
-                        </button>
+                        <select
+                            value={selectedProtocol}
+                            onChange={(e) => setSelectedProtocol(e.target.value)}
+                            className="flex h-10 items-center justify-between rounded-md border border-gray-300 bg-white px-3 py-2 text-sm w-full sm:w-[180px] text-gray-700 hover:bg-gray-50"
+                        >
+                            {protocols.length === 0 && (
+                                <option value="">No Protocols</option>
+                            )}
+                            {protocols.map(protocol => (
+                                <option key={protocol} value={protocol}>{protocol}</option>
+                            ))}
+                        </select>
                         <div className="flex gap-2">
                             <button className="inline-flex items-center justify-center gap-2 whitespace-nowrap text-sm font-medium border border-gray-300 bg-white hover:bg-gray-100 h-9 rounded-md px-3 text-gray-700 shadow-sm transition-colors">
                                 <FileText className="h-4 w-4" />
@@ -264,7 +294,7 @@ export default function TrialDataManagement() {
                                         <span className="text-xs px-2 py-0.5 bg-blue-100 text-blue-800 rounded-full font-medium">Imported Files</span>
                                     </p>
                                 </div>
-                                <button 
+                                <button
                                     onClick={() => {
                                         setRefreshing(true);
                                         setTimeout(() => setRefreshing(false), 1000);
@@ -287,28 +317,29 @@ export default function TrialDataManagement() {
                                             description: 'Clinical trial data section'
                                         };
                                         const count = dataFiles.filter(f => f.section === section).length;
-                                        
+
                                         return (
-                                        <button
-                                            key={section}
-                                            onClick={() => setActiveSubTab(section)}
-                                            className={cn(
-                                                "inline-flex items-center gap-1.5 px-3 py-1.5 rounded-md text-sm font-medium transition-colors whitespace-nowrap",
-                                                activeSubTab === section
-                                                    ? "bg-blue-50 text-blue-700 border border-blue-200"
-                                                    : "bg-white text-gray-600 border border-gray-200 hover:bg-gray-50 hover:text-gray-900"
-                                            )}
-                                            title={meta.description}
-                                        >
-                                            <meta.icon className="h-3.5 w-3.5" />
-                                            {meta.name}
-                                            {count > 0 && activeSubTab === section && (
-                                                <span className="ml-1 px-1.5 py-0.5 text-xs bg-blue-100 text-blue-700 rounded-full">
-                                                    {count}
-                                                </span>
-                                            )}
-                                        </button>
-                                    )})}
+                                            <button
+                                                key={section}
+                                                onClick={() => setActiveSubTab(section)}
+                                                className={cn(
+                                                    "inline-flex items-center gap-1.5 px-3 py-1.5 rounded-md text-sm font-medium transition-colors whitespace-nowrap",
+                                                    activeSubTab === section
+                                                        ? "bg-blue-50 text-blue-700 border border-blue-200"
+                                                        : "bg-white text-gray-600 border border-gray-200 hover:bg-gray-50 hover:text-gray-900"
+                                                )}
+                                                title={meta.description}
+                                            >
+                                                <meta.icon className="h-3.5 w-3.5" />
+                                                {meta.name}
+                                                {count > 0 && activeSubTab === section && (
+                                                    <span className="ml-1 px-1.5 py-0.5 text-xs bg-blue-100 text-blue-700 rounded-full">
+                                                        {count}
+                                                    </span>
+                                                )}
+                                            </button>
+                                        )
+                                    })}
                                     {sections.length === 0 && (
                                         <div className="text-sm text-gray-500 italic px-2 py-1">
                                             No sections found. Import data to see categories.
@@ -348,8 +379,8 @@ export default function TrialDataManagement() {
                                                                 <span className={cn(
                                                                     "text-xs px-2 py-1 rounded-full font-medium",
                                                                     file.status === 'Imported' ? 'bg-green-50 text-green-700' :
-                                                                    file.status === 'Duplicate' ? 'bg-yellow-50 text-yellow-700' :
-                                                                    'bg-gray-50 text-gray-700'
+                                                                        file.status === 'Duplicate' ? 'bg-yellow-50 text-yellow-700' :
+                                                                            'bg-gray-50 text-gray-700'
                                                                 )}>
                                                                     {file.status}
                                                                 </span>
@@ -444,7 +475,7 @@ export default function TrialDataManagement() {
                         <div className="bg-white rounded-lg shadow-xl w-full max-w-2xl max-h-96 overflow-hidden flex flex-col">
                             <div className="flex justify-between items-center p-6 border-b border-gray-200">
                                 <h3 className="text-lg font-semibold">Preview - {selectedFile.filename}</h3>
-                                <button 
+                                <button
                                     onClick={() => setShowPreview(false)}
                                     className="text-gray-400 hover:text-gray-600"
                                 >
@@ -493,7 +524,7 @@ export default function TrialDataManagement() {
                                 </div>
                             </div>
                             <div className="p-6 border-t border-gray-200 flex justify-end gap-3">
-                                <button 
+                                <button
                                     onClick={() => setShowPreview(false)}
                                     className="px-4 py-2 text-gray-700 border border-gray-300 rounded-md hover:bg-gray-50"
                                 >

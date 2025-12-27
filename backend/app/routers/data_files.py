@@ -17,10 +17,16 @@ def get_data_files(
     section: Optional[str] = Query(None),
     status: Optional[str] = Query(None),
     integration_id: Optional[int] = Query(None),
+    protocol_id: Optional[str] = Query(None),
     db: Session = Depends(get_db)
 ):
     """Get data files with optional filtering"""
     query = db.query(DataFile)
+    
+    # If filtering by protocol, join with IntegrationSource
+    if protocol_id:
+        query = query.join(IntegrationSource, DataFile.integration_id == IntegrationSource.id)\
+                     .filter(IntegrationSource.protocol_id == protocol_id)
     
     if section:
         query = query.filter(DataFile.section == section)

@@ -61,6 +61,7 @@ class IntegrationBase(BaseModel):
     type: str
     frequency: str
     status: str
+    protocol_id: Optional[str] = None
     folder_path: Optional[str] = None
 
 class IntegrationCreate(IntegrationBase):
@@ -72,6 +73,7 @@ class IntegrationUpdate(BaseModel):
     type: Optional[str] = None
     frequency: Optional[str] = None
     status: Optional[str] = None
+    protocol_id: Optional[str] = None
     last_sync: Optional[datetime] = None
     folder_path: Optional[str] = None
 

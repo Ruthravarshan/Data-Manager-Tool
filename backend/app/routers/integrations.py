@@ -36,6 +36,12 @@ def get_integration_statuses(db: Session = Depends(get_db)):
     statuses = db.query(IntegrationSource.status).distinct().all()
     return [s[0] for s in statuses if s[0]]
 
+@router.get("/filters/protocols", response_model=List[str])
+def get_protocol_ids(db: Session = Depends(get_db)):
+    """Get list of all unique protocol IDs"""
+    protocols = db.query(IntegrationSource.protocol_id).distinct().all()
+    return sorted([p[0] for p in protocols if p[0]])
+
 @router.post("/", response_model=Integration)
 def create_integration(integration: IntegrationCreate, db: Session = Depends(get_db)):
     """Create a new integration"""
