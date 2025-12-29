@@ -1,5 +1,5 @@
 from pydantic import BaseModel
-from typing import Optional, List
+from typing import Optional, List, Dict, Any
 from datetime import date, datetime
 
 class StudyBase(BaseModel):
@@ -116,3 +116,14 @@ class ScanFolderResponse(BaseModel):
     duplicate_files: int
     files: List[DataFile]
     warnings: List[str]
+
+class SectionMetadataResponse(BaseModel):
+    domain: str
+    dataset_name: str
+    vendor: str
+    data_source: str
+    last_updated: Optional[datetime]
+    description: str
+    record_count: int
+    variable_count: int
+    sample_data: List[Dict[str, Any]]
