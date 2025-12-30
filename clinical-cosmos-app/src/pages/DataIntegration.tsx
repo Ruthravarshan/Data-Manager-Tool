@@ -1,9 +1,9 @@
-
 import {
     Database, CalendarClock, Activity, PlusCircle,
     ServerCog, History, SlidersVertical, Mail,
     TriangleAlert, ChevronDown, Download, RefreshCw,
-    PauseCircle, PlayCircle, MoreHorizontal
+    PauseCircle, PlayCircle, MoreHorizontal, FileText,
+    Key, Settings, Trash2, StopCircle
 } from 'lucide-react';
 import { clsx, type ClassValue } from "clsx";
 import { twMerge } from "tailwind-merge";
@@ -14,6 +14,7 @@ function cn(...inputs: ClassValue[]) {
 
 import { useEffect, useState, useRef } from 'react';
 import { integrationService } from '../services/api';
+import CredentialsModal from '../components/CredentialsModal';
 
 export default function DataIntegration() {
     const [activeTab, setActiveTab] = useState('data-sources');
@@ -44,6 +45,11 @@ export default function DataIntegration() {
     const [submitError, setSubmitError] = useState('');
     const [scanningId, setScanningId] = useState<number | null>(null);
     const [scanSuccess, setScanSuccess] = useState<{ [key: number]: boolean }>({});
+
+    // Credentials Modal state
+    const [showCredentialsModal, setShowCredentialsModal] = useState(false);
+    const [selectedIntegrationForCredentials, setSelectedIntegrationForCredentials] = useState<any>(null);
+    const [activeActionMenuId, setActiveActionMenuId] = useState<number | null>(null);
 
     // Predefined options
     const integrationTypes = ['API', 'SFTP', 'S3', 'EDC', 'CTMS', 'Lab'];
@@ -120,7 +126,17 @@ export default function DataIntegration() {
                     frequency: "Daily at 6:00 AM",
                     last_sync: new Date().toISOString(),
                     status: "Error"
+                },
+                {
+                    id: 5,
+                    name: "ECG Data",
+                    vendor: "AliveCor",
+                    type: "API",
+                    frequency: "Daily at 4:00 AM",
+                    last_sync: new Date().toISOString(),
+                    status: "Active"
                 }
+
             ]);
             setAvailableTypes(['API', 'SFTP', 'S3', 'EDC', 'CTMS']);
             setAvailableStatuses(['Active', 'Inactive', 'Error', 'Warning']);
@@ -142,11 +158,15 @@ export default function DataIntegration() {
             if (statusDropdownRef.current && !statusDropdownRef.current.contains(event.target as Node)) {
                 setShowStatusDropdown(false);
             }
+            // Close action menu if clicking outside
+            if (activeActionMenuId !== null && !(event.target as Element).closest('.action-menu-container')) {
+                setActiveActionMenuId(null);
+            }
         };
 
         document.addEventListener('mousedown', handleClickOutside);
         return () => document.removeEventListener('mousedown', handleClickOutside);
-    }, []);
+    }, [activeActionMenuId]);
 
     // Handle filter changes
     const handleTypeChange = (type: string) => {
@@ -169,8 +189,17 @@ export default function DataIntegration() {
     const formatDateTime = (dateString: string | undefined) => {
         if (!dateString) return "Never";
         try {
-            const date = new Date(dateString);
-            return date.toLocaleString();
+            // Check if it's just a time string
+            if (dateString.includes('T')) {
+                const date = new Date(dateString);
+                return (
+                    <div className="flex flex-col">
+                        <span>{date.toISOString().split('T')[0]}</span>
+                        <span className="text-gray-400">{date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: false })}</span>
+                    </div>
+                );
+            }
+            return dateString;
         } catch (e) {
             return dateString;
         }
@@ -269,349 +298,253 @@ export default function DataIntegration() {
     };
 
     return (
-        <div className="p-6">
-            <div className="container mx-auto py-6">
+        <div className="p-6 bg-gray-50 min-h-screen">
+            <div className="container mx-auto py-2">
                 <div className="flex justify-between items-center mb-6">
-                    <div>
-                        <h1 className="text-3xl font-bold tracking-tight">Data Integration</h1>
-                        <p className="text-gray-500">Manage data integrations and connections across your clinical trials</p>
+                    {/* Replaced Header with something cleaner if desired, or keep generic */}
+                </div>
+
+                {/* Sub Tabs centered as per Image 0 (approx) */}
+                <div className="flex flex-col items-center mb-8">
+                    <div className="flex items-center space-x-1 bg-white p-1 rounded-full shadow-sm border border-gray-100 mb-6">
+                        {[
+                            { id: 'integration-sources', label: 'Integration Sources' },
+                            { id: 'integration-logs', label: 'Integration Logs' },
+                            { id: 'monitor-ai', label: 'Monitor.AI' },
+                            { id: 'notifications', label: 'Notifications' },
+                        ].map((tab) => (
+                            <button
+                                key={tab.id}
+                                onClick={() => setActiveSubTab(tab.id)}
+                                className={cn(
+                                    "px-4 py-1.5 text-sm font-medium rounded-full transition-all",
+                                    activeSubTab === tab.id
+                                        ? "bg-blue-50 text-blue-700"
+                                        : "text-gray-500 hover:text-gray-900 hover:bg-gray-50"
+                                )}
+                            >
+                                {tab.label}
+                            </button>
+                        ))}
                     </div>
                 </div>
 
-                {/* Main Tabs */}
-                <div className="flex space-x-1 bg-blue-50 p-1 rounded-md mb-6 w-full max-w-md">
-                    {[
-                        { id: 'data-sources', label: 'Data Sources', icon: Database },
-                        { id: 'scheduler', label: 'Scheduler', icon: CalendarClock },
-                        { id: 'monitoring', label: 'Real-Time Monitoring', icon: Activity },
-                    ].map((tab) => (
-                        <button
-                            key={tab.id}
-                            onClick={() => setActiveTab(tab.id)}
-                            className={cn(
-                                "flex-1 flex items-center justify-center px-3 py-1.5 text-sm font-medium rounded-sm transition-all",
-                                activeTab === tab.id
-                                    ? "bg-white text-blue-700 shadow-sm"
-                                    : "text-blue-600 hover:bg-blue-100 hover:text-blue-800"
-                            )}
-                        >
-                            <tab.icon className="h-4 w-4 mr-2" />
-                            {tab.label}
-                        </button>
-                    ))}
-                </div>
 
-                {activeTab === 'data-sources' && (
-                    <div className="rounded-lg border bg-white shadow-sm">
-                        {loading ? (
-                            <div className="p-8 text-center text-gray-500">Loading integrations...</div>
-                        ) : (
-                            <div className="p-6 flex flex-col space-y-6">
-                                <div className="flex items-center justify-between">
-                                    <div className="flex items-center gap-2">
-                                        <Database className="h-5 w-5 text-blue-600" />
-                                        <div>
-                                            <h3 className="text-2xl font-semibold leading-none tracking-tight">Data Source Manager</h3>
-                                            <p className="text-sm text-gray-500 mt-1">Configure and manage data integrations from external sources</p>
-                                        </div>
-                                    </div>
-                                    <button onClick={() => setShowAddModal(true)} className="inline-flex items-center justify-center whitespace-nowrap text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-blue-600 text-white hover:bg-blue-700 h-9 rounded-md px-3 gap-1">
-                                        <PlusCircle className="h-4 w-4" />
-                                        <span>Add Integration</span>
-                                    </button>
+                {activeSubTab === 'integration-sources' && (
+                    <div className="space-y-4">
+                        {/* Alert */}
+                        {integrations.some(i => i.status === 'Error') && (
+                            <div className="relative w-full rounded-md border p-3 bg-red-50 border-red-100 text-red-600 flex items-center gap-3">
+                                <TriangleAlert className="h-4 w-4" />
+                                <div className="text-sm font-medium">
+                                    One or more integrations have errors. Please check the integration details.
                                 </div>
+                            </div>
+                        )}
 
-                                {/* Sub Tabs */}
-                                <div className="bg-blue-50 p-1 rounded-md grid grid-cols-4 w-full max-w-lg mx-auto">
-                                    {[
-                                        { id: 'integration-sources', label: 'Integration Sources', icon: ServerCog },
-                                        { id: 'integration-logs', label: 'Integration Logs', icon: History },
-                                        { id: 'monitor-ai', label: 'Monitor.AI', icon: SlidersVertical },
-                                        { id: 'notifications', label: 'Notifications', icon: Mail },
-                                    ].map((tab) => (
+                        {/* Card Container */}
+                        <div className="bg-white border rounded-lg shadow-sm">
+
+                            {/* Toolbar */}
+                            <div className="flex items-center justify-between p-4 border-b border-gray-100">
+                                <div className="flex gap-2">
+                                    {/* Type Filter Dropdown */}
+                                    <div ref={typeDropdownRef} className="relative">
                                         <button
-                                            key={tab.id}
-                                            onClick={() => setActiveSubTab(tab.id)}
-                                            className={cn(
-                                                "flex items-center justify-center px-3 py-1.5 text-sm font-medium rounded-sm transition-all gap-1",
-                                                activeSubTab === tab.id
-                                                    ? "bg-white text-blue-700 shadow-sm"
-                                                    : "text-blue-600 hover:bg-blue-100 hover:text-blue-800"
-                                            )}
+                                            onClick={() => setShowTypeDropdown(!showTypeDropdown)}
+                                            className="flex h-9 items-center justify-between rounded-md border border-gray-200 bg-white px-3 py-1.5 text-sm w-[140px] text-gray-700 hover:bg-gray-50 disabled:opacity-50 transition-colors shadow-sm"
                                         >
-                                            <tab.icon className="h-4 w-4" />
-                                            <span className="truncate">{tab.label}</span>
+                                            <span>{typeFilter}</span>
+                                            <ChevronDown className="h-3 w-3 opacity-50" />
                                         </button>
-                                    ))}
-                                </div>
-
-                                {activeSubTab === 'integration-sources' && (
-                                    <div className="space-y-4">
-                                        {/* Alert */}
-                                        {integrations.some(i => i.status === 'Error') && (
-                                            <div className="relative w-full rounded-lg border p-4 bg-red-50 border-red-200 text-red-800 flex items-start gap-4">
-                                                <TriangleAlert className="h-4 w-4 mt-1" />
-                                                <div className="text-sm">
-                                                    One or more integrations have errors. Please check the integration details.
+                                        {showTypeDropdown && (
+                                            <div className="absolute top-full left-0 mt-1 w-[200px] bg-white border border-gray-200 rounded-lg shadow-xl z-20 overflow-hidden animate-in fade-in zoom-in-95 duration-150">
+                                                <div className="py-1">
+                                                    <button
+                                                        onClick={() => handleTypeChange('All Types')}
+                                                        className={cn(
+                                                            "w-full text-left px-3 py-2 text-sm hover:bg-gray-50",
+                                                            typeFilter === 'All Types' ? "bg-blue-50 text-blue-700 font-medium" : "text-gray-700"
+                                                        )}
+                                                    >
+                                                        All Types
+                                                    </button>
+                                                    {availableTypes.map(type => (
+                                                        <button
+                                                            key={type}
+                                                            onClick={() => handleTypeChange(type)}
+                                                            className={cn(
+                                                                "w-full text-left px-3 py-2 text-sm hover:bg-gray-50",
+                                                                typeFilter === type ? "bg-blue-50 text-blue-700 font-medium" : "text-gray-700"
+                                                            )}
+                                                        >
+                                                            {type}
+                                                        </button>
+                                                    ))}
                                                 </div>
                                             </div>
                                         )}
+                                    </div>
 
-                                        {/* Filters and Actions */}
-                                        <div className="flex items-center justify-between mb-4">
-                                            <div className="flex gap-2">
-                                                {/* Type Filter Dropdown */}
-                                                <div ref={typeDropdownRef} className="relative">
+                                    {/* Status Filter Dropdown */}
+                                    <div ref={statusDropdownRef} className="relative">
+                                        <button
+                                            onClick={() => setShowStatusDropdown(!showStatusDropdown)}
+                                            className="flex h-9 items-center justify-between rounded-md border border-gray-200 bg-white px-3 py-1.5 text-sm w-[140px] text-gray-700 hover:bg-gray-50 shadow-sm"
+                                        >
+                                            <span>{statusFilter}</span>
+                                            <ChevronDown className="h-3 w-3 opacity-50" />
+                                        </button>
+                                        {showStatusDropdown && (
+                                            <div className="absolute top-full left-0 mt-1 w-[200px] bg-white border border-gray-200 rounded-lg shadow-xl z-20 overflow-hidden animate-in fade-in zoom-in-95 duration-150">
+                                                <div className="py-1">
                                                     <button
-                                                        onClick={() => setShowTypeDropdown(!showTypeDropdown)}
-                                                        className="flex h-10 items-center justify-between rounded-md border border-gray-300 bg-white px-3 py-2 text-sm w-[160px] text-gray-700 hover:bg-gray-50"
+                                                        onClick={() => handleStatusChange('All Statuses')}
+                                                        className={cn(
+                                                            "w-full text-left px-3 py-2 text-sm hover:bg-gray-50",
+                                                            statusFilter === 'All Statuses' ? "bg-blue-50 text-blue-700 font-medium" : "text-gray-700"
+                                                        )}
                                                     >
-                                                        <span>{typeFilter}</span>
-                                                        <ChevronDown className="h-4 w-4 opacity-50" />
+                                                        All Statuses
                                                     </button>
-                                                    {showTypeDropdown && (
-                                                        <div className="absolute top-full left-0 mt-1 w-[160px] bg-white border border-gray-300 rounded-md shadow-lg z-10">
-                                                            <button
-                                                                onClick={() => handleTypeChange('All Types')}
-                                                                className={cn(
-                                                                    "w-full text-left px-3 py-2 text-sm hover:bg-blue-50",
-                                                                    typeFilter === 'All Types' ? "bg-blue-50 text-blue-700 font-medium" : "text-gray-700"
-                                                                )}
-                                                            >
-                                                                All Types
-                                                            </button>
-                                                            {availableTypes.map(type => (
-                                                                <button
-                                                                    key={type}
-                                                                    onClick={() => handleTypeChange(type)}
-                                                                    className={cn(
-                                                                        "w-full text-left px-3 py-2 text-sm hover:bg-blue-50",
-                                                                        typeFilter === type ? "bg-blue-50 text-blue-700 font-medium" : "text-gray-700"
-                                                                    )}
-                                                                >
-                                                                    {type}
-                                                                </button>
-                                                            ))}
-                                                        </div>
-                                                    )}
-                                                </div>
-
-                                                {/* Status Filter Dropdown */}
-                                                <div ref={statusDropdownRef} className="relative">
-                                                    <button
-                                                        onClick={() => setShowStatusDropdown(!showStatusDropdown)}
-                                                        className="flex h-10 items-center justify-between rounded-md border border-gray-300 bg-white px-3 py-2 text-sm w-[160px] text-gray-700 hover:bg-gray-50"
-                                                    >
-                                                        <span>{statusFilter}</span>
-                                                        <ChevronDown className="h-4 w-4 opacity-50" />
-                                                    </button>
-                                                    {showStatusDropdown && (
-                                                        <div className="absolute top-full left-0 mt-1 w-[160px] bg-white border border-gray-300 rounded-md shadow-lg z-10">
-                                                            <button
-                                                                onClick={() => handleStatusChange('All Statuses')}
-                                                                className={cn(
-                                                                    "w-full text-left px-3 py-2 text-sm hover:bg-blue-50",
-                                                                    statusFilter === 'All Statuses' ? "bg-blue-50 text-blue-700 font-medium" : "text-gray-700"
-                                                                )}
-                                                            >
-                                                                All Statuses
-                                                            </button>
-                                                            {availableStatuses.map(status => (
-                                                                <button
-                                                                    key={status}
-                                                                    onClick={() => handleStatusChange(status)}
-                                                                    className={cn(
-                                                                        "w-full text-left px-3 py-2 text-sm hover:bg-blue-50",
-                                                                        statusFilter === status ? "bg-blue-50 text-blue-700 font-medium" : "text-gray-700"
-                                                                    )}
-                                                                >
-                                                                    {status}
-                                                                </button>
-                                                            ))}
-                                                        </div>
-                                                    )}
+                                                    {availableStatuses.map(status => (
+                                                        <button
+                                                            key={status}
+                                                            onClick={() => handleStatusChange(status)}
+                                                            className={cn(
+                                                                "w-full text-left px-3 py-2 text-sm hover:bg-gray-50",
+                                                                statusFilter === status ? "bg-blue-50 text-blue-700 font-medium" : "text-gray-700"
+                                                            )}
+                                                        >
+                                                            {status}
+                                                        </button>
+                                                    ))}
                                                 </div>
                                             </div>
-                                            <button className="inline-flex items-center justify-center gap-2 whitespace-nowrap text-sm font-medium border border-gray-300 bg-white hover:bg-gray-100 h-9 rounded-md px-3 text-gray-700">
-                                                <Download className="h-4 w-4" />
-                                                Export Configuration
-                                            </button>
-                                        </div>
+                                        )}
+                                    </div>
+                                </div>
 
-                                        {/* Table */}
-                                        <div className="relative w-full overflow-auto">
-                                            <table className="w-full text-sm text-left">
-                                                <thead className="bg-blue-50 text-blue-900 font-semibold border-b border-blue-100">
-                                                    <tr>
-                                                        <th className="h-12 px-4 align-middle">Name</th>
-                                                        <th className="h-12 px-4 align-middle">Vendor</th>
-                                                        <th className="h-12 px-4 align-middle">Type</th>
-                                                        <th className="h-12 px-4 align-middle">Frequency</th>
-                                                        <th className="h-12 px-4 align-middle">Last Sync</th>
-                                                        <th className="h-12 px-4 align-middle">Status</th>
-                                                        <th className="h-12 px-4 align-middle text-right">Actions</th>
-                                                    </tr>
-                                                </thead>
-                                                <tbody>
-                                                    {integrations.map((item) => (
-                                                        <tr key={item.id} className="border-b border-gray-100 hover:bg-blue-50/50 transition-colors">
-                                                            <td className="p-4 font-medium text-blue-800">{item.name}</td>
-                                                            <td className="p-4 font-medium">{item.vendor}</td>
-                                                            <td className="p-4">
-                                                                <span className={cn("inline-flex items-center rounded-full border px-2.5 py-0.5 text-xs font-semibold", getItemColor(item.type, typeColors))}>
-                                                                    {item.type}
-                                                                </span>
-                                                            </td>
-                                                            <td className="p-4">{item.frequency}</td>
-                                                            <td className="p-4 font-mono text-xs">{formatDateTime(item.last_sync)}</td>
-                                                            <td className="p-4">
-                                                                <span className={cn("inline-flex items-center rounded-full border px-2.5 py-0.5 text-xs font-semibold", getItemColor(item.status, statusColors))}>
-                                                                    {item.status}
-                                                                </span>
-                                                            </td>
-                                                            <td className="p-4 text-right">
-                                                                <div className="flex justify-end items-center space-x-2">
+                                <div className="flex items-center gap-2">
+                                    <button className="hidden sm:inline-flex items-center justify-center gap-2 whitespace-nowrap text-sm font-medium border border-gray-200 bg-white hover:bg-gray-50 h-9 rounded-md px-3 text-gray-700 shadow-sm transition-colors">
+                                        <Download className="h-4 w-4 text-gray-500" />
+                                        Export Configuration
+                                    </button>
+                                    {/* Add Integration Button - kept here for functionality */}
+                                    <button onClick={() => setShowAddModal(true)} className="inline-flex items-center justify-center whitespace-nowrap text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 bg-blue-600 text-white shadow hover:bg-blue-700 h-9 rounded-md px-3">
+                                        Add Integration
+                                    </button>
+                                </div>
+                            </div>
+
+                            {/* Table */}
+                            <div className="relative w-full overflow-auto">
+                                <table className="w-full text-sm text-left">
+                                    <thead className="bg-blue-50/50 text-gray-500 font-medium border-b border-gray-100">
+                                        <tr>
+                                            <th className="h-12 px-6 align-middle">Name</th>
+                                            <th className="h-12 px-6 align-middle">Vendor</th>
+                                            <th className="h-12 px-6 align-middle text-center">Type</th>
+                                            <th className="h-12 px-6 align-middle">Frequency</th>
+                                            <th className="h-12 px-6 align-middle">Last Sync</th>
+                                            <th className="h-12 px-6 align-middle text-center">Status</th>
+                                            <th className="h-12 px-6 align-middle text-right">Actions</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody className="divide-y divide-gray-50">
+                                        {integrations.map((item) => (
+                                            <tr key={item.id} className="hover:bg-gray-50/50 transition-colors group">
+                                                <td className="p-6 font-medium text-blue-600 cursor-pointer hover:underline">{item.name}</td>
+                                                <td className="p-6 text-gray-900 font-medium">{item.vendor}</td>
+                                                <td className="p-6 text-center">
+                                                    <span className={cn("inline-flex items-center rounded-md border px-2.5 py-0.5 text-xs font-semibold", getItemColor(item.type, typeColors))}>
+                                                        {item.type}
+                                                    </span>
+                                                </td>
+                                                <td className="p-6 text-gray-500">{item.frequency}</td>
+                                                <td className="p-6 font-mono text-xs text-gray-500">{formatDateTime(item.last_sync)}</td>
+                                                <td className="p-6 text-center">
+                                                    <span className={cn("inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium", getItemColor(item.status, statusColors).replace('border', ''))}>
+                                                        {item.status}
+                                                    </span>
+                                                </td>
+                                                <td className="p-6 text-right">
+                                                    <div className="flex justify-end items-center gap-1">
+                                                        <button
+                                                            onClick={() => handleScanFolder(item.id)}
+                                                            disabled={scanningId === item.id}
+                                                            className="p-2 border border-gray-200 rounded-md hover:bg-gray-100 text-gray-500 disabled:opacity-50 transition-colors"
+                                                            title="Sync Now"
+                                                        >
+                                                            <RefreshCw className={`h-4 w-4 ${scanningId === item.id ? 'animate-spin' : ''}`} />
+                                                        </button>
+                                                        <button className="p-2 border border-gray-200 rounded-md hover:bg-gray-100 text-gray-500 transition-colors" title="Pause/Resume">
+                                                            {item.status === 'Inactive' ? <PlayCircle className="h-4 w-4" /> : <PauseCircle className="h-4 w-4" />}
+                                                        </button>
+
+                                                        {/* Action Menu */}
+                                                        <div className="relative action-menu-container">
+                                                            <button
+                                                                onClick={(e) => {
+                                                                    e.stopPropagation();
+                                                                    setActiveActionMenuId(activeActionMenuId === item.id ? null : item.id);
+                                                                }}
+                                                                className={cn(
+                                                                    "p-2 hover:bg-gray-100 rounded-md text-gray-500 transition-colors",
+                                                                    activeActionMenuId === item.id ? "bg-gray-100 text-gray-900" : ""
+                                                                )}
+                                                            >
+                                                                <MoreHorizontal className="h-4 w-4" />
+                                                            </button>
+
+                                                            {activeActionMenuId === item.id && (
+                                                                <div className="absolute right-0 top-full mt-2 w-56 bg-white rounded-lg shadow-xl border border-gray-100 z-50 py-1 overflow-hidden animate-in fade-in zoom-in-95 duration-100 origin-top-right ring-1 ring-black ring-opacity-5">
+                                                                    <button className="w-full text-left px-4 py-2.5 text-sm text-gray-700 hover:bg-gray-50 flex items-center gap-3 transition-colors">
+                                                                        <FileText className="h-4 w-4 text-gray-400" /> View Integration Details
+                                                                    </button>
                                                                     <button
-                                                                        onClick={() => handleScanFolder(item.id)}
-                                                                        disabled={scanningId === item.id}
-                                                                        className="p-2 border border-green-200 rounded-md hover:bg-green-50 text-green-600 disabled:opacity-50"
-                                                                        title="Scan folder for files"
+                                                                        onClick={() => {
+                                                                            setSelectedIntegrationForCredentials(item);
+                                                                            setShowCredentialsModal(true);
+                                                                            setActiveActionMenuId(null);
+                                                                        }}
+                                                                        className="w-full text-left px-4 py-2.5 text-sm text-gray-700 hover:bg-gray-50 flex items-center gap-3 transition-colors"
                                                                     >
-                                                                        <RefreshCw className={`h-4 w-4 ${scanningId === item.id ? 'animate-spin' : ''}`} />
+                                                                        <Key className="h-4 w-4 text-gray-400" /> Manage Credentials
                                                                     </button>
-                                                                    {scanSuccess[item.id] && (
-                                                                        <span className="text-xs text-green-600 font-medium">✓ Scanned</span>
-                                                                    )}
-                                                                    <button className="p-2 border border-gray-200 rounded-md hover:bg-gray-100 text-gray-500" title="Pause/Activate">
-                                                                        {item.status === 'Inactive' ? <PlayCircle className="h-4 w-4" /> : <PauseCircle className="h-4 w-4" />}
+                                                                    <button className="w-full text-left px-4 py-2.5 text-sm text-gray-700 hover:bg-gray-50 flex items-center gap-3 transition-colors">
+                                                                        <Activity className="h-4 w-4 text-gray-400" /> Test Integration
                                                                     </button>
-                                                                    <button className="p-2 hover:bg-gray-100 rounded-md text-gray-500">
-                                                                        <MoreHorizontal className="h-4 w-4" />
+                                                                    <div className="h-px bg-gray-100 my-1"></div>
+                                                                    <button className="w-full text-left px-4 py-2.5 text-sm text-gray-700 hover:bg-gray-50 flex items-center gap-3 transition-colors">
+                                                                        <Settings className="h-4 w-4 text-gray-400" /> Edit Configuration
+                                                                    </button>
+                                                                    <button className="w-full text-left px-4 py-2.5 text-sm text-gray-700 hover:bg-gray-50 flex items-center gap-3 transition-colors">
+                                                                        <CalendarClock className="h-4 w-4 text-gray-400" /> Edit Schedule
+                                                                    </button>
+                                                                    <div className="h-px bg-gray-100 my-1"></div>
+                                                                    <button className="w-full text-left px-4 py-2.5 text-sm text-red-600 hover:bg-red-50 flex items-center gap-3 transition-colors">
+                                                                        <Trash2 className="h-4 w-4" /> Delete Integration
                                                                     </button>
                                                                 </div>
-                                                            </td>
-                                                        </tr>
-                                                    ))}
-                                                </tbody>
-                                            </table>
-                                            {integrations.length === 0 && (
-                                                <div className="text-center py-8 text-gray-500">
-                                                    No integrations found
-                                                </div>
-                                            )}
-                                        </div>
+                                                            )}
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        ))}
+                                    </tbody>
+                                </table>
+                                {integrations.length === 0 && !loading && (
+                                    <div className="text-center py-12 text-gray-500">
+                                        No integrations found
                                     </div>
                                 )}
-                            </div>
-                        )}
-                    </div>
-                )}
-
-
-                {activeTab === 'scheduler' && (
-                    <div className="rounded-lg border bg-white shadow-sm">
-                        <div className="p-6">
-                            <div className="flex items-center gap-2 mb-6">
-                                <CalendarClock className="h-5 w-5 text-blue-600" />
-                                <div>
-                                    <h3 className="text-2xl font-semibold">Integration Scheduler</h3>
-                                    <p className="text-sm text-gray-500 mt-1">Manage scheduled data integration jobs</p>
-                                </div>
-                            </div>
-
-                            <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
-                                <div className="p-4 border rounded-lg bg-blue-50 border-blue-100">
-                                    <div className="text-sm font-medium text-gray-500">Active Jobs</div>
-                                    <div className="text-2xl font-bold text-blue-700 mt-1">{integrations.filter(i => i.status === 'Active').length}</div>
-                                </div>
-                                <div className="p-4 border rounded-lg bg-green-50 border-green-100">
-                                    <div className="text-sm font-medium text-gray-500">Completed Today</div>
-                                    <div className="text-2xl font-bold text-green-700 mt-1">12</div>
-                                </div>
-                                <div className="p-4 border rounded-lg bg-amber-50 border-amber-100">
-                                    <div className="text-sm font-medium text-gray-500">Next Scheduled</div>
-                                    <div className="text-sm font-bold text-amber-700 mt-1">In 2 hours</div>
-                                </div>
-                            </div>
-
-                            <div className="space-y-3">
-                                {integrations.filter(i => i.status === 'Active').map((item) => (
-                                    <div key={item.id} className="p-4 border rounded-lg hover:bg-blue-50/50 transition-colors">
-                                        <div className="flex items-center justify-between">
-                                            <div>
-                                                <div className="font-medium text-blue-800">{item.name}</div>
-                                                <div className="text-sm text-gray-500 mt-1">
-                                                    <CalendarClock className="h-3 w-3 inline mr-1" />
-                                                    {item.frequency}
-                                                </div>
-                                            </div>
-                                            <div className="flex items-center gap-2">
-                                                <span className="text-xs text-gray-500">Last run: {formatDateTime(item.last_sync)}</span>
-                                                <button className="px-3 py-1.5 text-sm border border-gray-300 rounded-md hover:bg-gray-100">
-                                                    Edit Schedule
-                                                </button>
-                                            </div>
-                                        </div>
+                                {loading && (
+                                    <div className="text-center py-12 text-gray-500">
+                                        Loading...
                                     </div>
-                                ))}
-                            </div>
-                        </div>
-                    </div>
-                )}
-
-                {activeTab === 'monitoring' && (
-                    <div className="rounded-lg border bg-white shadow-sm">
-                        <div className="p-6">
-                            <div className="flex items-center gap-2 mb-6">
-                                <Activity className="h-5 w-5 text-blue-600" />
-                                <div>
-                                    <h3 className="text-2xl font-semibold">Real-Time Monitoring</h3>
-                                    <p className="text-sm text-gray-500 mt-1">Monitor data integration health and performance</p>
-                                </div>
-                            </div>
-
-                            <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
-                                <div className="p-4 border rounded-lg">
-                                    <div className="text-sm font-medium text-gray-500">System Health</div>
-                                    <div className="text-2xl font-bold text-green-600 mt-1">98.5%</div>
-                                    <div className="text-xs text-gray-500 mt-1">All systems operational</div>
-                                </div>
-                                <div className="p-4 border rounded-lg">
-                                    <div className="text-sm font-medium text-gray-500">Avg Response Time</div>
-                                    <div className="text-2xl font-bold text-blue-600 mt-1">245ms</div>
-                                    <div className="text-xs text-gray-500 mt-1">Within normal range</div>
-                                </div>
-                                <div className="p-4 border rounded-lg">
-                                    <div className="text-sm font-medium text-gray-500">Data Throughput</div>
-                                    <div className="text-2xl font-bold text-purple-600 mt-1">1.2GB</div>
-                                    <div className="text-xs text-gray-500 mt-1">Last 24 hours</div>
-                                </div>
-                                <div className="p-4 border rounded-lg">
-                                    <div className="text-sm font-medium text-gray-500">Error Rate</div>
-                                    <div className="text-2xl font-bold text-red-600 mt-1">0.3%</div>
-                                    <div className="text-xs text-gray-500 mt-1">1 error in last hour</div>
-                                </div>
-                            </div>
-
-                            <div className="border rounded-lg p-4">
-                                <h4 className="font-medium mb-3">Active Connections</h4>
-                                <div className="space-y-2">
-                                    {integrations.map((item) => (
-                                        <div key={item.id} className="flex items-center justify-between p-2 hover:bg-gray-50 rounded">
-                                            <div className="flex items-center gap-3">
-                                                <div className={`h-2 w-2 rounded-full ${item.status === 'Active' ? 'bg-green-500' : item.status === 'Error' ? 'bg-red-500' : 'bg-gray-400'}`} />
-                                                <span className="font-medium">{item.name}</span>
-                                                <span className="text-xs text-gray-500">{item.vendor}</span>
-                                            </div>
-                                            <div className="flex items-center gap-4">
-                                                <span className="text-xs text-gray-500">Last sync: {formatDateTime(item.last_sync)}</span>
-                                                <span className={cn("text-xs px-2 py-1 rounded-full", getItemColor(item.status, statusColors))}>
-                                                    {item.status}
-                                                </span>
-                                            </div>
-                                        </div>
-                                    ))}
-                                </div>
+                                )}
                             </div>
                         </div>
                     </div>
@@ -621,10 +554,10 @@ export default function DataIntegration() {
             {/* Add Integration Modal */}
             {showAddModal && (
                 <div
-                    className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50"
+                    className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 backdrop-blur-sm"
                     onClick={handleModalBackdropClick}
                 >
-                    <div className="bg-white rounded-lg shadow-xl w-full max-w-md p-6">
+                    <div className="bg-white rounded-lg shadow-xl w-full max-w-md p-6 animate-in fade-in zoom-in-95 duration-200">
                         <div className="flex justify-between items-center mb-4">
                             <h2 className="text-xl font-semibold">Add New Data Integration</h2>
                             <button
@@ -781,6 +714,14 @@ export default function DataIntegration() {
                     </div>
                 </div>
             )}
+
+            {/* Credentials Modal */}
+            <CredentialsModal
+                isOpen={showCredentialsModal}
+                onClose={() => setShowCredentialsModal(false)}
+                integrationName={selectedIntegrationForCredentials?.name}
+                integrationId={selectedIntegrationForCredentials?.id}
+            />
         </div>
     );
 }
