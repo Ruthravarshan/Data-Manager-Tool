@@ -131,13 +131,71 @@ export const dataFileService = {
         return response.data;
     },
 
-    getSections: async () => {
-        const response = await api.get('/data-files/sections');
+    getSections: async (protocolId?: string) => {
+        const params = new URLSearchParams();
+        if (protocolId) {
+            params.append('protocol_id', protocolId);
+        }
+        const response = await api.get(`/data-files/sections?${params.toString()}`);
         return response.data;
     },
 
     deleteDataFile: async (fileId: number) => {
         const response = await api.delete(`/data-files/${fileId}`);
+        return response.data;
+    }
+};
+
+export const databaseConnectionService = {
+    testConnection: async (connectionData: {
+        db_type: string;
+        host: string;
+        port: number;
+        database_name: string;
+        username: string;
+        password: string;
+    }) => {
+        const response = await api.post('/database-connections/test', connectionData);
+        return response.data;
+    },
+
+    fetchTables: async (connectionData: {
+        db_type: string;
+        host: string;
+        port: number;
+        database_name: string;
+        username: string;
+        password: string;
+    }) => {
+        const response = await api.post('/database-connections/fetch-tables', connectionData);
+        return response.data;
+    },
+
+    saveCredentials: async (credentialsData: {
+        integration_id: number;
+        db_type: string;
+        host: string;
+        port: number;
+        database_name: string;
+        username: string;
+        password: string;
+    }) => {
+        const response = await api.post('/database-connections/save', credentialsData);
+        return response.data;
+    },
+
+    getCredentials: async (integrationId: number) => {
+        const response = await api.get(`/database-connections/${integrationId}`);
+        return response.data;
+    },
+
+    importDatabaseTables: async (integrationId: number, tableNames: string[]) => {
+        const response = await api.post(`/database-connections/import-data/${integrationId}`, tableNames);
+        return response.data;
+    },
+
+    deleteCredentials: async (integrationId: number) => {
+        const response = await api.delete(`/database-connections/${integrationId}`);
         return response.data;
     }
 };

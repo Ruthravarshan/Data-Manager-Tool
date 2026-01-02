@@ -127,3 +127,62 @@ class SectionMetadataResponse(BaseModel):
     record_count: int
     variable_count: int
     sample_data: List[Dict[str, Any]]
+
+# Database Connection Schemas
+class DatabaseCredentialCreate(BaseModel):
+    integration_id: int
+    db_type: str  # sqlserver, postgresql, mysql, oracle
+    host: str
+    port: int
+    database_name: str
+    username: str
+    password: str  # Will be encrypted before storage
+
+class DatabaseCredentialUpdate(BaseModel):
+    db_type: Optional[str] = None
+    host: Optional[str] = None
+    port: Optional[int] = None
+    database_name: Optional[str] = None
+    username: Optional[str] = None
+    password: Optional[str] = None
+
+class DatabaseCredential(BaseModel):
+    id: int
+    integration_id: int
+    db_type: str
+    host: str
+    port: int
+    database_name: str
+    username: str
+    created_at: datetime
+    last_updated: datetime
+    
+    class Config:
+        from_attributes = True
+
+class DatabaseTestConnectionRequest(BaseModel):
+    db_type: str
+    host: str
+    port: int
+    database_name: str
+    username: str
+    password: str
+
+class DatabaseTestConnectionResponse(BaseModel):
+    success: bool
+    message: str
+    error: Optional[str] = None
+
+class ClassifiedTable(BaseModel):
+    table_name: str
+    prefix: Optional[str] = None
+    domain: Optional[str] = None
+    category: str  # e.g., "Trial Data Management", "Unclassified"
+    description: Optional[str] = None
+
+class DatabaseTablesResponse(BaseModel):
+    success: bool
+    tables: List[ClassifiedTable]
+    total_count: int
+    classified_count: int
+    unclassified_count: int

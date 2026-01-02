@@ -32,10 +32,11 @@ def read_root():
     return {"message": "Welcome to Clinical Cosmos API"}
 
 
-from .routers import dashboard, studies, integrations, data_files, preview
+from .routers import dashboard, studies, integrations, data_files, preview, database_connections
 
 app.include_router(dashboard.router)
 app.include_router(studies.router)
 app.include_router(integrations.router)
 app.include_router(data_files.router)
 app.include_router(preview.router)
+app.include_router(database_connections.router)

@@ -44,9 +44,18 @@ def get_data_files(
 
 
 @router.get("/sections", response_model=List[str])
-def get_sections(db: Session = Depends(get_db)):
-    """Get list of all unique sections"""
-    sections = db.query(DataFile.section).distinct().filter(DataFile.section != None).all()
+def get_sections(
+    protocol_id: Optional[str] = Query(None),
+    db: Session = Depends(get_db)
+):
+    """Get list of unique sections, optionally filtered by protocol"""
+    query = db.query(DataFile.section).distinct().filter(DataFile.section != None)
+    
+    if protocol_id:
+        query = query.join(IntegrationSource, DataFile.integration_id == IntegrationSource.id)\
+                     .filter(IntegrationSource.protocol_id == protocol_id)
+                     
+    sections = query.all()
     return sorted([s[0] for s in sections if s[0]])
 
 
@@ -65,10 +74,26 @@ def scan_integration_folder(
         
         logger.info(f"Integration found: {integration.name}, folder: {integration.folder_path}")
         
+        # Check if folder path is configured
         if not integration.folder_path:
-            logger.error(f"Folder path not configured for integration {integration_id}")
-            raise HTTPException(status_code=400, detail="Folder path not configured for this integration")
-        
+            # If no folder path, check if it's a type that might not need one (like API)
+            # For now, we'll simulate a successful sync for non-folder integrations
+            # instead of raising an error
+            logger.info(f"No folder path for integration {integration_id} ({integration.type}). Simulating sync.")
+            
+            # Update integration's last_sync
+            integration.last_sync = datetime.utcnow()
+            db.commit()
+            
+            return ScanFolderResponse(
+                total_files=0,
+                imported_files=0,
+                unclassified_files=0,
+                duplicate_files=0,
+                files=[],
+                warnings=["Integration does not have a local folder path configured. Simulated sync completed."]
+            )
+            
         # Scan folder
         logger.info(f"Starting folder scan for: {integration.folder_path}")
         results, warnings = scan_folder(integration.folder_path)

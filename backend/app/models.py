@@ -51,6 +51,20 @@ class IntegrationSource(Base):
     protocol_id = Column(String, nullable=True) # E.g., PRO001
     folder_path = Column(String, nullable=True)  # Path to data source folder
 
+class DatabaseCredential(Base):
+    __tablename__ = "database_credentials"
+
+    id = Column(Integer, primary_key=True, index=True)
+    integration_id = Column(Integer, ForeignKey("integrations.id"), unique=True)
+    db_type = Column(String)  # sqlserver, postgresql, mysql, oracle
+    host = Column(String)
+    port = Column(Integer)
+    database_name = Column(String)
+    username = Column(String)
+    encrypted_password = Column(String)  # Encrypted password
+    created_at = Column(DateTime, default=datetime.utcnow)
+    last_updated = Column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
+
 class DataFile(Base):
     __tablename__ = "data_files"
 

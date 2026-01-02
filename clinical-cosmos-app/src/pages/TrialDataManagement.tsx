@@ -93,7 +93,7 @@ export default function TrialDataManagement() {
                 setLoading(true);
                 const [filesData, sectionsData] = await Promise.all([
                     dataFileService.getDataFiles(undefined, undefined, undefined, selectedProtocol || undefined),
-                    dataFileService.getSections()
+                    dataFileService.getSections(selectedProtocol || undefined)
                 ]);
                 setDataFiles(filesData || []);
                 setSections(sectionsData || []);
@@ -116,9 +116,6 @@ export default function TrialDataManagement() {
                 setLoading(false);
             }
         };
-        if (selectedProtocol) {
-            fetchData();
-        }
         if (selectedProtocol) {
             fetchData();
         }

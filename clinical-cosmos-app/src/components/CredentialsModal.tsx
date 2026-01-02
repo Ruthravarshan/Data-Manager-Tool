@@ -1,9 +1,10 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
     Shield, Key, Lock, Folder,
     Eye, EyeOff, Save, CheckCircle,
     AlertCircle, FileText, Server,
-    X
+    X, Database, ChevronDown, ChevronRight,
+    Loader2, Download
 } from 'lucide-react';
 import { clsx, type ClassValue } from "clsx";
 import { twMerge } from "tailwind-merge";
@@ -12,7 +13,7 @@ function cn(...inputs: ClassValue[]) {
     return twMerge(clsx(inputs));
 }
 
-import { integrationService } from '../services/api';
+import { integrationService, databaseConnectionService } from '../services/api';
 
 interface CredentialsModalProps {
     isOpen: boolean;
@@ -42,10 +43,190 @@ export default function CredentialsModal({ isOpen, onClose, integrationName = "I
         studyManager: false
     });
 
+    // Database connection states
+    const [dbType, setDbType] = useState('sqlserver');
+    const [dbHost, setDbHost] = useState('');
+    const [dbPort, setDbPort] = useState(1433);
+    const [dbName, setDbName] = useState('');
+    const [dbUsername, setDbUsername] = useState('');
+    const [dbPassword, setDbPassword] = useState('');
+    const [showDbPassword, setShowDbPassword] = useState(false);
+    const [isTestingConnection, setIsTestingConnection] = useState(false);
+    const [connectionTestResult, setConnectionTestResult] = useState<{ success: boolean; message: string } | null>(null);
+    const [isFetchingTables, setIsFetchingTables] = useState(false);
+    const [fetchedTables, setFetchedTables] = useState<any[]>([]);
+    const [tableStats, setTableStats] = useState({ total: 0, classified: 0, unclassified: 0 });
+    const [expandedCategories, setExpandedCategories] = useState<Set<string>>(new Set(['Trial Data Management']));
+    const [isSavingDbCredentials, setIsSavingDbCredentials] = useState(false);
+    const [dbSaveStatus, setDbSaveStatus] = useState<'idle' | 'success' | 'error'>('idle');
+    const [isImportingData, setIsImportingData] = useState(false);
+    const [importResult, setImportResult] = useState<any>(null);
+    const [selectedTablesToImport, setSelectedTablesToImport] = useState<Set<string>>(new Set());
+
+    // Load saved database credentials when modal opens
+    useEffect(() => {
+        if (isOpen && integrationId && activeTab === 'database') {
+            loadDatabaseCredentials();
+        }
+    }, [isOpen, integrationId, activeTab]);
+
+    // Handler functions for database tab
+    const loadDatabaseCredentials = async () => {
+        if (!integrationId) return;
+        try {
+            const credentials = await databaseConnectionService.getCredentials(integrationId);
+            setDbType(credentials.db_type);
+            setDbHost(credentials.host);
+            setDbPort(credentials.port);
+            setDbName(credentials.database_name);
+            setDbUsername(credentials.username);
+            // Don't load password for security
+        } catch (error) {
+            console.log('No saved credentials found');
+        }
+    };
+
+    const handleTestConnection = async () => {
+        setIsTestingConnection(true);
+        setConnectionTestResult(null);
+        try {
+            const result = await databaseConnectionService.testConnection({
+                db_type: dbType,
+                host: dbHost,
+                port: dbPort,
+                database_name: dbName,
+                username: dbUsername,
+                password: dbPassword
+            });
+            setConnectionTestResult(result);
+        } catch (error: any) {
+            setConnectionTestResult({
+                success: false,
+                message: error.response?.data?.detail || 'Connection failed'
+            });
+        } finally {
+            setIsTestingConnection(false);
+        }
+    };
+
+    const handleFetchTables = async () => {
+        setIsFetchingTables(true);
+        try {
+            const result = await databaseConnectionService.fetchTables({
+                db_type: dbType,
+                host: dbHost,
+                port: dbPort,
+                database_name: dbName,
+                username: dbUsername,
+                password: dbPassword
+            });
+            setFetchedTables(result.tables);
+            setTableStats({
+                total: result.total_count,
+                classified: result.classified_count,
+                unclassified: result.unclassified_count
+            });
+        } catch (error: any) {
+            alert(`Failed to fetch tables: ${error.response?.data?.detail || error.message}`);
+        } finally {
+            setIsFetchingTables(false);
+        }
+    };
+
+    const handleSaveDbCredentials = async () => {
+        if (!integrationId) return;
+        setIsSavingDbCredentials(true);
+        setDbSaveStatus('idle');
+        try {
+            await databaseConnectionService.saveCredentials({
+                integration_id: integrationId,
+                db_type: dbType,
+                host: dbHost,
+                port: dbPort,
+                database_name: dbName,
+                username: dbUsername,
+                password: dbPassword
+            });
+            setDbSaveStatus('success');
+            setTimeout(() => setDbSaveStatus('idle'), 3000);
+        } catch (error) {
+            console.error('Failed to save credentials:', error);
+            setDbSaveStatus('error');
+        } finally {
+            setIsSavingDbCredentials(false);
+        }
+    };
+
+    const toggleCategory = (category: string) => {
+        const newExpanded = new Set(expandedCategories);
+        if (newExpanded.has(category)) {
+            newExpanded.delete(category);
+        } else {
+            newExpanded.add(category);
+        }
+        setExpandedCategories(newExpanded);
+    };
+
+    const getDbPortPlaceholder = () => {
+        switch (dbType) {
+            case 'sqlserver': return '1433';
+            case 'postgresql': return '5432';
+            case 'mysql': return '3306';
+            case 'oracle': return '1521';
+            default: return '1433';
+        }
+    };
+
+    const handleImportData = async () => {
+        if (!integrationId || selectedTablesToImport.size === 0) return;
+
+        setIsImportingData(true);
+        setImportResult(null);
+
+        try {
+            const tableNames = Array.from(selectedTablesToImport);
+            const result = await databaseConnectionService.importDatabaseTables(integrationId, tableNames);
+            setImportResult(result);
+
+            // Show success message
+            if (result.success) {
+                alert(`Successfully imported ${result.imported_count} tables!\n\nYou can now view the data in the Trial Data Management tab.`);
+            }
+        } catch (error: any) {
+            setImportResult({
+                success: false,
+                error: error.response?.data?.detail || error.message
+            });
+            alert(`Failed to import data: ${error.response?.data?.detail || error.message}`);
+        } finally {
+            setIsImportingData(false);
+        }
+    };
+
+    const toggleTableSelection = (tableName: string) => {
+        const newSelection = new Set(selectedTablesToImport);
+        if (newSelection.has(tableName)) {
+            newSelection.delete(tableName);
+        } else {
+            newSelection.add(tableName);
+        }
+        setSelectedTablesToImport(newSelection);
+    };
+
+    const selectAllTables = () => {
+        const allTableNames = fetchedTables.map(t => t.table_name);
+        setSelectedTablesToImport(new Set(allTableNames));
+    };
+
+    const deselectAllTables = () => {
+        setSelectedTablesToImport(new Set());
+    };
+
     if (!isOpen) return null;
 
     const tabs = [
         { id: 'api', label: 'API Authentication', icon: Shield },
+        { id: 'database', label: 'Database', icon: Database },
         { id: 'connection', label: 'Connection Details', icon: Server },
         { id: 'security', label: 'Security Options', icon: Lock },
         { id: 'local', label: 'Local', icon: Folder }, // Requested "Local" section
@@ -286,6 +467,314 @@ export default function CredentialsModal({ isOpen, onClose, integrationName = "I
                                 <button className="px-6 py-2.5 bg-blue-600 text-white rounded-lg text-sm font-medium hover:bg-blue-700 shadow-sm shadow-blue-200 transition-all">
                                     Save Security Settings
                                 </button>
+                            </div>
+                        </div>
+                    )}
+
+                    {/* Database */}
+                    {activeTab === 'database' && (
+                        <div className="space-y-6 max-w-4xl mx-auto">
+                            <div className="grid grid-cols-2 gap-6">
+                                {/* Database Type */}
+                                <div className="col-span-2">
+                                    <label className="block text-sm font-medium text-gray-900 mb-2">Database Type</label>
+                                    <select
+                                        value={dbType}
+                                        onChange={(e) => {
+                                            setDbType(e.target.value);
+                                            // Update port based on database type
+                                            const portMap: any = {
+                                                'sqlserver': 1433,
+                                                'postgresql': 5432,
+                                                'mysql': 3306,
+                                                'oracle': 1521
+                                            };
+                                            setDbPort(portMap[e.target.value] || 1433);
+                                        }}
+                                        className="w-full h-10 px-3 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all bg-gray-50/50"
+                                    >
+                                        <option value="sqlserver">SQL Server</option>
+                                        <option value="postgresql">PostgreSQL</option>
+                                        <option value="mysql">MySQL</option>
+                                        <option value="oracle">Oracle</option>
+                                    </select>
+                                </div>
+
+                                {/* Host */}
+                                <div>
+                                    <label className="block text-sm font-medium text-gray-900 mb-2">Host</label>
+                                    <input
+                                        type="text"
+                                        value={dbHost}
+                                        onChange={(e) => setDbHost(e.target.value)}
+                                        placeholder="localhost or IP address"
+                                        className="w-full h-10 px-3 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all"
+                                    />
+                                </div>
+
+                                {/* Port */}
+                                <div>
+                                    <label className="block text-sm font-medium text-gray-900 mb-2">Port</label>
+                                    <input
+                                        type="number"
+                                        value={dbPort}
+                                        onChange={(e) => setDbPort(parseInt(e.target.value) || 0)}
+                                        placeholder={getDbPortPlaceholder()}
+                                        className="w-full h-10 px-3 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all"
+                                    />
+                                </div>
+
+                                {/* Database Name */}
+                                <div className="col-span-2">
+                                    <label className="block text-sm font-medium text-gray-900 mb-2">Database Name</label>
+                                    <input
+                                        type="text"
+                                        value={dbName}
+                                        onChange={(e) => setDbName(e.target.value)}
+                                        placeholder="Enter database name"
+                                        className="w-full h-10 px-3 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all"
+                                    />
+                                </div>
+
+                                {/* Username */}
+                                <div>
+                                    <label className="block text-sm font-medium text-gray-900 mb-2">Username</label>
+                                    <input
+                                        type="text"
+                                        value={dbUsername}
+                                        onChange={(e) => setDbUsername(e.target.value)}
+                                        placeholder="Database username"
+                                        className="w-full h-10 px-3 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all"
+                                    />
+                                </div>
+
+                                {/* Password */}
+                                <div>
+                                    <label className="block text-sm font-medium text-gray-900 mb-2">Password</label>
+                                    <div className="relative isolate">
+                                        <input
+                                            type={showDbPassword ? "text" : "password"}
+                                            value={dbPassword}
+                                            onChange={(e) => setDbPassword(e.target.value)}
+                                            placeholder="Database password"
+                                            autoComplete="new-password"
+                                            disabled={false}
+                                            className="w-full h-10 px-3 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all pr-10 bg-white relative z-0"
+                                        />
+                                        <button
+                                            type="button"
+                                            onClick={() => setShowDbPassword(!showDbPassword)}
+                                            className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 z-10 cursor-pointer p-1"
+                                            tabIndex={-1}
+                                        >
+                                            {showDbPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+
+                            {/* Action Buttons */}
+                            <div className="flex gap-3">
+                                <button
+                                    onClick={handleTestConnection}
+                                    disabled={isTestingConnection || !dbHost || !dbName || !dbUsername || !dbPassword}
+                                    className="px-4 py-2 border border-gray-200 rounded-lg text-sm font-medium text-gray-700 hover:bg-gray-50 transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
+                                >
+                                    {isTestingConnection ? (
+                                        <>
+                                            <Loader2 className="h-4 w-4 animate-spin" />
+                                            Testing...
+                                        </>
+                                    ) : (
+                                        <>
+                                            <Database className="h-4 w-4" />
+                                            Test Connection
+                                        </>
+                                    )}
+                                </button>
+
+                                <button
+                                    onClick={handleFetchTables}
+                                    disabled={isFetchingTables || !connectionTestResult?.success}
+                                    className="px-4 py-2 border border-gray-200 rounded-lg text-sm font-medium text-gray-700 hover:bg-gray-50 transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
+                                >
+                                    {isFetchingTables ? (
+                                        <>
+                                            <Loader2 className="h-4 w-4 animate-spin" />
+                                            Fetching...
+                                        </>
+                                    ) : (
+                                        <>
+                                            <FileText className="h-4 w-4" />
+                                            Fetch Tables
+                                        </>
+                                    )}
+                                </button>
+
+                                <button
+                                    onClick={handleSaveDbCredentials}
+                                    disabled={isSavingDbCredentials || !integrationId}
+                                    className={cn(
+                                        "px-4 py-2 text-white rounded-lg text-sm font-medium shadow-sm transition-all flex items-center gap-2 ml-auto",
+                                        isSavingDbCredentials ? "bg-blue-400 cursor-not-allowed" : "bg-blue-600 hover:bg-blue-700 shadow-blue-200"
+                                    )}
+                                >
+                                    {isSavingDbCredentials ? (
+                                        <>
+                                            <Loader2 className="h-4 w-4 animate-spin" />
+                                            Saving...
+                                        </>
+                                    ) : dbSaveStatus === 'success' ? (
+                                        <>
+                                            <CheckCircle className="h-4 w-4" />
+                                            Saved!
+                                        </>
+                                    ) : dbSaveStatus === 'error' ? (
+                                        <>
+                                            <AlertCircle className="h-4 w-4" />
+                                            Failed
+                                        </>
+                                    ) : (
+                                        <>
+                                            <Save className="h-4 w-4" />
+                                            Save Credentials
+                                        </>
+                                    )}
+                                </button>
+                            </div>
+
+                            {/* Connection Test Result */}
+                            {connectionTestResult && (
+                                <div className={cn(
+                                    "p-4 rounded-lg border flex gap-3 items-start",
+                                    connectionTestResult.success
+                                        ? "bg-green-50 text-green-700 border-green-200"
+                                        : "bg-red-50 text-red-700 border-red-200"
+                                )}>
+                                    {connectionTestResult.success ? (
+                                        <CheckCircle className="h-5 w-5 flex-shrink-0 mt-0.5" />
+                                    ) : (
+                                        <AlertCircle className="h-5 w-5 flex-shrink-0 mt-0.5" />
+                                    )}
+                                    <div className="text-sm">
+                                        <p className="font-semibold mb-1">{connectionTestResult.message}</p>
+                                        {connectionTestResult.success && (
+                                            <p className="opacity-90">Click "Fetch Tables" to retrieve table names from the database.</p>
+                                        )}
+                                    </div>
+                                </div>
+                            )}
+
+                            {/* Fetched Tables */}
+                            {fetchedTables.length > 0 && (
+                                <div className="border border-gray-200 rounded-lg overflow-hidden">
+                                    <div className="bg-gray-50 px-4 py-3 border-b border-gray-200 flex justify-between items-center">
+                                        <h3 className="text-sm font-semibold text-gray-900">
+                                            Database Tables ({tableStats.total} total, {tableStats.classified} classified)
+                                        </h3>
+                                        <div className="flex gap-2">
+                                            <button
+                                                onClick={selectAllTables}
+                                                className="text-xs px-2 py-1 text-blue-600 hover:bg-blue-50 rounded transition-colors"
+                                            >
+                                                Select All
+                                            </button>
+                                            <button
+                                                onClick={deselectAllTables}
+                                                className="text-xs px-2 py-1 text-gray-600 hover:bg-gray-100 rounded transition-colors"
+                                            >
+                                                Deselect All
+                                            </button>
+                                        </div>
+                                    </div>
+                                    <div className="p-4 max-h-96 overflow-y-auto">
+                                        {/* Group tables by category */}
+                                        {['Trial Data Management', 'Unclassified'].map(category => {
+                                            const tablesInCategory = fetchedTables.filter(t => t.category === category);
+                                            if (tablesInCategory.length === 0) return null;
+
+                                            return (
+                                                <div key={category} className="mb-4 last:mb-0">
+                                                    <button
+                                                        onClick={() => toggleCategory(category)}
+                                                        className="flex items-center gap-2 w-full text-left py-2 hover:bg-gray-50 rounded transition-colors"
+                                                    >
+                                                        {expandedCategories.has(category) ? (
+                                                            <ChevronDown className="h-4 w-4 text-gray-500" />
+                                                        ) : (
+                                                            <ChevronRight className="h-4 w-4 text-gray-500" />
+                                                        )}
+                                                        <span className="font-medium text-gray-900">{category}</span>
+                                                        <span className="text-sm text-gray-500">({tablesInCategory.length})</span>
+                                                    </button>
+
+                                                    {expandedCategories.has(category) && (
+                                                        <div className="ml-6 mt-2 space-y-1">
+                                                            {tablesInCategory.map((table, idx) => (
+                                                                <div key={idx} className="flex items-center justify-between py-2 px-3 hover:bg-gray-50 rounded text-sm">
+                                                                    <div className="flex items-center gap-3">
+                                                                        <input
+                                                                            type="checkbox"
+                                                                            checked={selectedTablesToImport.has(table.table_name)}
+                                                                            onChange={() => toggleTableSelection(table.table_name)}
+                                                                            className="h-4 w-4 text-blue-600 rounded border-gray-300 focus:ring-blue-500"
+                                                                        />
+                                                                        <Database className="h-4 w-4 text-gray-400" />
+                                                                        <span className="font-mono text-gray-900">{table.table_name}</span>
+                                                                        {table.domain && (
+                                                                            <span className="px-2 py-0.5 bg-blue-50 text-blue-700 rounded text-xs font-medium">
+                                                                                {table.domain}
+                                                                            </span>
+                                                                        )}
+                                                                    </div>
+                                                                    {table.description && (
+                                                                        <span className="text-xs text-gray-500">{table.description}</span>
+                                                                    )}
+                                                                </div>
+                                                            ))}
+                                                        </div>
+                                                    )}
+                                                </div>
+                                            );
+                                        })}
+                                    </div>
+
+                                    {/* Import Data Button */}
+                                    {selectedTablesToImport.size > 0 && (
+                                        <div className="bg-blue-50 px-4 py-3 border-t border-blue-100 flex justify-between items-center">
+                                            <span className="text-sm text-blue-700 font-medium">
+                                                {selectedTablesToImport.size} table{selectedTablesToImport.size > 1 ? 's' : ''} selected
+                                            </span>
+                                            <button
+                                                onClick={handleImportData}
+                                                disabled={isImportingData}
+                                                className={cn(
+                                                    "px-4 py-2 text-white rounded-lg text-sm font-medium shadow-sm transition-all flex items-center gap-2",
+                                                    isImportingData ? "bg-blue-400 cursor-not-allowed" : "bg-blue-600 hover:bg-blue-700"
+                                                )}
+                                            >
+                                                {isImportingData ? (
+                                                    <>
+                                                        <Loader2 className="h-4 w-4 animate-spin" />
+                                                        Importing Data...
+                                                    </>
+                                                ) : (
+                                                    <>
+                                                        <Download className="h-4 w-4" />
+                                                        Import Data to System
+                                                    </>
+                                                )}
+                                            </button>
+                                        </div>
+                                    )}
+                                </div>
+                            )}
+
+                            <div className="flex items-start gap-3 p-4 bg-gray-50 rounded-lg border border-gray-100">
+                                <Shield className="h-5 w-5 text-gray-400 flex-shrink-0 mt-0.5" />
+                                <p className="text-sm text-gray-500">
+                                    Database credentials are securely encrypted before storage. They will be used only for this integration.
+                                </p>
                             </div>
                         </div>
                     )}
