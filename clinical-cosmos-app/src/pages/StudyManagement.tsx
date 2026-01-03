@@ -99,10 +99,10 @@ function StudyDetail({ study, onBack }: { study: any, onBack: () => void }) {
                         </div>
                     </div>
                     <div className="flex gap-3">
-                        <div className={`px - 4 py - 1.5 rounded - full text - sm font - semibold border ${study.status === 'Active' ? 'bg-green-50 text-green-700 border-green-200' :
+                        <div className={`px-4 py-1.5 rounded-full text-sm font-semibold border ${study.status === 'Active' ? 'bg-green-50 text-green-700 border-green-200' :
                             study.status === 'Recruiting' ? 'bg-blue-50 text-blue-700 border-blue-200' :
                                 'bg-amber-50 text-amber-700 border-amber-200'
-                            } `}>
+                            }`}>
                             {study.status}
                         </div>
                         <div className="px-4 py-1.5 rounded-full text-sm font-semibold bg-purple-50 text-purple-700 border border-purple-200">
@@ -163,12 +163,12 @@ function StudyDetail({ study, onBack }: { study: any, onBack: () => void }) {
                             key={tab}
                             onClick={() => setActiveTab(tab.toLowerCase())}
                             className={`
-whitespace - nowrap py - 4 px - 1 border - b - 2 font - medium text - sm
+                                whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm
                                 ${activeTab === tab.toLowerCase() || (tab === 'Vendors & Services' && activeTab === 'vendors & services')
                                     ? 'border-blue-500 text-blue-600'
                                     : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
                                 }
-`}
+                            `}
                         >
                             {tab}
                         </button>
@@ -629,6 +629,9 @@ export default function StudyManagement() {
                 status: 'Planned',
                 description: '',
                 start_date: '',
+                end_date: '',
+                therapeutic_area: '',
+                indication: '',
                 sites_count: 0,
                 subjects_count: 0,
                 completion_percentage: 0
@@ -636,7 +639,17 @@ export default function StudyManagement() {
             setSelectedFile(null);
         } catch (error: any) {
             console.error("Failed to create study", error);
-            const errorMessage = error.response?.data?.detail || error.message || "Failed to create study. Please try again.";
+            const detail = error.response?.data?.detail;
+            let errorMessage = "Failed to create study. Please try again.";
+
+            if (Array.isArray(detail)) {
+                errorMessage = "Validation Error:\n" + detail.map((d: any) => `${d.loc.join('.')}: ${d.msg}`).join('\n');
+            } else if (typeof detail === 'string') {
+                errorMessage = detail;
+            } else if (error.message) {
+                errorMessage = error.message;
+            }
+
             alert(errorMessage);
         }
     };
@@ -713,10 +726,10 @@ export default function StudyManagement() {
                                                         </span>
                                                     </td>
                                                     <td className="px-6 py-4">
-                                                        <span className={`inline - flex items - center px - 2.5 py - 0.5 rounded - full text - xs font - medium ${study.status === 'Active' ? 'bg-green-100 text-green-800' :
+                                                        <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${study.status === 'Active' ? 'bg-green-100 text-green-800' :
                                                             study.status === 'Recruiting' ? 'bg-blue-100 text-blue-800' :
                                                                 'bg-amber-100 text-amber-800'
-                                                            } `}>
+                                                            }`}>
                                                             {study.status}
                                                         </span>
                                                     </td>
@@ -781,8 +794,8 @@ export default function StudyManagement() {
 
                         <form onSubmit={handleCreateStudy} className="space-y-6">
 
-                            {/* Row 1: Protocol ID & Phase */}
-                            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            {/* Row 1: Protocol ID, Phase & Status */}
+                            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                                 <div>
                                     <label className="block text-sm font-semibold text-gray-900 mb-1">Protocol ID</label>
                                     <input
@@ -792,7 +805,6 @@ export default function StudyManagement() {
                                         onChange={(e) => setFormData({ ...formData, protocol_id: e.target.value })}
                                         required
                                     />
-                                    <p className="text-xs text-gray-500 mt-1">Unique identifier for the study (e.g., PRO-123, CLIN-2023-01)</p>
                                 </div>
                                 <div>
                                     <label className="block text-sm font-semibold text-gray-900 mb-1">Phase</label>
@@ -800,6 +812,7 @@ export default function StudyManagement() {
                                         className="w-full border border-gray-300 rounded-md px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none"
                                         value={formData.phase}
                                         onChange={(e) => setFormData({ ...formData, phase: e.target.value })}
+                                        required
                                     >
                                         <option value="" disabled>Select phase</option>
                                         <option>Phase I</option>
@@ -807,7 +820,21 @@ export default function StudyManagement() {
                                         <option>Phase III</option>
                                         <option>Phase IV</option>
                                     </select>
-                                    <p className="text-xs text-gray-500 mt-1">Clinical trial phase indicating the stage of drug development</p>
+                                </div>
+                                <div>
+                                    <label className="block text-sm font-semibold text-gray-900 mb-1">Status</label>
+                                    <select
+                                        className="w-full border border-gray-300 rounded-md px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none"
+                                        value={formData.status}
+                                        onChange={(e) => setFormData({ ...formData, status: e.target.value })}
+                                        required
+                                    >
+                                        <option>Planned</option>
+                                        <option>Active</option>
+                                        <option>Recruiting</option>
+                                        <option>Completed</option>
+                                        <option>On Hold</option>
+                                    </select>
                                 </div>
                             </div>
 

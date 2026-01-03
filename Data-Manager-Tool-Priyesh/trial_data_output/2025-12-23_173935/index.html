@@ -1,0 +1,1649 @@
+<!doctype html><html><head><meta charset='utf-8'><title>Trial Data Management</title>
+<style>
+    body { font-family: Arial, sans-serif; margin: 24px; background: #f7f9fc; color: #1f2937; }
+    h1 { margin-bottom: 8px; }
+    .meta { color: #6b7280; margin-bottom: 24px; }
+    .section { margin-bottom: 32px; padding: 16px; background: #ffffff; border-radius: 8px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); }
+    .section h2 { margin-top: 0; }
+    .file-card { margin: 16px 0; padding: 16px; border: 1px solid #e5e7eb; border-radius: 8px; background: #fafafa; }
+    .file-meta { font-size: 0.95em; color: #374151; margin: 8px 0; }
+    .preview-table { border-collapse: collapse; width: 100%; }
+    .preview-table th, .preview-table td { border: 1px solid #e5e7eb; padding: 6px 8px; font-size: 0.92em; }
+    .preview-table th { background: #f3f4f6; }
+    .btn-row { margin-top: 8px; }
+    .btn { display: inline-block; padding: 8px 12px; background: #2563eb; color: #fff; border-radius: 6px; text-decoration: none; margin-right: 8px; }
+    .btn.secondary { background: #6b7280; }
+    .pill { display: inline-block; padding: 4px 8px; background: #eef2ff; color: #3730a3; border-radius: 999px; font-size: 0.85em; margin-left: 8px; }
+    </style></head><body>
+<h1>Trial Data Management</h1>
+<div class='meta'>Generated: 2025-12-23 17:39:35</div>
+<div class='section'>
+<h2>AE (Adverse Events)</h2>
+<div class='file-card'>
+<div class='file-meta'><strong>ae_raw_20251126_074704.csv</strong> <span class='pill'>2025-11-26 07:47:04</span></div>
+<div class='file-meta'>Encoding: utf-8 | Separator: ,</div>
+<div class='btn-row'>
+<a class='btn' href='AE\ae_raw_20251126_074704.csv' download>Download</a>
+</div>
+<div style='margin-top:12px;'>
+<div class='file-meta'>Preview (top 10 rows):</div>
+<table class="dataframe preview-table">
+  <thead>
+    <tr style="text-align: right;">
+      <th>study_id</th>
+      <th>subject_id</th>
+      <th>ae_number</th>
+      <th>event_term</th>
+      <th>start_date</th>
+      <th>start_time</th>
+      <th>end_date</th>
+      <th>end_time</th>
+      <th>ongoing</th>
+      <th>severity</th>
+      <th>serious</th>
+      <th>relationship_to_study_drug</th>
+      <th>action_taken</th>
+      <th>outcome</th>
+      <th>hospitalization</th>
+      <th>life_threatening</th>
+      <th>disability</th>
+      <th>death</th>
+      <th>congenital_anomaly</th>
+      <th>medically_important</th>
+      <th>reporter</th>
+      <th>report_date</th>
+      <th>treatment_given</th>
+      <th>treatment_details</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>STUDY001</td>
+      <td>SUB0001</td>
+      <td>AE001</td>
+      <td>Anemia</td>
+      <td>2024-04-03</td>
+      <td>15:50</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>Yes</td>
+      <td>Moderate</td>
+      <td>No</td>
+      <td>Not Related</td>
+      <td>Drug withdrawn</td>
+      <td>Not resolved</td>
+      <td>No</td>
+      <td>No</td>
+      <td>No</td>
+      <td>No</td>
+      <td>No</td>
+      <td>No</td>
+      <td>Investigator</td>
+      <td>2024-04-03</td>
+      <td>No</td>
+      <td>NaN</td>
+    </tr>
+    <tr>
+      <td>STUDY001</td>
+      <td>SUB0004</td>
+      <td>AE001</td>
+      <td>Peripheral neuropathy</td>
+      <td>2024-04-20</td>
+      <td>14:52</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>Yes</td>
+      <td>Mild</td>
+      <td>No</td>
+      <td>Not Related</td>
+      <td>Drug withdrawn</td>
+      <td>Not resolved</td>
+      <td>No</td>
+      <td>No</td>
+      <td>No</td>
+      <td>No</td>
+      <td>No</td>
+      <td>No</td>
+      <td>Subject</td>
+      <td>2024-04-20</td>
+      <td>Yes</td>
+      <td>NaN</td>
+    </tr>
+    <tr>
+      <td>STUDY001</td>
+      <td>SUB0004</td>
+      <td>AE002</td>
+      <td>Diarrhea</td>
+      <td>2024-04-23</td>
+      <td>19:38</td>
+      <td>2024-05-01</td>
+      <td>08:07</td>
+      <td>No</td>
+      <td>Mild</td>
+      <td>No</td>
+      <td>Definitely Related</td>
+      <td>NaN</td>
+      <td>Resolved with sequelae</td>
+      <td>No</td>
+      <td>No</td>
+      <td>No</td>
+      <td>No</td>
+      <td>No</td>
+      <td>No</td>
+      <td>Investigator</td>
+      <td>2024-04-23</td>
+      <td>No</td>
+      <td>NaN</td>
+    </tr>
+    <tr>
+      <td>STUDY001</td>
+      <td>SUB0006</td>
+      <td>AE001</td>
+      <td>Thrombocytopenia</td>
+      <td>2024-06-22</td>
+      <td>12:34</td>
+      <td>2024-06-25</td>
+      <td>08:31</td>
+      <td>No</td>
+      <td>Moderate</td>
+      <td>Yes</td>
+      <td>Possibly Related</td>
+      <td>Drug withdrawn</td>
+      <td>Resolved</td>
+      <td>No</td>
+      <td>No</td>
+      <td>No</td>
+      <td>No</td>
+      <td>No</td>
+      <td>Yes</td>
+      <td>Investigator</td>
+      <td>2024-06-22</td>
+      <td>No</td>
+      <td>NaN</td>
+    </tr>
+    <tr>
+      <td>STUDY001</td>
+      <td>SUB0007</td>
+      <td>AE001</td>
+      <td>Anemia</td>
+      <td>2024-05-22</td>
+      <td>13:08</td>
+      <td>2024-06-04</td>
+      <td>13:00</td>
+      <td>No</td>
+      <td>Moderate</td>
+      <td>Yes</td>
+      <td>Not Related</td>
+      <td>NaN</td>
+      <td>Not resolved</td>
+      <td>No</td>
+      <td>No</td>
+      <td>No</td>
+      <td>No</td>
+      <td>No</td>
+      <td>No</td>
+      <td>Investigator</td>
+      <td>2024-05-22</td>
+      <td>No</td>
+      <td>NaN</td>
+    </tr>
+    <tr>
+      <td>STUDY001</td>
+      <td>SUB0009</td>
+      <td>AE001</td>
+      <td>Thrombocytopenia</td>
+      <td>2024-09-01</td>
+      <td>09:52</td>
+      <td>2024-09-13</td>
+      <td>12:32</td>
+      <td>No</td>
+      <td>Severe</td>
+      <td>No</td>
+      <td>Probably Related</td>
+      <td>Dose interrupted</td>
+      <td>Resolved</td>
+      <td>No</td>
+      <td>No</td>
+      <td>No</td>
+      <td>No</td>
+      <td>No</td>
+      <td>Yes</td>
+      <td>Subject</td>
+      <td>2024-09-01</td>
+      <td>Yes</td>
+      <td>NaN</td>
+    </tr>
+    <tr>
+      <td>STUDY001</td>
+      <td>SUB0010</td>
+      <td>AE001</td>
+      <td>Mucositis</td>
+      <td>2024-06-28</td>
+      <td>10:00</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>Yes</td>
+      <td>Moderate</td>
+      <td>No</td>
+      <td>Not Related</td>
+      <td>Dose interrupted</td>
+      <td>Not resolved</td>
+      <td>No</td>
+      <td>No</td>
+      <td>No</td>
+      <td>No</td>
+      <td>No</td>
+      <td>No</td>
+      <td>Investigator</td>
+      <td>2024-06-28</td>
+      <td>No</td>
+      <td>NaN</td>
+    </tr>
+    <tr>
+      <td>STUDY001</td>
+      <td>SUB0011</td>
+      <td>AE001</td>
+      <td>Vomiting</td>
+      <td>2024-06-22</td>
+      <td>09:45</td>
+      <td>2024-07-04</td>
+      <td>19:47</td>
+      <td>No</td>
+      <td>Mild</td>
+      <td>Yes</td>
+      <td>Possibly Related</td>
+      <td>Dose reduced</td>
+      <td>Resolved</td>
+      <td>No</td>
+      <td>No</td>
+      <td>No</td>
+      <td>No</td>
+      <td>No</td>
+      <td>No</td>
+      <td>Study Coordinator</td>
+      <td>2024-06-22</td>
+      <td>No</td>
+      <td>NaN</td>
+    </tr>
+    <tr>
+      <td>STUDY001</td>
+      <td>SUB0011</td>
+      <td>AE002</td>
+      <td>Vomiting</td>
+      <td>2024-07-26</td>
+      <td>11:46</td>
+      <td>2024-08-16</td>
+      <td>12:07</td>
+      <td>No</td>
+      <td>Severe</td>
+      <td>No</td>
+      <td>Possibly Related</td>
+      <td>Drug withdrawn</td>
+      <td>Resolved</td>
+      <td>No</td>
+      <td>No</td>
+      <td>No</td>
+      <td>No</td>
+      <td>No</td>
+      <td>No</td>
+      <td>Study Coordinator</td>
+      <td>2024-07-26</td>
+      <td>No</td>
+      <td>NaN</td>
+    </tr>
+    <tr>
+      <td>STUDY001</td>
+      <td>SUB0012</td>
+      <td>AE001</td>
+      <td>Diarrhea</td>
+      <td>2024-04-23</td>
+      <td>10:13</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>Yes</td>
+      <td>Moderate</td>
+      <td>No</td>
+      <td>Possibly Related</td>
+      <td>Dose interrupted</td>
+      <td>Not resolved</td>
+      <td>No</td>
+      <td>No</td>
+      <td>No</td>
+      <td>No</td>
+      <td>No</td>
+      <td>No</td>
+      <td>Investigator</td>
+      <td>2024-04-23</td>
+      <td>No</td>
+      <td>Symptomatic treatment</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+</div>
+</div>
+<div class='section'>
+<h2>CM (Concomitant Medications)</h2>
+<div class='file-card'>
+<div class='file-meta'><strong>cm_raw_20251126_074704.csv</strong> <span class='pill'>2025-11-26 07:47:04</span></div>
+<div class='file-meta'>Encoding: utf-8 | Separator: ,</div>
+<div class='btn-row'>
+<a class='btn' href='CM\cm_raw_20251126_074704.csv' download>Download</a>
+</div>
+<div style='margin-top:12px;'>
+<div class='file-meta'>Preview (top 10 rows):</div>
+<table class="dataframe preview-table">
+  <thead>
+    <tr style="text-align: right;">
+      <th>study_id</th>
+      <th>subject_id</th>
+      <th>medication_number</th>
+      <th>medication_name</th>
+      <th>generic_name</th>
+      <th>start_date</th>
+      <th>end_date</th>
+      <th>ongoing</th>
+      <th>dose</th>
+      <th>dose_unit</th>
+      <th>frequency</th>
+      <th>route</th>
+      <th>indication</th>
+      <th>prior_to_study</th>
+      <th>modified_during_study</th>
+      <th>clinically_relevant</th>
+      <th>reporter</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>STUDY001</td>
+      <td>SUB0002</td>
+      <td>CM001</td>
+      <td>Aspirin</td>
+      <td>Yes</td>
+      <td>2024-01-30</td>
+      <td>NaN</td>
+      <td>Yes</td>
+      <td>81</td>
+      <td>IU</td>
+      <td>Three times daily</td>
+      <td>Oral</td>
+      <td>Hypertension</td>
+      <td>Yes</td>
+      <td>No</td>
+      <td>No</td>
+      <td>Subject</td>
+    </tr>
+    <tr>
+      <td>STUDY001</td>
+      <td>SUB0003</td>
+      <td>CM001</td>
+      <td>Aspirin</td>
+      <td>Yes</td>
+      <td>2024-01-20</td>
+      <td>2024-04-25</td>
+      <td>No</td>
+      <td>52</td>
+      <td>mcg</td>
+      <td>As needed</td>
+      <td>Oral</td>
+      <td>Hypertension</td>
+      <td>Yes</td>
+      <td>No</td>
+      <td>No</td>
+      <td>Subject</td>
+    </tr>
+    <tr>
+      <td>STUDY001</td>
+      <td>SUB0003</td>
+      <td>CM002</td>
+      <td>Metformin</td>
+      <td>No</td>
+      <td>2024-02-17</td>
+      <td>2024-03-01</td>
+      <td>No</td>
+      <td>86</td>
+      <td>IU</td>
+      <td>Three times daily</td>
+      <td>Subcutaneous</td>
+      <td>Pain</td>
+      <td>No</td>
+      <td>Yes</td>
+      <td>No</td>
+      <td>Subject</td>
+    </tr>
+    <tr>
+      <td>STUDY001</td>
+      <td>SUB0003</td>
+      <td>CM003</td>
+      <td>Lisinopril</td>
+      <td>Yes</td>
+      <td>2024-02-18</td>
+      <td>2024-03-04</td>
+      <td>No</td>
+      <td>93</td>
+      <td>mg</td>
+      <td>Twice daily</td>
+      <td>Oral</td>
+      <td>Pain</td>
+      <td>No</td>
+      <td>Yes</td>
+      <td>No</td>
+      <td>Subject</td>
+    </tr>
+    <tr>
+      <td>STUDY001</td>
+      <td>SUB0004</td>
+      <td>CM001</td>
+      <td>Aspirin</td>
+      <td>Yes</td>
+      <td>2024-02-03</td>
+      <td>NaN</td>
+      <td>Yes</td>
+      <td>29</td>
+      <td>mL</td>
+      <td>Twice daily</td>
+      <td>Oral</td>
+      <td>Other</td>
+      <td>Yes</td>
+      <td>No</td>
+      <td>No</td>
+      <td>Subject</td>
+    </tr>
+    <tr>
+      <td>STUDY001</td>
+      <td>SUB0004</td>
+      <td>CM002</td>
+      <td>Lisinopril</td>
+      <td>No</td>
+      <td>2024-01-30</td>
+      <td>NaN</td>
+      <td>Yes</td>
+      <td>67</td>
+      <td>mL</td>
+      <td>As needed</td>
+      <td>Topical</td>
+      <td>Other</td>
+      <td>Yes</td>
+      <td>No</td>
+      <td>No</td>
+      <td>Subject</td>
+    </tr>
+    <tr>
+      <td>STUDY001</td>
+      <td>SUB0005</td>
+      <td>CM001</td>
+      <td>Atorvastatin</td>
+      <td>Yes</td>
+      <td>2024-02-03</td>
+      <td>2024-04-05</td>
+      <td>No</td>
+      <td>44</td>
+      <td>IU</td>
+      <td>Three times daily</td>
+      <td>Topical</td>
+      <td>Pain</td>
+      <td>Yes</td>
+      <td>Yes</td>
+      <td>Yes</td>
+      <td>Subject</td>
+    </tr>
+    <tr>
+      <td>STUDY001</td>
+      <td>SUB0005</td>
+      <td>CM002</td>
+      <td>Lisinopril</td>
+      <td>No</td>
+      <td>2024-02-05</td>
+      <td>2024-04-18</td>
+      <td>No</td>
+      <td>81</td>
+      <td>mcg</td>
+      <td>Once daily</td>
+      <td>Oral</td>
+      <td>Diabetes</td>
+      <td>Yes</td>
+      <td>Yes</td>
+      <td>No</td>
+      <td>Subject</td>
+    </tr>
+    <tr>
+      <td>STUDY001</td>
+      <td>SUB0006</td>
+      <td>CM001</td>
+      <td>Lisinopril</td>
+      <td>Yes</td>
+      <td>2024-02-13</td>
+      <td>NaN</td>
+      <td>Yes</td>
+      <td>16</td>
+      <td>IU</td>
+      <td>Three times daily</td>
+      <td>Topical</td>
+      <td>Hypertension</td>
+      <td>Yes</td>
+      <td>Yes</td>
+      <td>No</td>
+      <td>Subject</td>
+    </tr>
+    <tr>
+      <td>STUDY001</td>
+      <td>SUB0006</td>
+      <td>CM002</td>
+      <td>Atorvastatin</td>
+      <td>No</td>
+      <td>2024-01-23</td>
+      <td>2024-04-08</td>
+      <td>No</td>
+      <td>74</td>
+      <td>mL</td>
+      <td>Once daily</td>
+      <td>Topical</td>
+      <td>Infection</td>
+      <td>Yes</td>
+      <td>Yes</td>
+      <td>No</td>
+      <td>Subject</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+</div>
+</div>
+<div class='section'>
+<h2>DM (Demographics)</h2>
+<div class='file-card'>
+<div class='file-meta'><strong>dm_raw_20251126_074704.csv</strong> <span class='pill'>2025-11-26 07:47:04</span></div>
+<div class='file-meta'>Encoding: utf-8 | Separator: ,</div>
+<div class='btn-row'>
+<a class='btn' href='DM\dm_raw_20251126_074704.csv' download>Download</a>
+</div>
+<div style='margin-top:12px;'>
+<div class='file-meta'>Preview (top 10 rows):</div>
+<table class="dataframe preview-table">
+  <thead>
+    <tr style="text-align: right;">
+      <th>study_id</th>
+      <th>subject_id</th>
+      <th>site_number</th>
+      <th>birth_date</th>
+      <th>age_years</th>
+      <th>gender</th>
+      <th>race_category</th>
+      <th>ethnicity</th>
+      <th>country_code</th>
+      <th>enrollment_date</th>
+      <th>informed_consent_date</th>
+      <th>height_cm</th>
+      <th>weight_kg</th>
+      <th>bmi</th>
+      <th>medical_history</th>
+      <th>smoking_status</th>
+      <th>alcohol_use</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>STUDY001</td>
+      <td>SUB0001</td>
+      <td>1</td>
+      <td>26-01-1969</td>
+      <td>55</td>
+      <td>Female</td>
+      <td>Hispanic</td>
+      <td>Not Hispanic or Latino</td>
+      <td>USA</td>
+      <td>26-01-2024</td>
+      <td>17-01-2024</td>
+      <td>145</td>
+      <td>83</td>
+      <td>39.5</td>
+      <td>Diabetes</td>
+      <td>Current</td>
+      <td>Heavy</td>
+    </tr>
+    <tr>
+      <td>STUDY001</td>
+      <td>SUB0002</td>
+      <td>2</td>
+      <td>02-04-1949</td>
+      <td>75</td>
+      <td>Female</td>
+      <td>Asian</td>
+      <td>Not Hispanic or Latino</td>
+      <td>CAN</td>
+      <td>01-04-2024</td>
+      <td>26-03-2024</td>
+      <td>169</td>
+      <td>90</td>
+      <td>31.5</td>
+      <td>Diabetes</td>
+      <td>Former</td>
+      <td>Occasional</td>
+    </tr>
+    <tr>
+      <td>STUDY001</td>
+      <td>SUB0003</td>
+      <td>2</td>
+      <td>21-05-1949</td>
+      <td>75</td>
+      <td>Female</td>
+      <td>Other</td>
+      <td>Not Hispanic or Latino</td>
+      <td>CAN</td>
+      <td>20-05-2024</td>
+      <td>19-05-2024</td>
+      <td>160</td>
+      <td>71</td>
+      <td>27.7</td>
+      <td>Diabetes</td>
+      <td>Never</td>
+      <td>Moderate</td>
+    </tr>
+    <tr>
+      <td>STUDY001</td>
+      <td>SUB0004</td>
+      <td>2</td>
+      <td>26-02-1961</td>
+      <td>63</td>
+      <td>Male</td>
+      <td>White</td>
+      <td>Not Hispanic or Latino</td>
+      <td>CAN</td>
+      <td>26-02-2024</td>
+      <td>20-02-2024</td>
+      <td>170</td>
+      <td>88</td>
+      <td>30.4</td>
+      <td>Depression</td>
+      <td>Current</td>
+      <td>Regular</td>
+    </tr>
+    <tr>
+      <td>STUDY001</td>
+      <td>SUB0005</td>
+      <td>2</td>
+      <td>26-04-1960</td>
+      <td>64</td>
+      <td>Female</td>
+      <td>Hispanic</td>
+      <td>Hispanic or Latino</td>
+      <td>USA</td>
+      <td>26-04-2024</td>
+      <td>15-04-2024</td>
+      <td>177</td>
+      <td>72</td>
+      <td>23.0</td>
+      <td>Arthritis</td>
+      <td>Unknown</td>
+      <td>Heavy</td>
+    </tr>
+    <tr>
+      <td>STUDY001</td>
+      <td>SUB0006</td>
+      <td>2</td>
+      <td>04-05-1960</td>
+      <td>64</td>
+      <td>Male</td>
+      <td>White</td>
+      <td>Not Hispanic or Latino</td>
+      <td>USA</td>
+      <td>04-05-2024</td>
+      <td>28-04-2024</td>
+      <td>153</td>
+      <td>118</td>
+      <td>50.4</td>
+      <td>Hypertension</td>
+      <td>Never</td>
+      <td>NaN</td>
+    </tr>
+    <tr>
+      <td>STUDY001</td>
+      <td>SUB0007</td>
+      <td>1</td>
+      <td>12-03-1948</td>
+      <td>76</td>
+      <td>Female</td>
+      <td>Asian</td>
+      <td>Not Hispanic or Latino</td>
+      <td>USA</td>
+      <td>12-03-2024</td>
+      <td>02-03-2024</td>
+      <td>172</td>
+      <td>91</td>
+      <td>30.8</td>
+      <td>Arthritis</td>
+      <td>Unknown</td>
+      <td>Heavy</td>
+    </tr>
+    <tr>
+      <td>STUDY001</td>
+      <td>SUB0008</td>
+      <td>2</td>
+      <td>24-03-2002</td>
+      <td>22</td>
+      <td>Female</td>
+      <td>Hispanic</td>
+      <td>Hispanic or Latino</td>
+      <td>USA</td>
+      <td>23-03-2024</td>
+      <td>11-03-2024</td>
+      <td>153</td>
+      <td>86</td>
+      <td>36.7</td>
+      <td>NaN</td>
+      <td>Unknown</td>
+      <td>NaN</td>
+    </tr>
+    <tr>
+      <td>STUDY001</td>
+      <td>SUB0009</td>
+      <td>2</td>
+      <td>07-07-2005</td>
+      <td>19</td>
+      <td>Male</td>
+      <td>Other</td>
+      <td>Not Hispanic or Latino</td>
+      <td>USA</td>
+      <td>06-07-2024</td>
+      <td>28-06-2024</td>
+      <td>190</td>
+      <td>79</td>
+      <td>21.9</td>
+      <td>Depression</td>
+      <td>Unknown</td>
+      <td>Occasional</td>
+    </tr>
+    <tr>
+      <td>STUDY001</td>
+      <td>SUB0010</td>
+      <td>1</td>
+      <td>13-04-1996</td>
+      <td>28</td>
+      <td>Female</td>
+      <td>Asian</td>
+      <td>Hispanic or Latino</td>
+      <td>USA</td>
+      <td>13-04-2024</td>
+      <td>30-03-2024</td>
+      <td>159</td>
+      <td>97</td>
+      <td>38.4</td>
+      <td>Arthritis</td>
+      <td>Former</td>
+      <td>Moderate</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+</div>
+</div>
+<div class='section'>
+<h2>EX (Exposure)</h2>
+<div class='file-card'>
+<div class='file-meta'><strong>ex_raw_20251126_074704.csv</strong> <span class='pill'>2025-11-26 07:47:04</span></div>
+<div class='file-meta'>Encoding: utf-8 | Separator: ,</div>
+<div class='btn-row'>
+<a class='btn' href='EX\ex_raw_20251126_074704.csv' download>Download</a>
+</div>
+<div style='margin-top:12px;'>
+<div class='file-meta'>Preview (top 10 rows):</div>
+<table class="dataframe preview-table">
+  <thead>
+    <tr style="text-align: right;">
+      <th>study_id</th>
+      <th>subject_id</th>
+      <th>visit_name</th>
+      <th>administration_date</th>
+      <th>administration_time</th>
+      <th>study_drug_name</th>
+      <th>dose_administered</th>
+      <th>dose_unit</th>
+      <th>route_of_administration</th>
+      <th>formulation</th>
+      <th>lot_number</th>
+      <th>compliance_percent</th>
+      <th>missed_doses</th>
+      <th>dose_modification</th>
+      <th>modification_reason</th>
+      <th>administered_by</th>
+      <th>storage_condition_met</th>
+      <th>TRTGroup</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>STUDY001</td>
+      <td>SUB0001</td>
+      <td>Day 1</td>
+      <td>15-02-2024</td>
+      <td>12:23</td>
+      <td>Investigational Product</td>
+      <td>10</td>
+      <td>mg</td>
+      <td>Oral</td>
+      <td>Tablet</td>
+      <td>LOT9469</td>
+      <td>99</td>
+      <td>0</td>
+      <td>No</td>
+      <td>NaN</td>
+      <td>Study Staff</td>
+      <td>Yes</td>
+      <td>A</td>
+    </tr>
+    <tr>
+      <td>STUDY001</td>
+      <td>SUB0001</td>
+      <td>Week 2</td>
+      <td>29-02-2024</td>
+      <td>08:11</td>
+      <td>Investigational Product</td>
+      <td>50</td>
+      <td>mg</td>
+      <td>Oral</td>
+      <td>Tablet</td>
+      <td>LOT7414</td>
+      <td>89</td>
+      <td>1</td>
+      <td>No</td>
+      <td>NaN</td>
+      <td>Study Staff</td>
+      <td>Yes</td>
+      <td>A</td>
+    </tr>
+    <tr>
+      <td>STUDY001</td>
+      <td>SUB0001</td>
+      <td>Week 4</td>
+      <td>14-03-2024</td>
+      <td>08:03</td>
+      <td>Investigational Product</td>
+      <td>100</td>
+      <td>mg</td>
+      <td>Oral</td>
+      <td>Tablet</td>
+      <td>LOT7662</td>
+      <td>95</td>
+      <td>1</td>
+      <td>No</td>
+      <td>NaN</td>
+      <td>Subject</td>
+      <td>Yes</td>
+      <td>A</td>
+    </tr>
+    <tr>
+      <td>STUDY001</td>
+      <td>SUB0001</td>
+      <td>Week 8</td>
+      <td>28-03-2024</td>
+      <td>10:30</td>
+      <td>Investigational Product</td>
+      <td>10</td>
+      <td>mg</td>
+      <td>Oral</td>
+      <td>Tablet</td>
+      <td>LOT7482</td>
+      <td>90</td>
+      <td>0</td>
+      <td>No</td>
+      <td>NaN</td>
+      <td>Study Staff</td>
+      <td>Yes</td>
+      <td>A</td>
+    </tr>
+    <tr>
+      <td>STUDY001</td>
+      <td>SUB0001</td>
+      <td>Week 12</td>
+      <td>11-04-2024</td>
+      <td>10:16</td>
+      <td>Investigational Product</td>
+      <td>20</td>
+      <td>mg</td>
+      <td>Oral</td>
+      <td>Tablet</td>
+      <td>LOT2692</td>
+      <td>98</td>
+      <td>0</td>
+      <td>No</td>
+      <td>NaN</td>
+      <td>Subject</td>
+      <td>Yes</td>
+      <td>A</td>
+    </tr>
+    <tr>
+      <td>STUDY001</td>
+      <td>SUB0002</td>
+      <td>Day 1</td>
+      <td>15-02-2024</td>
+      <td>11:29</td>
+      <td>Investigational Product</td>
+      <td>100</td>
+      <td>mg</td>
+      <td>Oral</td>
+      <td>Tablet</td>
+      <td>LOT5603</td>
+      <td>87</td>
+      <td>0</td>
+      <td>No</td>
+      <td>NaN</td>
+      <td>Study Staff</td>
+      <td>Yes</td>
+      <td>B</td>
+    </tr>
+    <tr>
+      <td>STUDY001</td>
+      <td>SUB0002</td>
+      <td>Week 2</td>
+      <td>29-02-2024</td>
+      <td>10:20</td>
+      <td>Investigational Product</td>
+      <td>50</td>
+      <td>mg</td>
+      <td>Oral</td>
+      <td>Tablet</td>
+      <td>LOT6686</td>
+      <td>98</td>
+      <td>1</td>
+      <td>No</td>
+      <td>NaN</td>
+      <td>Study Staff</td>
+      <td>Yes</td>
+      <td>B</td>
+    </tr>
+    <tr>
+      <td>STUDY001</td>
+      <td>SUB0002</td>
+      <td>Week 4</td>
+      <td>14-03-2024</td>
+      <td>08:16</td>
+      <td>Investigational Product</td>
+      <td>100</td>
+      <td>mg</td>
+      <td>Oral</td>
+      <td>Tablet</td>
+      <td>LOT1125</td>
+      <td>92</td>
+      <td>0</td>
+      <td>No</td>
+      <td>NaN</td>
+      <td>Subject</td>
+      <td>Yes</td>
+      <td>B</td>
+    </tr>
+    <tr>
+      <td>STUDY001</td>
+      <td>SUB0002</td>
+      <td>Week 8</td>
+      <td>28-03-2024</td>
+      <td>09:36</td>
+      <td>Investigational Product</td>
+      <td>20</td>
+      <td>mg</td>
+      <td>Oral</td>
+      <td>Tablet</td>
+      <td>LOT3253</td>
+      <td>89</td>
+      <td>2</td>
+      <td>No</td>
+      <td>NaN</td>
+      <td>Subject</td>
+      <td>Yes</td>
+      <td>B</td>
+    </tr>
+    <tr>
+      <td>STUDY001</td>
+      <td>SUB0002</td>
+      <td>Week 12</td>
+      <td>11-04-2024</td>
+      <td>11:26</td>
+      <td>Investigational Product</td>
+      <td>20</td>
+      <td>mg</td>
+      <td>Oral</td>
+      <td>Tablet</td>
+      <td>LOT6888</td>
+      <td>85</td>
+      <td>0</td>
+      <td>No</td>
+      <td>NaN</td>
+      <td>Subject</td>
+      <td>Yes</td>
+      <td>B</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+</div>
+</div>
+<div class='section'>
+<h2>MH (Medical History)</h2>
+<div class='file-card'>
+<div class='file-meta'><strong>mh_raw_20251126_074704.csv</strong> <span class='pill'>2025-11-26 07:47:04</span></div>
+<div class='file-meta'>Encoding: utf-8 | Separator: ,</div>
+<div class='btn-row'>
+<a class='btn' href='MH\mh_raw_20251126_074704.csv' download>Download</a>
+</div>
+<div style='margin-top:12px;'>
+<div class='file-meta'>Preview (top 10 rows):</div>
+<table class="dataframe preview-table">
+  <thead>
+    <tr style="text-align: right;">
+      <th>study_id</th>
+      <th>subject_id</th>
+      <th>condition_number</th>
+      <th>medical_condition</th>
+      <th>start_date</th>
+      <th>end_date</th>
+      <th>ongoing</th>
+      <th>severity</th>
+      <th>diagnosis_confirmed</th>
+      <th>hospitalization_required</th>
+      <th>treatment_received</th>
+      <th>clinically_significant</th>
+      <th>source_of_information</th>
+      <th>reporter</th>
+      <th>relationship_to_study_condition</th>
+      <th>interferes_with_study</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>STUDY001</td>
+      <td>SUB0001</td>
+      <td>MH001</td>
+      <td>Hyperlipidemia</td>
+      <td>2023-01-26</td>
+      <td>NaN</td>
+      <td>Yes</td>
+      <td>Mild</td>
+      <td>No</td>
+      <td>No</td>
+      <td>No</td>
+      <td>Yes</td>
+      <td>Subject Report</td>
+      <td>Investigator</td>
+      <td>Possibly Related</td>
+      <td>No</td>
+    </tr>
+    <tr>
+      <td>STUDY001</td>
+      <td>SUB0001</td>
+      <td>MH002</td>
+      <td>Hyperlipidemia</td>
+      <td>2019-01-27</td>
+      <td>2020-01-27</td>
+      <td>No</td>
+      <td>Moderate</td>
+      <td>Yes</td>
+      <td>No</td>
+      <td>No</td>
+      <td>Yes</td>
+      <td>Prior CRF</td>
+      <td>Investigator</td>
+      <td>Possibly Related</td>
+      <td>No</td>
+    </tr>
+    <tr>
+      <td>STUDY001</td>
+      <td>SUB0001</td>
+      <td>MH003</td>
+      <td>Anxiety</td>
+      <td>2021-01-26</td>
+      <td>NaN</td>
+      <td>Yes</td>
+      <td>Severe</td>
+      <td>Yes</td>
+      <td>Yes</td>
+      <td>No</td>
+      <td>No</td>
+      <td>Subject Report</td>
+      <td>Investigator</td>
+      <td>Possibly Related</td>
+      <td>No</td>
+    </tr>
+    <tr>
+      <td>STUDY001</td>
+      <td>SUB0001</td>
+      <td>MH004</td>
+      <td>Diabetes Mellitus Type 2</td>
+      <td>2017-01-27</td>
+      <td>NaN</td>
+      <td>Yes</td>
+      <td>Mild</td>
+      <td>No</td>
+      <td>No</td>
+      <td>No</td>
+      <td>No</td>
+      <td>Subject Report</td>
+      <td>Investigator</td>
+      <td>Not Related</td>
+      <td>No</td>
+    </tr>
+    <tr>
+      <td>STUDY001</td>
+      <td>SUB0001</td>
+      <td>MH005</td>
+      <td>Arthritis</td>
+      <td>2010-01-29</td>
+      <td>NaN</td>
+      <td>Yes</td>
+      <td>Mild</td>
+      <td>Yes</td>
+      <td>No</td>
+      <td>Yes</td>
+      <td>Yes</td>
+      <td>Medical Records</td>
+      <td>Investigator</td>
+      <td>Not Related</td>
+      <td>No</td>
+    </tr>
+    <tr>
+      <td>STUDY001</td>
+      <td>SUB0004</td>
+      <td>MH001</td>
+      <td>Anxiety</td>
+      <td>2004-03-02</td>
+      <td>NaN</td>
+      <td>Yes</td>
+      <td>Moderate</td>
+      <td>No</td>
+      <td>No</td>
+      <td>Yes</td>
+      <td>No</td>
+      <td>Prior CRF</td>
+      <td>Investigator</td>
+      <td>Possibly Related</td>
+      <td>No</td>
+    </tr>
+    <tr>
+      <td>STUDY001</td>
+      <td>SUB0004</td>
+      <td>MH002</td>
+      <td>Diabetes Mellitus Type 2</td>
+      <td>2009-03-01</td>
+      <td>2012-02-29</td>
+      <td>No</td>
+      <td>Mild</td>
+      <td>No</td>
+      <td>No</td>
+      <td>No</td>
+      <td>No</td>
+      <td>Subject Report</td>
+      <td>Investigator</td>
+      <td>Possibly Related</td>
+      <td>No</td>
+    </tr>
+    <tr>
+      <td>STUDY001</td>
+      <td>SUB0005</td>
+      <td>MH001</td>
+      <td>Arthritis</td>
+      <td>2012-04-29</td>
+      <td>NaN</td>
+      <td>Yes</td>
+      <td>Mild</td>
+      <td>Yes</td>
+      <td>No</td>
+      <td>Yes</td>
+      <td>No</td>
+      <td>Medical Records</td>
+      <td>Investigator</td>
+      <td>Possibly Related</td>
+      <td>No</td>
+    </tr>
+    <tr>
+      <td>STUDY001</td>
+      <td>SUB0005</td>
+      <td>MH002</td>
+      <td>Arthritis</td>
+      <td>2010-04-30</td>
+      <td>NaN</td>
+      <td>Yes</td>
+      <td>Severe</td>
+      <td>No</td>
+      <td>No</td>
+      <td>No</td>
+      <td>Yes</td>
+      <td>Medical Records</td>
+      <td>Investigator</td>
+      <td>Not Related</td>
+      <td>No</td>
+    </tr>
+    <tr>
+      <td>STUDY001</td>
+      <td>SUB0005</td>
+      <td>MH003</td>
+      <td>Arthritis</td>
+      <td>2009-04-30</td>
+      <td>2020-04-27</td>
+      <td>No</td>
+      <td>Severe</td>
+      <td>Yes</td>
+      <td>Yes</td>
+      <td>Yes</td>
+      <td>Yes</td>
+      <td>Medical Records</td>
+      <td>Investigator</td>
+      <td>Possibly Related</td>
+      <td>No</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+</div>
+</div>
+<div class='section'>
+<h2>Unclassified</h2>
+<div class='file-card'>
+<div class='file-meta'><strong>eg_raw_20251126_074704.csv</strong> <span class='pill'>2025-11-26 07:47:04</span></div>
+<div class='file-meta'>Encoding: utf-8 | Separator: ,</div>
+<div class='btn-row'>
+<a class='btn' href='Unclassified\eg_raw_20251126_074704.csv' download>Download</a>
+</div>
+<div style='margin-top:12px;'>
+<div class='file-meta'>Preview (top 10 rows):</div>
+<table class="dataframe preview-table">
+  <thead>
+    <tr style="text-align: right;">
+      <th>study_id</th>
+      <th>subject_id</th>
+      <th>visit_name</th>
+      <th>ecg_date</th>
+      <th>ecg_time</th>
+      <th>heart_rate_bpm</th>
+      <th>pr_interval_ms</th>
+      <th>qrs_duration_ms</th>
+      <th>qt_interval_ms</th>
+      <th>qtc_interval_ms</th>
+      <th>rhythm</th>
+      <th>interpretation</th>
+      <th>clinically_significant</th>
+      <th>cardiologist_review</th>
+      <th>machine_type</th>
+      <th>technician_name</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>STUDY001</td>
+      <td>SUB0001</td>
+      <td>Screening</td>
+      <td>2024-02-15</td>
+      <td>10:09</td>
+      <td>92</td>
+      <td>167</td>
+      <td>98</td>
+      <td>366</td>
+      <td>404</td>
+      <td>Normal sinus rhythm</td>
+      <td>Normal</td>
+      <td>No</td>
+      <td>Not required</td>
+      <td>Mortara ELI 350</td>
+      <td>Tech A</td>
+    </tr>
+    <tr>
+      <td>STUDY001</td>
+      <td>SUB0001</td>
+      <td>Baseline</td>
+      <td>2024-03-14</td>
+      <td>16:57</td>
+      <td>83</td>
+      <td>175</td>
+      <td>96</td>
+      <td>385</td>
+      <td>386</td>
+      <td>Sinus bradycardia</td>
+      <td>Normal</td>
+      <td>Yes</td>
+      <td>Not required</td>
+      <td>GE MAC 5500</td>
+      <td>Tech B</td>
+    </tr>
+    <tr>
+      <td>STUDY001</td>
+      <td>SUB0001</td>
+      <td>Week 4</td>
+      <td>2024-04-11</td>
+      <td>11:32</td>
+      <td>92</td>
+      <td>165</td>
+      <td>85</td>
+      <td>368</td>
+      <td>427</td>
+      <td>Sinus bradycardia</td>
+      <td>Normal</td>
+      <td>Yes</td>
+      <td>Reviewed - follow up</td>
+      <td>Mortara ELI 350</td>
+      <td>Tech A</td>
+    </tr>
+    <tr>
+      <td>STUDY001</td>
+      <td>SUB0001</td>
+      <td>Week 8</td>
+      <td>2024-05-09</td>
+      <td>12:32</td>
+      <td>73</td>
+      <td>159</td>
+      <td>93</td>
+      <td>409</td>
+      <td>391</td>
+      <td>Sinus bradycardia</td>
+      <td>Abnormal, not clinically significant</td>
+      <td>No</td>
+      <td>Not required</td>
+      <td>Mortara ELI 350</td>
+      <td>Tech B</td>
+    </tr>
+    <tr>
+      <td>STUDY001</td>
+      <td>SUB0001</td>
+      <td>Week 12</td>
+      <td>2024-06-06</td>
+      <td>14:14</td>
+      <td>71</td>
+      <td>159</td>
+      <td>106</td>
+      <td>378</td>
+      <td>384</td>
+      <td>Sinus tachycardia</td>
+      <td>Abnormal, not clinically significant</td>
+      <td>No</td>
+      <td>Reviewed - follow up</td>
+      <td>Philips PageWriter</td>
+      <td>Tech B</td>
+    </tr>
+    <tr>
+      <td>STUDY001</td>
+      <td>SUB0002</td>
+      <td>Screening</td>
+      <td>2024-02-15</td>
+      <td>14:01</td>
+      <td>80</td>
+      <td>199</td>
+      <td>89</td>
+      <td>388</td>
+      <td>400</td>
+      <td>Sinus bradycardia</td>
+      <td>Normal</td>
+      <td>No</td>
+      <td>Reviewed - follow up</td>
+      <td>Mortara ELI 350</td>
+      <td>Tech C</td>
+    </tr>
+    <tr>
+      <td>STUDY001</td>
+      <td>SUB0002</td>
+      <td>Baseline</td>
+      <td>2024-03-14</td>
+      <td>13:07</td>
+      <td>70</td>
+      <td>131</td>
+      <td>84</td>
+      <td>365</td>
+      <td>414</td>
+      <td>Normal sinus rhythm</td>
+      <td>Normal</td>
+      <td>No</td>
+      <td>Reviewed - no action</td>
+      <td>Mortara ELI 350</td>
+      <td>Tech C</td>
+    </tr>
+    <tr>
+      <td>STUDY001</td>
+      <td>SUB0002</td>
+      <td>Week 4</td>
+      <td>2024-04-11</td>
+      <td>10:41</td>
+      <td>81</td>
+      <td>161</td>
+      <td>106</td>
+      <td>407</td>
+      <td>404</td>
+      <td>Sinus tachycardia</td>
+      <td>Normal</td>
+      <td>No</td>
+      <td>Reviewed - follow up</td>
+      <td>Mortara ELI 350</td>
+      <td>Tech B</td>
+    </tr>
+    <tr>
+      <td>STUDY001</td>
+      <td>SUB0002</td>
+      <td>Week 8</td>
+      <td>2024-05-09</td>
+      <td>16:09</td>
+      <td>89</td>
+      <td>185</td>
+      <td>83</td>
+      <td>389</td>
+      <td>408</td>
+      <td>Normal sinus rhythm</td>
+      <td>Abnormal, clinically significant</td>
+      <td>No</td>
+      <td>Reviewed - follow up</td>
+      <td>Mortara ELI 350</td>
+      <td>Tech C</td>
+    </tr>
+    <tr>
+      <td>STUDY001</td>
+      <td>SUB0002</td>
+      <td>Week 12</td>
+      <td>2024-06-06</td>
+      <td>11:54</td>
+      <td>67</td>
+      <td>195</td>
+      <td>97</td>
+      <td>388</td>
+      <td>445</td>
+      <td>Sinus tachycardia</td>
+      <td>Normal</td>
+      <td>No</td>
+      <td>Not required</td>
+      <td>GE MAC 5500</td>
+      <td>Tech B</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+</div>
+<div class='file-card'>
+<div class='file-meta'><strong>pe_raw_20251126_074704.csv</strong> <span class='pill'>2025-11-26 07:47:04</span></div>
+<div class='file-meta'>Encoding: utf-8 | Separator: ,</div>
+<div class='btn-row'>
+<a class='btn' href='Unclassified\pe_raw_20251126_074704.csv' download>Download</a>
+</div>
+<div style='margin-top:12px;'>
+<div class='file-meta'>Preview (top 10 rows):</div>
+<table class="dataframe preview-table">
+  <thead>
+    <tr style="text-align: right;">
+      <th>study_id</th>
+      <th>subject_id</th>
+      <th>visit_name</th>
+      <th>examination_date</th>
+      <th>body_system</th>
+      <th>examination_finding</th>
+      <th>normal_abnormal</th>
+      <th>clinical_significance</th>
+      <th>examiner_name</th>
+      <th>comments</th>
+      <th>baseline_assessment</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>STUDY001</td>
+      <td>SUB0001</td>
+      <td>Screening</td>
+      <td>2024-02-15</td>
+      <td>General Appearance</td>
+      <td>Normal</td>
+      <td>Normal</td>
+      <td>Not applicable</td>
+      <td>Dr. Smith</td>
+      <td>Within normal limits</td>
+      <td>Yes</td>
+    </tr>
+    <tr>
+      <td>STUDY001</td>
+      <td>SUB0001</td>
+      <td>Screening</td>
+      <td>2024-02-15</td>
+      <td>Head, Eyes, Ears, Nose, Throat</td>
+      <td>Normal</td>
+      <td>Normal</td>
+      <td>Not applicable</td>
+      <td>Dr. Brown</td>
+      <td>No abnormalities noted</td>
+      <td>Yes</td>
+    </tr>
+    <tr>
+      <td>STUDY001</td>
+      <td>SUB0001</td>
+      <td>Screening</td>
+      <td>2024-02-15</td>
+      <td>Cardiovascular</td>
+      <td>Normal</td>
+      <td>Normal</td>
+      <td>Not applicable</td>
+      <td>Dr. Wilson</td>
+      <td>No abnormalities noted</td>
+      <td>Yes</td>
+    </tr>
+    <tr>
+      <td>STUDY001</td>
+      <td>SUB0001</td>
+      <td>Screening</td>
+      <td>2024-02-15</td>
+      <td>Respiratory</td>
+      <td>Normal</td>
+      <td>Normal</td>
+      <td>Not applicable</td>
+      <td>Dr. Johnson</td>
+      <td>No abnormalities noted</td>
+      <td>Yes</td>
+    </tr>
+    <tr>
+      <td>STUDY001</td>
+      <td>SUB0001</td>
+      <td>Screening</td>
+      <td>2024-02-15</td>
+      <td>Gastrointestinal</td>
+      <td>Normal</td>
+      <td>Normal</td>
+      <td>Not applicable</td>
+      <td>Dr. Smith</td>
+      <td>NaN</td>
+      <td>Yes</td>
+    </tr>
+    <tr>
+      <td>STUDY001</td>
+      <td>SUB0001</td>
+      <td>Screening</td>
+      <td>2024-02-15</td>
+      <td>Neurological</td>
+      <td>Normal</td>
+      <td>Normal</td>
+      <td>Not applicable</td>
+      <td>Dr. Wilson</td>
+      <td>NaN</td>
+      <td>Yes</td>
+    </tr>
+    <tr>
+      <td>STUDY001</td>
+      <td>SUB0001</td>
+      <td>Screening</td>
+      <td>2024-02-15</td>
+      <td>Musculoskeletal</td>
+      <td>Normal</td>
+      <td>Normal</td>
+      <td>Not applicable</td>
+      <td>Dr. Wilson</td>
+      <td>NaN</td>
+      <td>Yes</td>
+    </tr>
+    <tr>
+      <td>STUDY001</td>
+      <td>SUB0001</td>
+      <td>Screening</td>
+      <td>2024-02-15</td>
+      <td>Skin and Subcutaneous</td>
+      <td>Normal</td>
+      <td>Normal</td>
+      <td>Not applicable</td>
+      <td>Dr. Smith</td>
+      <td>Within normal limits</td>
+      <td>Yes</td>
+    </tr>
+    <tr>
+      <td>STUDY001</td>
+      <td>SUB0001</td>
+      <td>Screening</td>
+      <td>2024-02-15</td>
+      <td>Lymph Nodes</td>
+      <td>Normal</td>
+      <td>Normal</td>
+      <td>Not applicable</td>
+      <td>Dr. Johnson</td>
+      <td>NaN</td>
+      <td>Yes</td>
+    </tr>
+    <tr>
+      <td>STUDY001</td>
+      <td>SUB0001</td>
+      <td>Baseline</td>
+      <td>2024-03-14</td>
+      <td>General Appearance</td>
+      <td>Normal</td>
+      <td>Normal</td>
+      <td>Not applicable</td>
+      <td>Dr. Wilson</td>
+      <td>Within normal limits</td>
+      <td>Yes</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+</div>
+<div class='file-card'>
+<div class='file-meta'><strong>rs_raw_20251126_074704.csv</strong> <span class='pill'>2025-11-26 07:47:04</span></div>
+<div class='file-meta'>Encoding: utf-8 | Separator: ,</div>
+<div class='btn-row'>
+<a class='btn' href='Unclassified\rs_raw_20251126_074704.csv' download>Download</a>
+</div>
+<div style='margin-top:12px;'>
+<div class='file-meta'>Preview (top 10 rows):</div>
+<table class="dataframe preview-table">
+  <thead>
+    <tr style="text-align: right;">
+      <th>study_id</th>
+      <th>subject_id</th>
+      <th>overall_response</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>STUDY001</td>
+      <td>SUB0001</td>
+      <td>Stable Disease</td>
+    </tr>
+    <tr>
+      <td>STUDY001</td>
+      <td>SUB0002</td>
+      <td>Partial Response</td>
+    </tr>
+    <tr>
+      <td>STUDY001</td>
+      <td>SUB0003</td>
+      <td>Progressive Disease</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+</div>
+</div>
+</body></html>

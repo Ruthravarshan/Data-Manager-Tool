@@ -22,7 +22,7 @@ def read_studies(skip: int = 0, limit: int = 100, db: Session = Depends(get_db))
 
 @router.post("/", response_model=StudySchema)
 def create_study(study: StudyCreate, db: Session = Depends(get_db)):
-    db_study = Study(**study.dict(), id=f"ST-{uuid.uuid4().hex[:6].upper()}")
+    db_study = Study(**study.model_dump(), id=f"ST-{uuid.uuid4().hex[:6].upper()}")
     db.add(db_study)
     db.commit()
     db.refresh(db_study)

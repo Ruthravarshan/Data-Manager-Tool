@@ -20,6 +20,7 @@ class Study(Base):
     indication = Column(String, nullable=True)
     completion_percentage = Column(Integer)
     file_url = Column(String, nullable=True) # URL to PDF in Blob Storage
+    created_at = Column(DateTime, default=datetime.utcnow)
     
     # Relationship
     documents = relationship("Document", back_populates="study", cascade="all, delete-orphan")
@@ -48,6 +49,26 @@ class IntegrationSource(Base):
     frequency = Column(String)
     last_sync = Column(DateTime, default=datetime.utcnow)
     status = Column(String)
+    protocol_id = Column(String, nullable=True)
+    folder_path = Column(String, nullable=True)
+
+class DataFile(Base):
+    __tablename__ = "data_files"
+
+    id = Column(Integer, primary_key=True, index=True)
+    filename = Column(String, index=True)
+    prefix = Column(String, nullable=True)
+    section = Column(String, index=True) # DM, AE, etc.
+    status = Column(String)
+    file_path = Column(String)
+    file_size = Column(String, nullable=True)
+    timestamp = Column(String, nullable=True)
+    last_updated = Column(DateTime, nullable=True)
+    created_at = Column(DateTime, default=datetime.utcnow)
+    protocol_id = Column(String, nullable=True)
+    integration_id = Column(Integer, ForeignKey("integrations.id"), nullable=True)
+
+    integration = relationship("IntegrationSource")
 
 class Metric(Base):
     __tablename__ = "metrics"
