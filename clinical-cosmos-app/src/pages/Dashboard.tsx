@@ -1,12 +1,13 @@
 import {
     FileText, ChartColumn, CircleArrowUp, FlaskConical, Clock, MessagesSquare,
     AlarmClock, ListChecks, Activity, Flag, CircleCheck, Bell, Award, Microscope,
-    ChevronRight, Eye, CircleAlert, CircleDashed, Database, Link2, FileSpreadsheet
+    ChevronRight, Eye, CircleAlert, CircleDashed, Database, Link2, FileSpreadsheet,
+    ChevronUp, ChevronDown
 } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { dashboardService, studyService, activityService } from '../services/api';
+import { dashboardService, studyService, activityService, dataFileService } from '../services/api';
 
 export default function Dashboard() {
     const navigate = useNavigate();
@@ -16,6 +17,62 @@ export default function Dashboard() {
     const [studies, setStudies] = useState<any[]>([]);
     const [recentActivities, setRecentActivities] = useState<any[]>([]);
     const [loading, setLoading] = useState(true);
+
+    // SDTM Data State
+    const [sdtmFiles, setSdtmFiles] = useState<any[]>([]);
+    const [selectedProtocol, setSelectedProtocol] = useState<string>('all');
+    const [sdtmDomains, setSdtmDomains] = useState<any[]>([]);
+
+    useEffect(() => {
+        const fetchSDTMData = async () => {
+            try {
+                // Fetch files based on selected protocol
+                const protocol = selectedProtocol === 'all' ? undefined : selectedProtocol;
+                const files = await dataFileService.getDataFiles(undefined, undefined, protocol);
+                setSdtmFiles(files || []);
+
+                // Group by section (domain)
+                const grouped = (files || []).reduce((acc: any, file: any) => {
+                    const domain = file.section || 'Unclassified';
+                    if (!acc[domain]) {
+                        acc[domain] = {
+                            code: domain,
+                            name: getDomainName(domain),
+                            files: [],
+                            totalRecords: 0
+                        };
+                    }
+                    acc[domain].files.push(file);
+                    acc[domain].totalRecords += (file.record_count || 0);
+                    return acc;
+                }, {});
+
+                // Calculate progress/completeness (mock logic for now as we don't have target records)
+                // Removed as per user request since it was hardcoded/mock
+
+                setSdtmDomains(Object.values(grouped).sort((a: any, b: any) => a.code.localeCompare(b.code)));
+            } catch (error) {
+                console.error("Failed to fetch SDTM data", error);
+                setSdtmFiles([]);
+            }
+        };
+
+        fetchSDTMData();
+    }, [selectedProtocol]);
+
+    const getDomainName = (code: string) => {
+        const names: any = {
+            'DM': 'Demographics',
+            'AE': 'Adverse Events',
+            'VS': 'Vital Signs',
+            'LB': 'Laboratory Tests',
+            'CM': 'Concomitant Medications',
+            'EX': 'Exposure',
+            'DS': 'Disposition',
+            'SV': 'Subject Visits'
+        };
+        return names[code] || code;
+    };
 
     useEffect(() => {
         const fetchMetrics = async () => {
@@ -363,19 +420,42 @@ export default function Dashboard() {
 
                         {/* SDTM Domains */}
                         <div className="rounded-lg border bg-card text-card-foreground shadow-sm">
-                            <div className="flex flex-col space-y-1.5 p-6 pb-2">
-                                <h3 className="font-semibold tracking-tight text-lg flex items-center">
-                                    <Database className="mr-2 h-5 w-5 text-blue-600" />
-                                    SDTM Domains
-                                </h3>
+                            <div className="flex flex-col space-y-3 p-6 pb-2">
+                                <div className="flex justify-between items-center">
+                                    <h3 className="font-semibold tracking-tight text-lg flex items-center">
+                                        <Database className="mr-2 h-5 w-5 text-blue-600" />
+                                        SDTM Domains
+                                    </h3>
+                                    <select
+                                        value={selectedProtocol}
+                                        onChange={(e) => setSelectedProtocol(e.target.value)}
+                                        className="h-8 text-xs border-gray-300 rounded-md shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50"
+                                    >
+                                        <option value="all">All Protocols</option>
+                                        {studies.map(study => (
+                                            <option key={study.id} value={study.protocol_id || study.title}>
+                                                {study.protocol_id || study.title}
+                                            </option>
+                                        ))}
+                                    </select>
+                                </div>
                             </div>
                             <div className="p-6 pt-0 space-y-2">
-                                <SDTMItem code="DM" name="Demographics" records="959" progress="98%" progressColor="green-600" />
-                                <SDTMItem code="VS" name="Vital Signs" records="4,782" progress="93%" progressColor="green-600" />
-                                <SDTMItem code="LB" name="Laboratory Tests" records="12,568" progress="88%" progressColor="amber-600" />
-                                <SDTMItem code="AE" name="Adverse Events" records="873" progress="95%" progressColor="green-600" />
-                                <SDTMItem code="CM" name="Concomitant Medications" records="1,924" progress="82%" progressColor="amber-600" />
-                                <SDTMItem code="EX" name="Exposure" records="959" progress="97%" progressColor="green-600" />
+                                {sdtmDomains.length > 0 ? (
+                                    sdtmDomains.map((domain: any) => (
+                                        <SDTMDomainItem
+                                            key={domain.code}
+                                            code={domain.code}
+                                            name={domain.name}
+                                            records={domain.totalRecords.toLocaleString()}
+                                            fileCount={domain.files.length}
+                                        />
+                                    ))
+                                ) : (
+                                    <div className="text-center py-4 text-gray-500 text-sm">
+                                        No data found for selected protocol
+                                    </div>
+                                )}
                             </div>
                             <div className="flex items-center p-6 pt-0">
                                 <Link to="/trial-data-management" className="w-full">
@@ -618,22 +698,23 @@ function DeviationItem({ code, severity, severityColor, desc, site }: any) {
     )
 }
 
-function SDTMItem({ code, name, records, progress, progressColor }: any) {
+function SDTMDomainItem({ code, name, records, fileCount }: any) {
     return (
-        <div className="flex items-center justify-between p-2 border-b last:border-0 hover:bg-slate-50">
-            <div>
-                <div className="flex items-center">
-                    <div className="bg-blue-100 rounded p-1 mr-2">
-                        <span className="text-xs font-semibold text-blue-700">{code}</span>
-                    </div>
-                    <span className="text-sm">{name}</span>
+        <div className="group flex items-center justify-between p-3 rounded-lg border border-gray-100 bg-white hover:border-blue-200 hover:shadow-sm transition-all duration-200">
+            <div className="flex items-center gap-4">
+                <div className="flex-shrink-0 w-10 h-10 rounded-full bg-blue-50 flex items-center justify-center text-blue-700 font-bold text-xs ring-4 ring-white group-hover:ring-blue-50 transition-all">
+                    {code}
                 </div>
-                <div className="flex mt-1 text-xs text-gray-500">
-                    <span>{records} records</span>
+                <div>
+                    <h4 className="text-sm font-semibold text-gray-900 leading-none mb-1">{name}</h4>
+                    <div className="flex items-center gap-2 text-xs text-gray-500">
+                        <span className="bg-gray-100 px-1.5 py-0.5 rounded text-gray-600 font-medium">{fileCount} files</span>
+                    </div>
                 </div>
             </div>
-            <div className="text-sm font-medium">
-                <span className={`text-${progressColor}`}>{progress}</span>
+            <div className="text-right">
+                <span className="block text-lg font-bold text-gray-900 tracking-tight">{records}</span>
+                <span className="text-[10px] uppercase font-semibold text-gray-400">Records</span>
             </div>
         </div>
     )

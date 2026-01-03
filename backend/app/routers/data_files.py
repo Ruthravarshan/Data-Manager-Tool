@@ -94,7 +94,8 @@ def scan_integration_folder(
                 created_at=result.timestamp if isinstance(result.timestamp, datetime) else datetime.utcnow(),
                 status=result.status,
                 protocol_id=result.protocol_id,
-                integration_id=integration_id
+                integration_id=integration_id,
+                record_count=result.record_count
             )
             db.add(data_file)
             

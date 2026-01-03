@@ -4,7 +4,7 @@ import {
     ServerCog, History, SlidersVertical, Mail,
     TriangleAlert, ChevronDown, Download, RefreshCw,
     PauseCircle, PlayCircle, MoreHorizontal, CheckCircle2,
-    Search, Filter, Settings, Trash2, Edit
+    Search, Filter, Settings, Trash2, Edit, X
 } from 'lucide-react';
 import { clsx, type ClassValue } from "clsx";
 import { twMerge } from "tailwind-merge";
@@ -24,6 +24,16 @@ export default function DataIntegration() {
     const [scanningId, setScanningId] = useState<number | null>(null);
     const [scanResults, setScanResults] = useState<any>(null);
     const [toast, setToast] = useState<{ message: string, type: 'success' | 'error' } | null>(null);
+    const [isAddModalOpen, setIsAddModalOpen] = useState(false);
+    const [newIntegration, setNewIntegration] = useState({
+        name: '',
+        vendor: '',
+        type: 'EDC',
+        protocol_id: '',
+        folder_path: '',
+        frequency: 'Manual',
+        status: 'Active'
+    });
 
     const fetchIntegrations = async () => {
         try {
@@ -59,6 +69,33 @@ export default function DataIntegration() {
             });
         } finally {
             setScanningId(null);
+        }
+    };
+
+    const handleAddIntegration = async () => {
+        try {
+            if (!newIntegration.name || !newIntegration.folder_path) {
+                setToast({ message: "Name and Folder Path are required", type: 'error' });
+                return;
+            }
+
+            await integrationService.createIntegration(newIntegration);
+            setIsAddModalOpen(false);
+            setToast({ message: "Integration created successfully", type: 'success' });
+            fetchIntegrations();
+            // Reset form
+            setNewIntegration({
+                name: '',
+                vendor: '',
+                type: 'EDC',
+                protocol_id: '',
+                folder_path: '',
+                frequency: 'Manual',
+                status: 'Active'
+            });
+        } catch (error: any) {
+            console.error("Create failed", error);
+            setToast({ message: error.response?.data?.detail || "Failed to create integration", type: 'error' });
         }
     };
 
@@ -134,7 +171,9 @@ export default function DataIntegration() {
                                             <p className="text-sm text-gray-500 mt-1">Configure and manage data integrations from external sources</p>
                                         </div>
                                     </div>
-                                    <button className="inline-flex items-center justify-center whitespace-nowrap text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-blue-600 text-white hover:bg-blue-700 h-9 rounded-md px-3 gap-1">
+                                    <button
+                                        onClick={() => setIsAddModalOpen(true)}
+                                        className="inline-flex items-center justify-center whitespace-nowrap text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-blue-600 text-white hover:bg-blue-700 h-9 rounded-md px-3 gap-1">
                                         <PlusCircle className="h-4 w-4" />
                                         <span>Add Integration</span>
                                     </button>
@@ -249,6 +288,112 @@ export default function DataIntegration() {
                                 )}
                             </div>
                         )}
+                    </div>
+                )}
+                {/* Add Integration Modal */}
+                {isAddModalOpen && (
+                    <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
+                        <div className="bg-white rounded-lg shadow-xl w-full max-w-md overflow-hidden animate-in fade-in zoom-in-95 duration-200">
+                            <div className="flex justify-between items-center p-6 border-b border-gray-100">
+                                <h3 className="text-lg font-semibold text-gray-900">Add Data Integration</h3>
+                                <button
+                                    onClick={() => setIsAddModalOpen(false)}
+                                    className="text-gray-400 hover:text-gray-600 transition-colors"
+                                >
+                                    <X className="h-5 w-5" />
+                                </button>
+                            </div>
+                            <div className="p-6 space-y-4">
+                                <div className="space-y-2">
+                                    <label className="text-sm font-medium text-gray-700">Name <span className="text-red-500">*</span></label>
+                                    <input
+                                        type="text"
+                                        value={newIntegration.name}
+                                        onChange={(e) => setNewIntegration({ ...newIntegration, name: e.target.value })}
+                                        placeholder="e.g. DM Data Feed"
+                                        className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm"
+                                    />
+                                </div>
+
+                                <div className="space-y-2">
+                                    <label className="text-sm font-medium text-gray-700">Vendor</label>
+                                    <input
+                                        type="text"
+                                        value={newIntegration.vendor}
+                                        onChange={(e) => setNewIntegration({ ...newIntegration, vendor: e.target.value })}
+                                        placeholder="e.g. Medidata"
+                                        className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm"
+                                    />
+                                </div>
+
+                                <div className="grid grid-cols-2 gap-4">
+                                    <div className="space-y-2">
+                                        <label className="text-sm font-medium text-gray-700">Type</label>
+                                        <select
+                                            value={newIntegration.type}
+                                            onChange={(e) => setNewIntegration({ ...newIntegration, type: e.target.value })}
+                                            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm"
+                                        >
+                                            <option>EDC</option>
+                                            <option>eTMF</option>
+                                            <option>CTMS</option>
+                                            <option>Lab</option>
+                                            <option>Imaging</option>
+                                        </select>
+                                    </div>
+                                    <div className="space-y-2">
+                                        <label className="text-sm font-medium text-gray-700">Protocol ID</label>
+                                        <input
+                                            type="text"
+                                            value={newIntegration.protocol_id}
+                                            onChange={(e) => setNewIntegration({ ...newIntegration, protocol_id: e.target.value })}
+                                            placeholder="e.g. PRO-001"
+                                            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm"
+                                        />
+                                    </div>
+                                </div>
+
+                                <div className="space-y-2">
+                                    <label className="text-sm font-medium text-gray-700">Folder Path <span className="text-red-500">*</span></label>
+                                    <input
+                                        type="text"
+                                        value={newIntegration.folder_path}
+                                        onChange={(e) => setNewIntegration({ ...newIntegration, folder_path: e.target.value })}
+                                        placeholder="Absolute path e.g. C:/Data/Study001"
+                                        className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm font-mono"
+                                    />
+                                    <p className="text-xs text-gray-500">Provide the absolute path to the local directory containing data files.</p>
+                                </div>
+
+                                <div className="space-y-2">
+                                    <label className="text-sm font-medium text-gray-700">Sync Frequency</label>
+                                    <select
+                                        value={newIntegration.frequency}
+                                        onChange={(e) => setNewIntegration({ ...newIntegration, frequency: e.target.value })}
+                                        className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm"
+                                    >
+                                        <option>Manual</option>
+                                        <option>Daily</option>
+                                        <option>Weekly</option>
+                                        <option>Real-time</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div className="p-6 pt-0 flex justify-end gap-3">
+                                <button
+                                    onClick={() => setIsAddModalOpen(false)}
+                                    className="px-4 py-2 text-sm font-medium text-gray-700 bg-gray-100 hover:bg-gray-200 rounded-md transition-colors"
+                                >
+                                    Cancel
+                                </button>
+                                <button
+                                    onClick={handleAddIntegration}
+                                    className="px-4 py-2 text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 rounded-md transition-colors"
+                                >
+                                    Create Integration
+                                </button>
+                            </div>
+                        </div>
                     </div>
                 )}
             </div>

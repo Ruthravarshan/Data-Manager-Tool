@@ -106,6 +106,7 @@ class DataFileBase(BaseModel):
     timestamp: Optional[str] = None
     protocol_id: Optional[str] = None
     integration_id: Optional[int] = None
+    record_count: Optional[int] = 0
 
 class DataFile(DataFileBase):
     id: int

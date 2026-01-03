@@ -67,6 +67,7 @@ class DataFile(Base):
     created_at = Column(DateTime, default=datetime.utcnow)
     protocol_id = Column(String, nullable=True)
     integration_id = Column(Integer, ForeignKey("integrations.id"), nullable=True)
+    record_count = Column(Integer, default=0)
 
     integration = relationship("IntegrationSource")
 

@@ -7,6 +7,7 @@ import os
 import re
 from pathlib import Path
 from typing import List, Tuple, Optional
+import pandas as pd
 
 # Mapping of file prefixes to section names
 PREFIX_TO_SECTION = {
@@ -34,7 +35,8 @@ class FileClassificationResult:
     """Result of classifying a single file"""
     def __init__(self, filename: str, prefix: Optional[str] = None, section: Optional[str] = None, 
                  timestamp: Optional[str] = None, file_size: int = 0, status: str = 'Imported', 
-                 error: Optional[str] = None, protocol_id: Optional[str] = None, file_path: Optional[str] = None):
+                 error: Optional[str] = None, protocol_id: Optional[str] = None, file_path: Optional[str] = None,
+                 record_count: int = 0):
         self.filename = filename
         self.prefix = prefix
         self.section = section
@@ -45,6 +47,7 @@ class FileClassificationResult:
         self.is_valid = error is None
         self.protocol_id = protocol_id
         self.file_path = file_path
+        self.record_count = record_count
 
 
 def parse_filename(filename: str) -> Tuple[Optional[str], Optional[str], Optional[str], Optional[str]]:
@@ -117,8 +120,23 @@ def classify_file(file_path: str) -> FileClassificationResult:
         
         if error:
             status = 'Unclassified'
+            record_count = 0
         else:
             status = 'Imported'
+            # Count records
+            record_count = 0
+            try:
+                if ext.lower() in ['.xlsx', '.xls']:
+                    df = pd.read_excel(file_path, nrows=None) # Read all to count
+                    record_count = len(df)
+                elif ext.lower() == '.csv':
+                    df = pd.read_csv(file_path, nrows=None)
+                    record_count = len(df)
+            except Exception as e:
+                # If cannot read, just log/ignore count, don't fail classification purely on reading data
+                # But maybe we should warn?
+                print(f"Failed to count records in {filename}: {e}")
+                pass
         
         return FileClassificationResult(
             filename=filename,
@@ -127,7 +145,8 @@ def classify_file(file_path: str) -> FileClassificationResult:
             timestamp=timestamp,
             file_size=file_size,
             status=status,
-            error=error
+            error=error,
+            record_count=record_count
         )
     
     except Exception as e:
