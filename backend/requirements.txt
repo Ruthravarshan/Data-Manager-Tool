@@ -5,3 +5,4 @@ psycopg2-binary==2.9.10
 python-dotenv==1.0.1
 azure-storage-blob==12.24.0
 python-multipart==0.0.20
+pandas

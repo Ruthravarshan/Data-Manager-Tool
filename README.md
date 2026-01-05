@@ -11,9 +11,6 @@ npm install
 
 ```bash
 cd backend
-python setup_postgres_db.py
-python create_db.py
-python seed_db.py
 uvicorn app.main:app --reload
 ```
 

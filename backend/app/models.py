@@ -3,8 +3,6 @@ from sqlalchemy.orm import relationship
 from .database import Base
 from datetime import datetime
 
-from sqlalchemy.sql import func
-
 class Study(Base):
     __tablename__ = "studies"
 
@@ -22,27 +20,10 @@ class Study(Base):
     indication = Column(String, nullable=True)
     completion_percentage = Column(Integer)
     file_url = Column(String, nullable=True) # URL to PDF in Blob Storage
+    created_at = Column(DateTime, default=datetime.utcnow)
     
     # Relationship
     documents = relationship("Document", back_populates="study", cascade="all, delete-orphan")
-
-
-# Data Quality and Reconciliation Issues for DataManagerAI
-class DataQualityIssue(Base):
-    __tablename__ = "data_quality_issues"
-
-    id = Column(String, primary_key=True, index=True)  # e.g., DQ-001, DR-001
-    study_id = Column(String, ForeignKey("studies.id"), nullable=False)
-    type = Column(String)  # e.g., 'Missing Data', 'Inconsistent Data'
-    category = Column(String)  # e.g., 'DQ', 'Reconciliation'
-    title = Column(String)
-    status = Column(String)  # e.g., 'Detected', 'Reviewing', 'Resolved'
-    severity = Column(String)  # e.g., 'High', 'Medium', 'Low'
-    domain = Column(String)  # e.g., 'DM', 'LB', 'VS'
-    created = Column(DateTime, default=func.now())
-    updated = Column(DateTime, default=func.now(), onupdate=func.now())
-
-    study = relationship("Study")
 
 class Document(Base):
     __tablename__ = "documents"
@@ -68,6 +49,29 @@ class IntegrationSource(Base):
     frequency = Column(String)
     last_sync = Column(DateTime, default=datetime.utcnow)
     status = Column(String)
+    protocol_id = Column(String, nullable=True)
+    folder_path = Column(String, nullable=True)
+
+class DataFile(Base):
+    __tablename__ = "data_files"
+
+    id = Column(Integer, primary_key=True, index=True)
+    filename = Column(String, index=True)
+    prefix = Column(String, nullable=True)
+    section = Column(String, index=True) # DM, AE, etc.
+    status = Column(String)
+    status = Column(String)
+    file_path = Column(String)
+    table_name = Column(String, nullable=True)
+    file_size = Column(String, nullable=True)
+    timestamp = Column(String, nullable=True)
+    last_updated = Column(DateTime, nullable=True)
+    created_at = Column(DateTime, default=datetime.utcnow)
+    protocol_id = Column(String, nullable=True)
+    integration_id = Column(Integer, ForeignKey("integrations.id"), nullable=True)
+    record_count = Column(Integer, default=0)
+
+    integration = relationship("IntegrationSource")
 
 class Metric(Base):
     __tablename__ = "metrics"
@@ -76,26 +80,13 @@ class Metric(Base):
     value = Column(String)
     label = Column(String)
     trend = Column(String, nullable=True)
-
-class Agent(Base):
-    __tablename__ = "agents"
+class Activity(Base):
+    __tablename__ = "activities"
 
     id = Column(Integer, primary_key=True, index=True)
-    name = Column(String)
-    role = Column(String)
-    status = Column(String) # active, inactive
-    type = Column(String) 
+    action_type = Column(String, index=True)  # e.g., "study_created", "query_raised", "task_closed"
     description = Column(String)
-    last_active = Column(DateTime, default=datetime.utcnow)
-    records_processed = Column(Integer, default=0)
-    issues_found = Column(Integer, default=0)
-    icon = Column(String) # e.g., 'Cpu', 'Database', etc.
-
-class ActivityLog(Base):
-    __tablename__ = "activity_logs"
-
-    id = Column(Integer, primary_key=True, index=True)
-    agent_name = Column(String)
-    timestamp = Column(DateTime, default=datetime.utcnow)
-    message = Column(String)
-    level = Column(String) # info, warning, error
+    user_name = Column(String, default="User")  # Can be enhanced with actual user tracking
+    timestamp = Column(DateTime, default=datetime.utcnow, index=True)
+    related_entity_id = Column(String, nullable=True)  # Study ID, Query ID, Task ID, etc.
+    related_entity_type = Column(String, nullable=True)  # 'study', 'query', 'task', 'document'

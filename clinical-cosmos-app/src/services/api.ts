@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 export const api = axios.create({
-    baseURL: 'http://127.0.0.1:8000/api',
+    baseURL: 'http://localhost:8000/api',
     headers: {
         'Content-Type': 'application/json',
     },
@@ -18,6 +18,10 @@ export const studyService = {
     getStudies: async () => {
         const response = await api.get('/studies/');
         return response.data;
+    },
+    getActiveStudiesCount: async () => {
+        const response = await api.get('/studies/count/active');
+        return response.data.count;
     },
     createStudy: async (studyData: any) => {
         const response = await api.post('/studies/', studyData);
@@ -68,27 +72,111 @@ export const documentService = {
 };
 
 export const integrationService = {
-    getIntegrations: async () => {
-        const response = await api.get('/integrations/');
+    getIntegrations: async (type?: string, status?: string) => {
+        const params = new URLSearchParams();
+        if (type && type !== 'All Types') params.append('type_filter', type);
+        if (status && status !== 'All Statuses') params.append('status_filter', status);
+
+        const response = await api.get(`/integrations/?${params.toString()}`);
+        return response.data;
+    },
+    getIntegrationTypes: async () => {
+        const response = await api.get('/integrations/filters/types');
+        return response.data;
+    },
+    getIntegrationStatuses: async () => {
+        const response = await api.get('/integrations/filters/statuses');
+        return response.data;
+    },
+    getProtocols: async () => {
+        const response = await api.get('/integrations/filters/protocols');
+        return response.data;
+    },
+    createIntegration: async (data: any) => {
+        const response = await api.post('/integrations/', data);
+        return response.data;
+    },
+    updateIntegration: async (id: number, data: any) => {
+        const response = await api.put(`/integrations/${id}`, data);
+        return response.data;
+    },
+    deleteIntegration: async (id: number) => {
+        const response = await api.delete(`/integrations/${id}`);
+        return response.data;
+    },
+    scanFolder: async (integrationId: number | string) => {
+        // This actually maps to the data_files router scan endpoint
+        const response = await api.post(`/data-files/scan/${integrationId}`);
         return response.data;
     }
 };
 
-export const dataManagerService = {
-    getAgents: async () => {
-        const response = await api.get('/agents');
+export const dataFileService = {
+    getDataFiles: async (section?: string, status?: string, protocol_id?: string, integration_id?: string) => {
+        const params = new URLSearchParams();
+        if (section) params.append('section', section);
+        if (status) params.append('status', status);
+        if (protocol_id) params.append('protocol_id', protocol_id);
+        if (integration_id && !isNaN(Number(integration_id))) params.append('integration_id', integration_id);
+
+        const queryString = params.toString();
+        const response = await api.get(`/data-files/${queryString ? '?' + queryString : ''}`);
         return response.data;
     },
-    refreshAgent: async (id: number) => {
-        const response = await api.post(`/agents/${id}/refresh`);
+
+    getSections: async () => {
+        const response = await api.get('/data-files/sections');
         return response.data;
     },
-    getActivityLogs: async () => {
-        const response = await api.get('/activity-logs');
+
+    scanFolder: async (integration_id: string) => {
+        const response = await api.post(`/data-files/scan/${integration_id}`);
         return response.data;
     },
-    getDQIssues: async () => {
-        const response = await api.get('/dq-issues');
+
+    deleteDataFile: async (file_id: string | number) => {
+        const response = await api.delete(`/data-files/${file_id}`);
+        return response.data;
+    },
+
+    getFilePreview: async (filePath: string) => {
+        const response = await api.get(`/preview?file_path=${encodeURIComponent(filePath)}&nrows=10`);
+        return response.data;
+    },
+
+    getFileData: async (fileId: number, limit: number = 100, offset: number = 0) => {
+        const response = await api.get(`/data-files/${fileId}/data?limit=${limit}&offset=${offset}`);
+        return response.data;
+    },
+
+    getSectionMetadata: async (section: string, protocolId?: string) => {
+        const params = new URLSearchParams();
+        params.append('section', section);
+        if (protocolId) params.append('protocol_id', protocolId);
+        const response = await api.get(`/data-files/metadata?${params.toString()}`);
+        return response.data;
+    }
+};
+
+export const activityService = {
+    logActivity: async (activity: {
+        action_type: string;
+        description: string;
+        user_name?: string;
+        related_entity_id?: string;
+        related_entity_type?: string;
+    }) => {
+        const response = await api.post('/activities/', activity);
+        return response.data;
+    },
+
+    getRecentActivities: async (limit: number = 10) => {
+        const response = await api.get(`/activities/recent?limit=${limit}`);
+        return response.data;
+    },
+
+    getAllActivities: async (skip: number = 0, limit: number = 100) => {
+        const response = await api.get(`/activities/?skip=${skip}&limit=${limit}`);
         return response.data;
     }
 };
