@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 export const api = axios.create({
-    baseURL: 'http://127.0.0.1:8000/api',
+    baseURL: 'http://localhost:8000/api',
     headers: {
         'Content-Type': 'application/json',
     },
@@ -70,25 +70,6 @@ export const documentService = {
 export const integrationService = {
     getIntegrations: async () => {
         const response = await api.get('/integrations/');
-        return response.data;
-    }
-};
-
-export const dataManagerService = {
-    getAgents: async () => {
-        const response = await api.get('/agents');
-        return response.data;
-    },
-    refreshAgent: async (id: number) => {
-        const response = await api.post(`/agents/${id}/refresh`);
-        return response.data;
-    },
-    getActivityLogs: async () => {
-        const response = await api.get('/activity-logs');
-        return response.data;
-    },
-    getDQIssues: async () => {
-        const response = await api.get('/dq-issues');
         return response.data;
     }
 };
