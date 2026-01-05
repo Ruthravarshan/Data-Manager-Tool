@@ -46,22 +46,12 @@ def startup_event():
 def read_root():
     return {"message": "Welcome to Clinical Cosmos API"}
 
-<<<<<<< HEAD
-from .routers import dashboard, studies, integrations, activities, data_files, preview
-=======
-
-from .routers import dashboard, studies, integrations, data_files, preview, database_connections
->>>>>>> origin/Priyesh
+from .routers import dashboard, studies, integrations, activities, data_files, preview, database_connections
 
 app.include_router(dashboard.router)
 app.include_router(studies.router)
 app.include_router(integrations.router)
-<<<<<<< HEAD
 app.include_router(activities.router)
 app.include_router(data_files.router)
 app.include_router(preview.router)
-=======
-app.include_router(data_files.router)
-app.include_router(preview.router)
 app.include_router(database_connections.router)
->>>>>>> origin/Priyesh

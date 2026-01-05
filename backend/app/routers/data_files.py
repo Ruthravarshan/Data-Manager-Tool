@@ -1,33 +1,20 @@
 from fastapi import APIRouter, Depends, Query, HTTPException
 from sqlalchemy.orm import Session
-<<<<<<< HEAD
 from sqlalchemy import text
 from typing import List, Optional, Dict, Any
 from app.database import get_db, engine
 from app.models import DataFile, IntegrationSource
 from app.schemas import DataFile as DataFileSchema, ScanFolderRequest, ScanFolderResponse, SectionMetadataResponse
 from app.file_classifier import scan_folder, scan_folder_recursive
-=======
-from typing import List, Optional
-from app.database import get_db
-from app.models import DataFile, IntegrationSource
-from app.schemas import DataFile as DataFileSchema, ScanFolderRequest, ScanFolderResponse
-from app.file_classifier import scan_folder
->>>>>>> origin/Priyesh
 import logging
 from datetime import datetime
 import pandas as pd
 import os
-<<<<<<< HEAD
 import re
-=======
-from app.schemas import SectionMetadataResponse
->>>>>>> origin/Priyesh
 
 logger = logging.getLogger(__name__)
 router = APIRouter(prefix="/api/data-files", tags=["data-files"])
 
-<<<<<<< HEAD
 def get_safe_table_name(filename: str) -> str:
     """Generate a safe table name from filename"""
     # Remove extension
@@ -37,17 +24,8 @@ def get_safe_table_name(filename: str) -> str:
         name = name.split("_raw")[0]
     # Replace non-alphanumeric with _
     safe_name = re.sub(r'[^a-zA-Z0-9]', '_', name).lower()
-    # Add timestamp/random suffix to ensure uniqueness? 
-    # For now, we'll rely on the logic that we can check if table exists or just append a unique ID if needed.
-    # But populate_db logic was: base_name + _sub + number.
-    # We should probably try to be consistent or just use a unique ID based suffix.
-    # Let's use a simple deterministic name first, but we need to handle duplicates.
-    # To avoid complexity, let's use: data_{timestamp_ms}_{safe_name}
     timestamp_suffix = datetime.now().strftime("%Y%m%d%H%M%S")
     return f"dt_{safe_name}_{timestamp_suffix}"
-
-=======
->>>>>>> origin/Priyesh
 
 @router.get("/", response_model=List[DataFileSchema])
 def get_data_files(
@@ -58,15 +36,6 @@ def get_data_files(
     db: Session = Depends(get_db)
 ):
     """Get data files with optional filtering"""
-<<<<<<< HEAD
-    query = db.query(DataFile)
-    
-    # If filtering by protocol, join with IntegrationSource
-    # If filtering by protocol, filter by DataFile.protocol_id
-    if protocol_id:
-        query = query.filter(DataFile.protocol_id == protocol_id)
-=======
-    """Get data files with optional filtering"""
     # Query DataFile and IntegrationSource.type
     query = db.query(DataFile, IntegrationSource.type.label("integration_type"))\
         .outerjoin(IntegrationSource, DataFile.integration_id == IntegrationSource.id)
@@ -74,7 +43,6 @@ def get_data_files(
     # Apply filters
     if protocol_id:
         query = query.filter(IntegrationSource.protocol_id == protocol_id)
->>>>>>> origin/Priyesh
     
     if section:
         query = query.filter(DataFile.section == section)
@@ -85,15 +53,15 @@ def get_data_files(
     if integration_id:
         query = query.filter(DataFile.integration_id == integration_id)
     
-<<<<<<< HEAD
-    return query.order_by(DataFile.created_at.desc()).all()
-
-
-@router.get("/sections", response_model=List[str])
-def get_sections(db: Session = Depends(get_db)):
-    """Get list of all unique sections"""
-    sections = db.query(DataFile.section).distinct().filter(DataFile.section != None).all()
-=======
+    if section:
+        query = query.filter(DataFile.section == section)
+    
+    if status:
+        query = query.filter(DataFile.status == status)
+    
+    if integration_id:
+        query = query.filter(DataFile.integration_id == integration_id)
+    
     results = query.order_by(DataFile.created_at.desc()).all()
     
     # Transform to response schema
@@ -121,7 +89,6 @@ def get_sections(
                      .filter(IntegrationSource.protocol_id == protocol_id)
                      
     sections = query.all()
->>>>>>> origin/Priyesh
     return sorted([s[0] for s in sections if s[0]])
 
 
@@ -140,7 +107,6 @@ def scan_integration_folder(
         
         logger.info(f"Integration found: {integration.name}, folder: {integration.folder_path}")
         
-<<<<<<< HEAD
         if not integration.folder_path:
             logger.error(f"Folder path not configured for integration {integration_id}")
             raise HTTPException(status_code=400, detail="Folder path not configured for this integration")
@@ -148,31 +114,6 @@ def scan_integration_folder(
         # Scan folder
         logger.info(f"Starting folder scan for: {integration.folder_path}")
         results, warnings = scan_folder_recursive(integration.folder_path)
-=======
-        # Check if folder path is configured
-        if not integration.folder_path:
-            # If no folder path, check if it's a type that might not need one (like API)
-            # For now, we'll simulate a successful sync for non-folder integrations
-            # instead of raising an error
-            logger.info(f"No folder path for integration {integration_id} ({integration.type}). Simulating sync.")
-            
-            # Update integration's last_sync
-            integration.last_sync = datetime.utcnow()
-            db.commit()
-            
-            return ScanFolderResponse(
-                total_files=0,
-                imported_files=0,
-                unclassified_files=0,
-                duplicate_files=0,
-                files=[],
-                warnings=["Integration does not have a local folder path configured. Simulated sync completed."]
-            )
-            
-        # Scan folder
-        logger.info(f"Starting folder scan for: {integration.folder_path}")
-        results, warnings = scan_folder(integration.folder_path)
->>>>>>> origin/Priyesh
         logger.info(f"Scan completed. Found {len(results)} files")
         
         # Clear existing files for this integration
@@ -186,7 +127,6 @@ def scan_integration_folder(
         stored_files = []
         
         for result in results:
-<<<<<<< HEAD
             # Generate table name and ingest data if imported
             table_name = None
             if result.status == 'Imported' and result.file_path and os.path.exists(result.file_path):
@@ -211,18 +151,12 @@ def scan_integration_folder(
                         logger.info(f"Ingested {result.filename} into table {table_name}")
                 except Exception as e:
                     logger.error(f"Failed to ingest {result.filename}: {e}")
-                    # We don't fail the whole scan, just log error. 
-                    # Optionally mark as Error/Warning?
-                    # For now, proceeding but table_name will be None
                     pass
 
-=======
->>>>>>> origin/Priyesh
             data_file = DataFile(
                 filename=result.filename,
                 prefix=result.prefix,
                 section=result.section,
-<<<<<<< HEAD
                 file_path=result.file_path if result.file_path else 
                           f"{integration.folder_path}/{result.filename}",
                 file_size=result.file_size,
@@ -232,14 +166,6 @@ def scan_integration_folder(
                 integration_id=integration_id,
                 record_count=result.record_count,
                 table_name=table_name
-=======
-                file_path=result.file_path if hasattr(result, 'file_path') else 
-                          f"{integration.folder_path}/{result.filename}",
-                file_size=result.file_size,
-                timestamp=result.timestamp,
-                status=result.status,
-                integration_id=integration_id
->>>>>>> origin/Priyesh
             )
             db.add(data_file)
             
@@ -269,11 +195,7 @@ def scan_integration_folder(
             imported_files=imported_count,
             unclassified_files=unclassified_count,
             duplicate_files=duplicate_count,
-<<<<<<< HEAD
-            files=stored_files,
-=======
             files=[DataFileSchema.from_orm(f) for f in stored_files],
->>>>>>> origin/Priyesh
             warnings=warnings
         )
     except HTTPException:
@@ -295,15 +217,10 @@ def get_section_metadata(
         # query for the latest file in this section
         query = db.query(DataFile)
         
-<<<<<<< HEAD
-        if protocol_id:
-            query = query.filter(DataFile.protocol_id == protocol_id)
-=======
         # Join with IntegrationSource if protocol_id is provided
         if protocol_id:
             query = query.join(IntegrationSource, DataFile.integration_id == IntegrationSource.id)\
                          .filter(IntegrationSource.protocol_id == protocol_id)
->>>>>>> origin/Priyesh
         
         # Filter by section and get latest
         latest_file = query.filter(DataFile.section == section)\
@@ -462,7 +379,6 @@ def delete_data_file(file_id: int, db: Session = Depends(get_db)):
     db.commit()
     return {"message": "Data file deleted successfully"}
 
-<<<<<<< HEAD
 @router.get("/{file_id}/data")
 def get_file_data(
     file_id: int, 
@@ -475,23 +391,12 @@ def get_file_data(
     if not data_file:
         raise HTTPException(status_code=404, detail="Data file not found")
     
+    # Check if table exists
     if not data_file.table_name:
-        # Fallback to file reading or return empty?
-        # If it's imported, it should have a table. If not, maybe it wasn't valid.
         raise HTTPException(status_code=400, detail="Data not ingested into database for this file.")
 
     try:
-        # Verify table exists (basic SQL injection prevention is done by not using user input for table name directly, 
-        # but the table_name in DB should be safe as we generated it)
-        # However, to be extra safe, we used sqlalchemy text with caution or quoted identifiers.
-        # pandas read_sql handles quoting usually.
-        
-        # We use simple string interpolation for table name because it's from our DB and strict format.
-        # But let's check if table exists first using passing check.
-        
         query = f'SELECT * FROM "{data_file.table_name}" LIMIT {limit} OFFSET {offset}'
-        
-        # Use pandas to read sql for convenience as it returns a DataFrame we can convert to dict
         df = pd.read_sql_query(query, engine)
         
         # Convert to records
@@ -509,7 +414,3 @@ def get_file_data(
     except Exception as e:
         logger.error(f"Error fetching data from table {data_file.table_name}: {e}")
         raise HTTPException(status_code=500, detail=f"Error retrieving data: {str(e)}")
-=======
-
-
->>>>>>> origin/Priyesh

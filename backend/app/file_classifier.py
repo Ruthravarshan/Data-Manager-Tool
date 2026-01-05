@@ -7,10 +7,7 @@ import os
 import re
 from pathlib import Path
 from typing import List, Tuple, Optional
-<<<<<<< HEAD
 import pandas as pd
-=======
->>>>>>> origin/Priyesh
 
 # Mapping of file prefixes to section names
 PREFIX_TO_SECTION = {
@@ -38,12 +35,8 @@ class FileClassificationResult:
     """Result of classifying a single file"""
     def __init__(self, filename: str, prefix: Optional[str] = None, section: Optional[str] = None, 
                  timestamp: Optional[str] = None, file_size: int = 0, status: str = 'Imported', 
-<<<<<<< HEAD
                  error: Optional[str] = None, protocol_id: Optional[str] = None, file_path: Optional[str] = None,
                  record_count: int = 0):
-=======
-                 error: Optional[str] = None):
->>>>>>> origin/Priyesh
         self.filename = filename
         self.prefix = prefix
         self.section = section
@@ -52,12 +45,9 @@ class FileClassificationResult:
         self.status = status
         self.error = error
         self.is_valid = error is None
-<<<<<<< HEAD
         self.protocol_id = protocol_id
         self.file_path = file_path
         self.record_count = record_count
-=======
->>>>>>> origin/Priyesh
 
 
 def parse_filename(filename: str) -> Tuple[Optional[str], Optional[str], Optional[str], Optional[str]]:
@@ -130,7 +120,6 @@ def classify_file(file_path: str) -> FileClassificationResult:
         
         if error:
             status = 'Unclassified'
-<<<<<<< HEAD
             record_count = 0
         else:
             status = 'Imported'
@@ -144,14 +133,8 @@ def classify_file(file_path: str) -> FileClassificationResult:
                     df = pd.read_csv(file_path, nrows=None)
                     record_count = len(df)
             except Exception as e:
-                # If cannot read, just log/ignore count, don't fail classification purely on reading data
-                # But maybe we should warn?
-                print(f"Failed to count records in {filename}: {e}")
+                # If cannot read, just log/ignore count
                 pass
-=======
-        else:
-            status = 'Imported'
->>>>>>> origin/Priyesh
         
         return FileClassificationResult(
             filename=filename,
@@ -160,12 +143,8 @@ def classify_file(file_path: str) -> FileClassificationResult:
             timestamp=timestamp,
             file_size=file_size,
             status=status,
-<<<<<<< HEAD
             error=error,
             record_count=record_count
-=======
-            error=error
->>>>>>> origin/Priyesh
         )
     
     except Exception as e:
@@ -174,7 +153,6 @@ def classify_file(file_path: str) -> FileClassificationResult:
             status='Unclassified',
             error=f"Error processing file: {str(e)}"
         )
-<<<<<<< HEAD
 def scan_folder_recursive(folder_path: str) -> Tuple[List[FileClassificationResult], List[str]]:
     """
     Recursively scan a folder for Excel/CSV files and classify them.
@@ -213,10 +191,7 @@ def scan_folder_recursive(folder_path: str) -> Tuple[List[FileClassificationResu
                         result.protocol_id = protocol_id
                         result.file_path = file_path
                         
-                        # Check for duplicates (globally in this scan or per protocol? Assuming global for now)
-                        # Actually if same filename exists in different protocols, they are different files logically.
-                        # But typically filenames should be unique or we check if we've seen it.
-                        # For now, let's treat (protocol_id, filename) as unique key if protocol exists, else filename.
+                        # Check for duplicates
                         unique_key = (protocol_id, result.filename) if protocol_id else result.filename
                         
                         if unique_key in seen_filenames:
@@ -241,9 +216,6 @@ def scan_folder_recursive(folder_path: str) -> Tuple[List[FileClassificationResu
     except Exception as e:
         warnings.append(f"Fatal error scanning folder: {str(e)}")
         return results, warnings
-=======
-
->>>>>>> origin/Priyesh
 
 def scan_folder(folder_path: str) -> Tuple[List[FileClassificationResult], List[str]]:
     """
