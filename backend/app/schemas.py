@@ -35,7 +35,7 @@ class Document(DocumentBase):
     upload_date: datetime
 
     class Config:
-        from_attributes = True
+        orm_mode = True
 
 class Study(StudyBase):
     id: str
@@ -43,7 +43,7 @@ class Study(StudyBase):
     documents: List[Document] = []
     
     class Config:
-        from_attributes = True
+        orm_mode = True
 
 class MetricBase(BaseModel):
     key: str
@@ -53,7 +53,7 @@ class MetricBase(BaseModel):
 
 class Metric(MetricBase):
     class Config:
-        from_attributes = True
+        orm_mode = True
 
 class IntegrationBase(BaseModel):
     name: str
@@ -67,57 +67,4 @@ class Integration(IntegrationBase):
     last_sync: datetime
     
     class Config:
-        from_attributes = True
-
-class AgentBase(BaseModel):
-    name: str
-    role: str
-    status: str
-    type: str
-    description: str
-    records_processed: int
-    issues_found: int
-    icon: str
-
-class AgentCreate(AgentBase):
-    pass
-
-class Agent(AgentBase):
-    id: int
-    last_active: datetime
-
-    class Config:
-        from_attributes = True
-
-class ActivityLogBase(BaseModel):
-    agent_name: str
-    message: str
-    level: str
-    timestamp: datetime
-
-class ActivityLogCreate(ActivityLogBase):
-    pass
-
-class ActivityLog(ActivityLogBase):
-    id: int
-
-    class Config:
-        from_attributes = True
-
-class DataQualityIssueBase(BaseModel):
-    id: str
-    study_id: str
-    type: str
-    category: str
-    title: str
-    status: str
-    severity: str
-    domain: str
-    created: datetime
-
-class DataQualityIssueCreate(DataQualityIssueBase):
-    pass
-
-class DataQualityIssue(DataQualityIssueBase):
-    class Config:
-        from_attributes = True
+        orm_mode = True

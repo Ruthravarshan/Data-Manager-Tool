@@ -3,7 +3,7 @@ import {
     Database, CalendarClock, Activity, PlusCircle,
     ServerCog, History, SlidersVertical, Mail,
     TriangleAlert, ChevronDown, Download, RefreshCw,
-    PauseCircle, PlayCircle, MoreHorizontal
+    PauseCircle, PlayCircle, MoreHorizontal, X, FileText, Search
 } from 'lucide-react';
 import { clsx, type ClassValue } from "clsx";
 import { twMerge } from "tailwind-merge";
@@ -20,6 +20,102 @@ export default function DataIntegration() {
     const [activeSubTab, setActiveSubTab] = useState('integration-sources');
     const [integrations, setIntegrations] = useState<any[]>([]);
     const [loading, setLoading] = useState(true);
+    const [showAddModal, setShowAddModal] = useState(false);
+    const [selectedLog, setSelectedLog] = useState<any>(null);
+
+    const integrationLogs = [
+        {
+            id: 1,
+            date: "2025-04-07 15:32:45",
+            source: "EDC Data Feed",
+            operation: "Data Load",
+            opType: "load", // for styling
+            records: "3,450",
+            difference: "+156",
+            duration: "78s",
+            status: "Unknown",
+            details: "Loaded DM, VS, AE domains. 156 new records processed.",
+            prevCount: "3,294"
+        },
+        {
+            id: 2,
+            date: "2025-04-07 14:05:12",
+            source: "Central Lab Results",
+            operation: "Sync",
+            opType: "sync",
+            records: "1,275",
+            difference: "+37",
+            duration: "45s",
+            status: "Unknown",
+            details: "Synced lab results from central repository.",
+            prevCount: "1,238"
+        },
+        {
+            id: 3,
+            date: "2025-04-07 12:30:01",
+            source: "CTMS Data",
+            operation: "Error",
+            opType: "error",
+            records: "-",
+            difference: "-",
+            duration: "12s",
+            status: "Error",
+            details: "Connection timed out while fetching site data.",
+            prevCount: "-"
+        },
+        {
+            id: 4,
+            date: "2025-04-07 10:15:22",
+            source: "Imaging Data",
+            operation: "Config",
+            opType: "config",
+            records: "-",
+            difference: "-",
+            duration: "3s",
+            status: "Unknown",
+            details: "Configuration update applied successfully.",
+            prevCount: "-"
+        },
+        {
+            id: 5,
+            date: "2025-04-07 09:45:18",
+            source: "Central Lab Results",
+            operation: "Data Load",
+            opType: "load",
+            records: "1,238",
+            difference: "+51",
+            duration: "62s",
+            status: "Unknown",
+            details: "Daily incremental load.",
+            prevCount: "1,187"
+        },
+        {
+            id: 6,
+            date: "2025-04-07 08:30:55",
+            source: "ECG Data",
+            operation: "Data Load",
+            opType: "load",
+            records: "1,032",
+            difference: "+42",
+            duration: "28s",
+            status: "Unknown",
+            details: "ECG readings imported.",
+            prevCount: "990"
+        },
+        {
+            id: 7,
+            date: "2025-04-07 07:15:33",
+            source: "eCOA Data",
+            operation: "Config",
+            opType: "config",
+            records: "-",
+            difference: "-",
+            duration: "5s",
+            status: "Unknown",
+            details: "Schema validation check.",
+            prevCount: "-"
+        }
+    ];
 
     useEffect(() => {
         const fetchIntegrations = async () => {
@@ -133,7 +229,9 @@ export default function DataIntegration() {
                                             <p className="text-sm text-gray-500 mt-1">Configure and manage data integrations from external sources</p>
                                         </div>
                                     </div>
-                                    <button className="inline-flex items-center justify-center whitespace-nowrap text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-blue-600 text-white hover:bg-blue-700 h-9 rounded-md px-3 gap-1">
+                                    <button
+                                        onClick={() => setShowAddModal(true)}
+                                        className="inline-flex items-center justify-center whitespace-nowrap text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-blue-600 text-white hover:bg-blue-700 h-9 rounded-md px-3 gap-1">
                                         <PlusCircle className="h-4 w-4" />
                                         <span>Add Integration</span>
                                     </button>
@@ -243,6 +341,151 @@ export default function DataIntegration() {
                                                 </tbody>
                                             </table>
                                         </div>
+                                    </div>
+                                )}
+
+                                {activeSubTab === 'integration-logs' && (
+                                    <div className="space-y-6">
+                                        {/* Filter Bar */}
+                                        <div className="flex items-center justify-between gap-4">
+                                            <div className="relative flex-1 max-w-sm">
+                                                <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" />
+                                                <input
+                                                    type="text"
+                                                    placeholder="Search logs..."
+                                                    className="w-full pl-10 pr-4 h-10 rounded-md border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                                                />
+                                            </div>
+                                            <div className="flex gap-2">
+                                                <div className="relative w-[160px]">
+                                                    <select className="w-full h-10 pl-3 pr-8 appearance-none rounded-md border border-gray-300 bg-white text-sm text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500">
+                                                        <option>All Statuses</option>
+                                                        <option>Success</option>
+                                                        <option>Warning</option>
+                                                        <option>Error</option>
+                                                        <option>Info</option>
+                                                    </select>
+                                                    <ChevronDown className="absolute right-3 top-3 h-4 w-4 text-gray-400 pointer-events-none" />
+                                                </div>
+                                                <div className="relative w-[180px]">
+                                                    <select className="w-full h-10 pl-3 pr-8 appearance-none rounded-md border border-gray-300 bg-white text-sm text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500">
+                                                        <option>All Sources</option>
+                                                        <option>EDC Data Feed</option>
+                                                        <option>Central Lab Results</option>
+                                                        <option>Imaging Data</option>
+                                                        <option>ECG Data</option>
+                                                        <option>CTMS Data</option>
+                                                        <option>eCOA Data</option>
+                                                    </select>
+                                                    <ChevronDown className="absolute right-3 top-3 h-4 w-4 text-gray-400 pointer-events-none" />
+                                                </div>
+                                            </div>
+                                            <button className="ml-auto inline-flex items-center justify-center gap-2 h-10 px-4 rounded-md border border-gray-300 bg-white text-sm font-medium text-gray-700 hover:bg-gray-50">
+                                                <Download className="h-4 w-4" />
+                                                Export Logs
+                                            </button>
+                                        </div>
+
+                                        {/* Table */}
+                                        <div className="rounded-md border border-gray-200 overflow-hidden">
+                                            <table className="w-full text-sm text-left">
+                                                <thead className="bg-blue-50 text-blue-900 font-semibold border-b border-blue-100">
+                                                    <tr>
+                                                        <th className="h-12 px-4 align-middle">Date & Time</th>
+                                                        <th className="h-12 px-4 align-middle">Integration Source</th>
+                                                        <th className="h-12 px-4 align-middle">Operation</th>
+                                                        <th className="h-12 px-4 align-middle text-center">Records Processed</th>
+                                                        <th className="h-12 px-4 align-middle text-center">Records Difference</th>
+                                                        <th className="h-12 px-4 align-middle text-center">Duration</th>
+                                                        <th className="h-12 px-4 align-middle">Status</th>
+                                                        <th className="h-12 px-4 align-middle text-right">Actions</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody className="divide-y divide-gray-100">
+                                                    {integrationLogs.map((log) => (
+                                                        <tr key={log.id} className="hover:bg-blue-50/30 transition-colors">
+                                                            <td className="p-4 font-mono text-xs">{log.date}</td>
+                                                            <td className="p-4 font-medium">{log.source}</td>
+                                                            <td className="p-4">
+                                                                <span className={cn(
+                                                                    "inline-flex items-center px-2.5 py-1 rounded-full text-xs font-semibold",
+                                                                    log.opType === 'load' && "bg-blue-100 text-blue-700",
+                                                                    log.opType === 'sync' && "bg-green-100 text-green-700",
+                                                                    log.opType === 'error' && "bg-red-100 text-red-700",
+                                                                    log.opType === 'config' && "bg-purple-100 text-purple-700"
+                                                                )}>
+                                                                    {log.operation}
+                                                                </span>
+                                                            </td>
+                                                            <td className="p-4 text-center font-medium">{log.records}</td>
+                                                            <td className="p-4 text-center">
+                                                                {log.difference !== '-' && (
+                                                                    <span className="text-green-600 font-medium">{log.difference}</span>
+                                                                )}
+                                                                {log.difference === '-' && <span className="text-gray-400">-</span>}
+                                                            </td>
+                                                            <td className="p-4 text-center font-medium">{log.duration}</td>
+                                                            <td className="p-4">
+                                                                <span className={cn(
+                                                                    "inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium border",
+                                                                    log.status === 'Error'
+                                                                        ? "bg-red-50 text-red-700 border-red-200"
+                                                                        : "bg-gray-50 text-gray-600 border-gray-200"
+                                                                )}>
+                                                                    {log.status}
+                                                                </span>
+                                                            </td>
+                                                            <td className="p-4 text-right">
+                                                                <button
+                                                                    onClick={() => setSelectedLog(log)}
+                                                                    className="inline-flex items-center gap-1.5 px-3 py-1.5 border border-gray-200 rounded-md text-xs font-medium text-gray-700 hover:bg-gray-50 bg-white"
+                                                                >
+                                                                    <FileText className="h-3.5 w-3.5" />
+                                                                    Details
+                                                                </button>
+                                                            </td>
+                                                        </tr>
+                                                    ))}
+                                                </tbody>
+                                            </table>
+                                        </div>
+
+                                        {/* Details Section */}
+                                        {selectedLog && (
+                                            <div className="rounded-lg border border-gray-200 bg-white p-6 shadow-sm animate-in fade-in slide-in-from-top-4 duration-300">
+                                                <div className="flex justify-between items-start mb-4">
+                                                    <div>
+                                                        <h3 className="text-lg font-bold text-gray-900">Log Details</h3>
+                                                    </div>
+                                                    <button onClick={() => setSelectedLog(null)} className="text-gray-400 hover:text-gray-600">
+                                                        <X className="h-5 w-5" />
+                                                    </button>
+                                                </div>
+
+                                                <div className="grid grid-cols-1 gap-6">
+                                                    <div>
+                                                        <div className="text-sm font-medium text-slate-700 mb-1">Selected Log Message:</div>
+                                                        <div className="text-sm text-gray-600">Successfully loaded {selectedLog.difference.replace('+', '')} records</div>
+                                                    </div>
+
+                                                    <div>
+                                                        <div className="text-sm font-medium text-slate-700 mb-1">Details:</div>
+                                                        <div className="text-sm text-gray-600">{selectedLog.details}</div>
+                                                    </div>
+
+                                                    <div className="grid grid-cols-2 gap-8 pt-2">
+                                                        <div>
+                                                            <div className="text-sm font-medium text-slate-700">Previous Records Count:</div>
+                                                            <div className="text-lg font-mono text-gray-600 mt-1">{selectedLog.prevCount}</div>
+                                                        </div>
+                                                        <div>
+                                                            <div className="text-sm font-medium text-slate-700">Current Records Count:</div>
+                                                            <div className="text-lg font-mono text-gray-600 mt-1">{selectedLog.records}</div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        )}
                                     </div>
                                 )}
                             </div>
@@ -360,6 +603,84 @@ export default function DataIntegration() {
                     </div>
                 )}
             </div>
+            {showAddModal && (
+                <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
+                    <div className="bg-white rounded-lg shadow-lg w-full max-w-xl mx-4 animate-in fade-in zoom-in duration-200">
+                        <div className="p-6">
+                            <div className="flex justify-between items-start mb-1">
+                                <h2 className="text-xl font-bold text-gray-900">Add New Data Integration</h2>
+                                <button onClick={() => setShowAddModal(false)} className="text-gray-400 hover:text-gray-600">
+                                    <X className="h-5 w-5" />
+                                </button>
+                            </div>
+                            <p className="text-sm text-gray-500 mb-6">Connect to external data sources to import clinical trial data.</p>
+
+                            <div className="space-y-5">
+                                <div className="grid grid-cols-4 items-center gap-4">
+                                    <label className="text-sm font-bold text-gray-900 text-right col-span-1">Integration Name</label>
+                                    <input type="text" placeholder="e.g., Primary EDC Data Feed" className="col-span-3 flex h-10 w-full rounded-md border border-gray-300 bg-white px-3 py-2 text-sm placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-600 focus:border-transparent" />
+                                </div>
+
+                                <div className="grid grid-cols-4 items-center gap-4">
+                                    <label className="text-sm font-bold text-gray-900 text-right col-span-1">Integration Type</label>
+                                    <div className="col-span-3 relative">
+                                        <select className="flex h-10 w-full appearance-none rounded-md border border-gray-300 bg-white px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-600 focus:border-transparent">
+                                            <option>API</option>
+                                            <option>SFTP</option>
+                                            <option>S3</option>
+                                        </select>
+                                        <ChevronDown className="absolute right-3 top-3 h-4 w-4 text-gray-400 pointer-events-none" />
+                                    </div>
+                                </div>
+
+                                <div className="grid grid-cols-4 items-center gap-4">
+                                    <label className="text-sm font-bold text-gray-900 text-right col-span-1">Vendor</label>
+                                    <div className="col-span-3 relative">
+                                        <select className="flex h-10 w-full appearance-none rounded-md border border-gray-300 bg-white px-3 py-2 text-sm text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-600 focus:border-transparent">
+                                            <option>Select vendor</option>
+                                            <option>Medidata Rave</option>
+                                            <option>IQVIA</option>
+                                            <option>Veeva</option>
+                                            <option>Labcorp</option>
+                                            <option>Quest Diagnostics</option>
+                                            <option>Calyx</option>
+                                            <option>AliveCor</option>
+                                            <option>ClinicalInk</option>
+                                        </select>
+                                        <ChevronDown className="absolute right-3 top-3 h-4 w-4 text-gray-400 pointer-events-none" />
+                                    </div>
+                                </div>
+
+                                <div className="grid grid-cols-4 items-center gap-4">
+                                    <label className="text-sm font-bold text-gray-900 text-right col-span-1">Update Frequency</label>
+                                    <div className="col-span-3 relative">
+                                        <select className="flex h-10 w-full appearance-none rounded-md border border-gray-300 bg-white px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-600 focus:border-transparent">
+                                            <option>Every hour</option>
+                                            <option>Daily at 2:00 AM</option>
+                                            <option>Weekly on Monday</option>
+                                            <option>Custom schedule</option>
+                                        </select>
+                                        <ChevronDown className="absolute right-3 top-3 h-4 w-4 text-gray-400 pointer-events-none" />
+                                    </div>
+                                </div>
+
+                                <div className="flex items-center space-x-2 pt-2">
+                                    <input type="checkbox" id="launch" className="h-4 w-4 rounded border-gray-300 text-blue-600 focus:ring-blue-600" />
+                                    <label htmlFor="launch" className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">Launch integration immediately after setup</label>
+                                </div>
+                            </div>
+
+                            <div className="flex justify-end gap-3 mt-8">
+                                <button onClick={() => setShowAddModal(false)} className="px-4 py-2 border border-gray-300 rounded-md text-sm font-medium text-gray-700 hover:bg-gray-50 bg-white">Cancel</button>
+                                <button className="px-4 py-2 bg-blue-400 hover:bg-blue-500 text-white rounded-md text-sm font-medium flex items-center gap-2">
+                                    <PlusCircle className="h-4 w-4" />
+                                    Add Integration
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            )}
         </div>
     );
 }
