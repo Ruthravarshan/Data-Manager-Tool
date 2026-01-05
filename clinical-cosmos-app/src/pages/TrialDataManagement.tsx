@@ -1,8 +1,4 @@
 import { useState, useEffect } from 'react';
-<<<<<<< HEAD
-=======
-import Papa from 'papaparse';
->>>>>>> origin/Priyesh
 import {
     FileText, Download, Database,
     Activity, Users, FileSpreadsheet, ClipboardList,
@@ -12,11 +8,7 @@ import {
 import { clsx, type ClassValue } from "clsx";
 import { twMerge } from "tailwind-merge";
 
-<<<<<<< HEAD
 import { dataFileService, studyService } from '../services/api';
-=======
-import { dataFileService, integrationService } from '../services/api';
->>>>>>> origin/Priyesh
 
 // New interface for metadata
 interface SectionMetadata {
@@ -62,34 +54,25 @@ export default function TrialDataManagement() {
     const [activeSubTab, setActiveSubTab] = useState('DM (Demographics)');
     const [dataFiles, setDataFiles] = useState<any[]>([]);
     const [sections, setSections] = useState<string[]>([]);
-<<<<<<< HEAD
 
     const [selectedProtocol, setSelectedProtocol] = useState<string>('');
     const [studies, setStudies] = useState<any[]>([]);
-=======
-    const [protocols, setProtocols] = useState<string[]>([]);
-    const [selectedProtocol, setSelectedProtocol] = useState<string>('');
->>>>>>> origin/Priyesh
     const [loading, setLoading] = useState(false);
     const [refreshing, setRefreshing] = useState(false);
     const [selectedFile, setSelectedFile] = useState<any | null>(null);
     const [previewData, setPreviewData] = useState<{ columns: string[]; rows: any[] } | null>(null);
     const [showPreview, setShowPreview] = useState(false);
 
-<<<<<<< HEAD
     // Data View State
     const [selectedVersion, setSelectedVersion] = useState<number | null>(null);
     const [tableData, setTableData] = useState<{ columns: string[]; rows: any[]; total_rows_fetched: number } | null>(null);
     const [dataLoading, setDataLoading] = useState(false);
 
-=======
->>>>>>> origin/Priyesh
     // New State for Metadata
     const [viewMode, setViewMode] = useState<'metadata' | 'data'>('data');
     const [metadata, setMetadata] = useState<SectionMetadata | null>(null);
     const [metadataLoading, setMetadataLoading] = useState(false);
 
-<<<<<<< HEAD
     // New State for Study Validation
     const [studyDetails, setStudyDetails] = useState<any | null>(null);
 
@@ -129,43 +112,17 @@ export default function TrialDataManagement() {
 
         fetchStudies();
         fetchSections();
-=======
-    // Fetch protocols on mount
-    useEffect(() => {
-        const fetchProtocols = async () => {
-            try {
-                const protocolsData = await integrationService.getProtocols();
-                setProtocols(protocolsData || []);
-                // Auto-select first protocol if available
-                if (protocolsData && protocolsData.length > 0) {
-                    setSelectedProtocol(protocolsData[0]);
-                }
-            } catch (error) {
-                console.error('Failed to fetch protocols:', error);
-                setProtocols([]);
-            }
-        };
-        fetchProtocols();
->>>>>>> origin/Priyesh
     }, []);
 
     // Fetch data files and sections when protocol changes
     useEffect(() => {
         const fetchData = async () => {
-<<<<<<< HEAD
             console.log("Fetching files for Protocol:", selectedProtocol);
             try {
                 setLoading(true);
                 const [filesData, sectionsData] = await Promise.all([
                     dataFileService.getDataFiles(undefined, undefined, selectedProtocol),
                     dataFileService.getSections()
-=======
-            try {
-                setLoading(true);
-                const [filesData, sectionsData] = await Promise.all([
-                    dataFileService.getDataFiles(undefined, undefined, undefined, selectedProtocol || undefined),
-                    dataFileService.getSections(selectedProtocol || undefined)
->>>>>>> origin/Priyesh
                 ]);
                 setDataFiles(filesData || []);
                 setSections(sectionsData || []);
@@ -188,7 +145,6 @@ export default function TrialDataManagement() {
                 setLoading(false);
             }
         };
-<<<<<<< HEAD
         fetchData();
     }, [selectedProtocol]);
 
@@ -239,32 +195,14 @@ export default function TrialDataManagement() {
         }
     }, [selectedVersion, viewMode]);
 
-=======
-        if (selectedProtocol) {
-            fetchData();
-        }
-    }, [selectedProtocol]);
-
->>>>>>> origin/Priyesh
     // Fetch metadata when subtab or protocol changes
     useEffect(() => {
         const fetchMetadata = async () => {
             if (!activeSubTab || !selectedProtocol) return;
             setMetadataLoading(true);
             try {
-<<<<<<< HEAD
                 const data = await dataFileService.getSectionMetadata(activeSubTab, selectedProtocol);
                 setMetadata(data);
-=======
-                // We need to fetch from the new endpoint
-                const response = await fetch(`http://localhost:8000/api/data-files/metadata?section=${encodeURIComponent(activeSubTab)}&protocol_id=${encodeURIComponent(selectedProtocol)}`);
-                if (response.ok) {
-                    const data = await response.json();
-                    setMetadata(data);
-                } else {
-                    setMetadata(null);
-                }
->>>>>>> origin/Priyesh
             } catch (error) {
                 console.error("Failed to fetch metadata:", error);
                 setMetadata(null);
@@ -302,11 +240,7 @@ export default function TrialDataManagement() {
         if (!dateString) return 'N/A';
         try {
             const date = new Date(dateString);
-<<<<<<< HEAD
             return date.toLocaleDateString();
-=======
-            return date.toLocaleString();
->>>>>>> origin/Priyesh
         } catch {
             return dateString;
         }
@@ -329,7 +263,6 @@ export default function TrialDataManagement() {
     const handlePreview = async (file: any) => {
         setSelectedFile(file);
         try {
-<<<<<<< HEAD
             // Use DB fetch if it's a new file with ID, else fallback? 
             // The file object has an ID.
             const data = await dataFileService.getFileData(file.id);
@@ -343,17 +276,6 @@ export default function TrialDataManagement() {
             } catch (fallbackErr) {
                 setPreviewData({ columns: [], rows: [{ error: 'Failed to load file data from database or file preview.' }] });
             }
-=======
-            // Use backend preview API for both CSV and Excel
-            const response = await fetch(`http://localhost:8000/api/preview?filename=${encodeURIComponent(file.filename)}&nrows=10`);
-            if (!response.ok) {
-                throw new Error('Failed to fetch preview');
-            }
-            const data = await response.json();
-            setPreviewData(data);
-        } catch (err) {
-            setPreviewData({ columns: [], rows: [{ error: 'Failed to load file preview.' }] });
->>>>>>> origin/Priyesh
         }
         setShowPreview(true);
     };
@@ -381,10 +303,7 @@ export default function TrialDataManagement() {
         link.click();
         document.body.removeChild(link);
     };
-<<<<<<< HEAD
 
-=======
->>>>>>> origin/Priyesh
 
     return (
         <div className="p-6">
@@ -398,23 +317,12 @@ export default function TrialDataManagement() {
                     <div className="flex items-center gap-4 w-full sm:w-auto">
                         <select
                             value={selectedProtocol}
-<<<<<<< HEAD
                             onChange={(e) => handleProtocolChange(e.target.value)}
                             className="flex h-10 items-center justify-between rounded-md border border-gray-300 bg-white px-3 py-2 text-sm w-full sm:w-[180px] text-gray-700 hover:bg-gray-50"
                         >
                             <option value="">Select Protocol</option>
                             {studies.map(study => (
                                 <option key={study.id} value={study.protocol_id}>{study.protocol_id}</option>
-=======
-                            onChange={(e) => setSelectedProtocol(e.target.value)}
-                            className="flex h-10 items-center justify-between rounded-md border border-gray-300 bg-white px-3 py-2 text-sm w-full sm:w-[180px] text-gray-700 hover:bg-gray-50"
-                        >
-                            {protocols.length === 0 && (
-                                <option value="">No Protocols</option>
-                            )}
-                            {protocols.map(protocol => (
-                                <option key={protocol} value={protocol}>{protocol}</option>
->>>>>>> origin/Priyesh
                             ))}
                         </select>
                         <div className="flex gap-2">
@@ -430,7 +338,6 @@ export default function TrialDataManagement() {
                     </div>
                 </div>
 
-<<<<<<< HEAD
 
                 {studyDetails && (
                     <div className="rounded-lg border bg-white shadow-sm mb-6 overflow-hidden">
@@ -455,23 +362,6 @@ export default function TrialDataManagement() {
                                 <div className="hidden sm:block">
                                     {/* Optional: Add study-level actions here if needed */}
                                 </div>
-=======
-                {/* Study Info Card */}
-                <div className="rounded-lg border bg-white shadow-sm mb-6">
-                    <div className="p-6 pb-3 border-b border-gray-100">
-                        <h3 className="text-2xl font-semibold leading-none tracking-tight text-gray-900">Diabetes Type 2 Study</h3>
-                        <p className="text-sm text-gray-500 mt-2">
-                            Protocol: <span className="font-mono text-gray-700">PRO001</span> |
-                            Phase: <span className="font-medium text-gray-700">Phase 3</span> |
-                            Status: <span className="font-medium text-green-600 bg-green-50 px-2 py-0.5 rounded-full ml-1 text-xs">Active</span>
-                        </p>
-                    </div>
-                    <div className="p-6 pt-4">
-                        <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
-                            <div className="space-y-1">
-                                <h4 className="text-xs font-medium text-gray-500 uppercase tracking-wider">Indication</h4>
-                                <p className="font-medium text-gray-900">Type 2 Diabetes</p>
->>>>>>> origin/Priyesh
                             </div>
                         </div>
                         <div className="p-6">
@@ -593,7 +483,6 @@ export default function TrialDataManagement() {
                             </div>
 
                             {/* Domain Content */}
-<<<<<<< HEAD
                             {activeSubTab ? (
                                 <div>
                                     {/* Control Bar */}
@@ -630,187 +519,6 @@ export default function TrialDataManagement() {
                                             <div className="py-12 text-center">
                                                 <RefreshCw className="h-8 w-8 text-blue-600 animate-spin mx-auto mb-3" />
                                                 <p className="text-gray-500">Loading metadata...</p>
-=======
-                            <div>
-                                {/* Control Bar */}
-                                <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6 gap-4">
-                                    <div className="text-sm font-medium text-gray-700">
-                                        Data Source: <span className="text-gray-900 font-bold">EDC</span> <span className="text-gray-900 font-bold mx-1">{activeSubTab?.split(' ')[0]} Domain</span> <span className="text-gray-900 font-bold">{metadata?.record_count || currentSectionFiles.reduce((acc, f) => acc + (f.file_path?.endsWith('csv') ? 1 : 0), 0) /* Fallback approximation if no metadata */} Records</span>
-                                    </div>
-                                    <div className="flex bg-gray-100 p-1 rounded-md">
-                                        <button
-                                            onClick={() => setViewMode('metadata')}
-                                            className={cn(
-                                                "px-4 py-1.5 text-sm font-medium rounded-md transition-all flex items-center gap-2",
-                                                viewMode === 'metadata' ? "bg-blue-600 text-white shadow-sm" : "text-gray-600 hover:text-gray-900"
-                                            )}
-                                        >
-                                            <div className="w-4 h-4 rounded-full border border-current flex items-center justify-center text-[10px]">i</div>
-                                            Metadata
-                                        </button>
-                                        <button
-                                            onClick={() => setViewMode('data')}
-                                            className={cn(
-                                                "px-4 py-1.5 text-sm font-medium rounded-md transition-all flex items-center gap-2",
-                                                viewMode === 'data' ? "bg-blue-600 text-white shadow-sm" : "text-gray-600 hover:text-gray-900"
-                                            )}
-                                        >
-                                            <Database className="w-4 h-4" />
-                                            Data
-                                        </button>
-                                    </div>
-                                </div>
-
-                                {viewMode === 'metadata' ? (
-                                    metadataLoading ? (
-                                        <div className="py-12 text-center">
-                                            <RefreshCw className="h-8 w-8 text-blue-600 animate-spin mx-auto mb-3" />
-                                            <p className="text-gray-500">Loading metadata...</p>
-                                        </div>
-                                    ) : metadata ? (
-                                        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                                            {/* Left Card: Dataset Overview */}
-                                            <div className="border border-blue-100 rounded-lg p-6 bg-white shadow-sm">
-                                                <h3 className="text-lg font-semibold text-blue-600 flex items-center gap-2 mb-6">
-                                                    <Database className="h-5 w-5" />
-                                                    Dataset Overview
-                                                </h3>
-
-                                                <div className="space-y-4">
-                                                    <div className="flex">
-                                                        <div className="w-32 flex items-center gap-2 text-gray-500 text-sm">
-                                                            <div className="w-4 h-4 rounded-full border border-gray-300 flex items-center justify-center text-[10px]">i</div>
-                                                            Domain:
-                                                        </div>
-                                                        <div className="font-medium text-gray-900">{metadata.domain}</div>
-                                                    </div>
-                                                    <div className="flex">
-                                                        <div className="w-32 flex items-center gap-2 text-gray-500 text-sm">
-                                                            <FileSpreadsheet className="h-4 w-4" />
-                                                            Dataset Name:
-                                                        </div>
-                                                        <div className="font-medium text-gray-900">{metadata.dataset_name}</div>
-                                                    </div>
-                                                    <div className="flex">
-                                                        <div className="w-32 flex items-center gap-2 text-gray-500 text-sm">
-                                                            <Users className="h-4 w-4" />
-                                                            Vendor:
-                                                        </div>
-                                                        <div className="font-medium text-gray-900">{metadata.vendor}</div>
-                                                    </div>
-                                                    <div className="flex">
-                                                        <div className="w-32 flex items-center gap-2 text-gray-500 text-sm">
-                                                            <Server className="h-4 w-4" />
-                                                            Data Source:
-                                                        </div>
-                                                        <div className="font-medium text-gray-900">{metadata.data_source}</div>
-                                                    </div>
-                                                    <div className="flex">
-                                                        <div className="w-32 flex items-center gap-2 text-gray-500 text-sm">
-                                                            <Activity className="h-4 w-4" />
-                                                            Last Updated:
-                                                        </div>
-                                                        <div className="font-medium text-gray-900">{metadata.last_updated ? formatDate(metadata.last_updated) : 'N/A'}</div>
-                                                    </div>
-                                                </div>
-
-                                                <hr className="my-6 border-gray-100" />
-
-                                                <div className="space-y-2">
-                                                    <h4 className="flex items-center gap-2 text-gray-500 text-sm font-medium">
-                                                        <div className="w-4 h-4 rounded-md border border-gray-300" />
-                                                        Description
-                                                    </h4>
-                                                    <p className="text-sm text-gray-600 leading-relaxed">
-                                                        {metadata.description}
-                                                    </p>
-                                                </div>
-
-                                                <div className="mt-6">
-                                                    <div className="inline-flex items-center px-3 py-1 bg-blue-50 text-blue-700 text-xs font-medium rounded-full">
-                                                        SDTM Standard Domain
-                                                    </div>
-                                                    <div className="mt-2 flex gap-2">
-                                                        <span className="px-2 py-0.5 border border-gray-200 rounded text-xs text-gray-500">SDTM 1.4</span>
-                                                        <span className="px-2 py-0.5 border border-gray-200 rounded text-xs text-gray-500">SDTM 1.5</span>
-                                                        <span className="px-2 py-0.5 border border-gray-200 rounded text-xs text-gray-500">SDTM 1.7</span>
-                                                    </div>
-                                                </div>
-                                            </div>
-
-                                            {/* Right Card: Data Overview */}
-                                            <div className="border border-gray-200 rounded-lg p-6 bg-white shadow-sm">
-                                                <h3 className="text-lg font-semibold text-blue-600 mb-6">
-                                                    {metadata.domain} Domain - Data Overview
-                                                </h3>
-
-                                                <div className="flex justify-between mb-8">
-                                                    <div>
-                                                        <p className="text-gray-500 text-sm mb-1">Record Count</p>
-                                                        <p className="text-3xl font-bold text-gray-900">{metadata.record_count}</p>
-                                                    </div>
-                                                    <div className="text-right">
-                                                        <p className="text-gray-500 text-sm mb-1">Variable Count</p>
-                                                        <p className="text-3xl font-bold text-gray-900">{metadata.variable_count}</p>
-                                                    </div>
-                                                </div>
-
-                                                <div>
-                                                    <p className="text-gray-500 text-sm mb-3">Sample Data</p>
-                                                    <div className="border border-gray-200 rounded-lg overflow-hidden">
-                                                        <div className="overflow-x-auto">
-                                                            <table className="min-w-full text-sm divide-y divide-gray-200">
-                                                                <thead className="bg-gray-50">
-                                                                    <tr>
-                                                                        {/* Use keys from first row but prioritize specific ones */}
-                                                                        {(() => {
-                                                                            if (!metadata.sample_data || metadata.sample_data.length === 0) return <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase">No Data</th>;
-
-                                                                            const priority = ['recordId', 'importedAt', 'STUDYID', 'DOMAIN', 'USUBJID'];
-                                                                            const keys = Object.keys(metadata.sample_data[0]);
-                                                                            const sortedKeys = [
-                                                                                ...priority.filter(k => keys.includes(k)),
-                                                                                ...keys.filter(k => !priority.includes(k))
-                                                                            ];
-
-                                                                            return sortedKeys.slice(0, 6).map(key => (
-                                                                                <th key={key} className="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                                                                    {key}
-                                                                                </th>
-                                                                            ));
-                                                                        })()}
-                                                                    </tr>
-                                                                </thead>
-                                                                <tbody className="bg-white divide-y divide-gray-200">
-                                                                    {metadata.sample_data.slice(0, 5).map((row, idx) => {
-                                                                        const priority = ['recordId', 'importedAt', 'STUDYID', 'DOMAIN', 'USUBJID'];
-                                                                        const keys = Object.keys(row);
-                                                                        const sortedKeys = [
-                                                                            ...priority.filter(k => keys.includes(k)),
-                                                                            ...keys.filter(k => !priority.includes(k))
-                                                                        ];
-
-                                                                        return (
-                                                                            <tr key={idx}>
-                                                                                {sortedKeys.slice(0, 6).map((key, i) => (
-                                                                                    <td key={i} className="px-4 py-3 whitespace-nowrap text-gray-700">
-                                                                                        {row[key]}
-                                                                                    </td>
-                                                                                ))}
-                                                                            </tr>
-                                                                        );
-                                                                    })}
-                                                                    {metadata.sample_data.length === 0 && (
-                                                                        <tr>
-                                                                            <td colSpan={6} className="px-4 py-3 text-center text-gray-500 text-xs">No sample data available</td>
-                                                                        </tr>
-                                                                    )}
-                                                                </tbody>
-                                                            </table>
-                                                        </div>
-                                                    </div>
-                                                </div>
->>>>>>> origin/Priyesh
                                             </div>
                                         ) : metadata ? (
                                             <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
@@ -1056,7 +764,6 @@ export default function TrialDataManagement() {
                                                 </div>
                                             )}
                                         </div>
-<<<<<<< HEAD
                                     )
                                     }
                                 </div>
@@ -1071,167 +778,6 @@ export default function TrialDataManagement() {
                                     </p>
                                 </div>
                             )}
-=======
-                                    ) : (
-                                        <div className="py-12 text-center border-2 border-dashed border-gray-200 rounded-lg">
-                                            <Database className="h-8 w-8 text-gray-400 mx-auto mb-3" />
-                                            <p className="text-gray-500">No metadata available for this section.</p>
-                                        </div>
-                                    )
-                                ) : (
-                                    /* Existing Data View */
-                                    loading ? (
-                                        <div className="py-12 text-center">
-                                            <RefreshCw className="h-8 w-8 text-gray-400 animate-spin mx-auto mb-3" />
-                                            <p className="text-gray-500">Loading data files...</p>
-                                        </div>
-                                    ) : currentSectionFiles.length > 0 ? (
-                                        <div className="space-y-4">
-                                            {/* Files List Header/Description if needed, but we have the control bar now */}
-                                            {/* Note: In Data View we might want to keep the "Files" approach or the "Records" approach. 
-                                                The screenshot shows "Records" view. But we only have files. 
-                                                The user said "features missing example meta data". 
-                                                The screenshot SHOWS a "Data" tab selected which shows a record list.
-                                                However, our current backend is file-based not record-based database.
-                                                Constructing a full record database is a huge task.
-                                                I will keep the "Files" list as the "Data" view for now, as it's the closest equivalent we have.
-                                            */}
-                                            <div className="flex justify-between items-center bg-gray-50 p-3 rounded-md border border-gray-100">
-                                                <div className="relative w-full max-w-sm">
-                                                    <input
-                                                        type="text"
-                                                        placeholder="Search records..."
-                                                        className="w-full pl-9 pr-4 py-2 text-sm border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                                                    />
-                                                    <Eye className="absolute left-3 top-2.5 h-4 w-4 text-gray-400" />
-                                                </div>
-                                                <div className="flex gap-2">
-                                                    <button className="flex items-center gap-2 px-3 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md hover:bg-gray-50">
-                                                        <span className="w-4 h-4">▼</span> Filter
-                                                    </button>
-                                                    <button className="flex items-center gap-2 px-3 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md hover:bg-gray-50">
-                                                        <Download className="w-4 h-4" /> Export
-                                                    </button>
-                                                    <button className="flex items-center gap-2 px-3 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md hover:bg-gray-50">
-                                                        <ClipboardList className="w-4 h-4" /> Copy
-                                                    </button>
-                                                </div>
-                                            </div>
-
-                                            <div className="flex justify-between items-center">
-                                                <button className="text-sm font-medium text-gray-600 flex items-center gap-1 hover:text-gray-900">
-                                                    › Show All Columns
-                                                </button>
-                                                <div className="flex gap-2">
-                                                    <button className="flex items-center gap-2 px-3 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md hover:bg-gray-50">
-                                                        <RefreshCw className="w-4 h-4" /> Refresh
-                                                    </button>
-                                                    <button className="flex items-center gap-2 px-3 py-2 text-sm font-medium text-white bg-blue-600 rounded-md hover:bg-blue-700">
-                                                        + Add Record
-                                                    </button>
-                                                </div>
-                                            </div>
-
-                                            {/* Files List */}
-                                            <div className="space-y-2">
-                                                {currentSectionFiles.map((file) => {
-                                                    const isDatabase = file.integration_type === 'Database' || (file.filename && file.filename.match(/_[0-9]{8}_[0-9]{6}\.csv$/));
-                                                    const displayName = isDatabase
-                                                        ? file.prefix ? file.prefix.toUpperCase() : file.filename.replace(/\.csv$/i, '')
-                                                        : file.filename;
-
-                                                    return (
-                                                        <div key={file.id} className="border border-gray-200 rounded-lg p-4 hover:bg-gray-50 transition-colors bg-white">
-                                                            <div className="flex items-start justify-between">
-                                                                <div className="flex-1">
-                                                                    <div className="flex items-center gap-2">
-                                                                        {isDatabase ? (
-                                                                            <Database className="h-4 w-4 text-purple-600" />
-                                                                        ) : (
-                                                                            <FileSpreadsheet className="h-4 w-4 text-blue-600" />
-                                                                        )}
-                                                                        <h4 className="font-medium text-gray-900">{displayName}</h4>
-                                                                        <span className={cn(
-                                                                            "text-xs px-2 py-1 rounded-full font-medium",
-                                                                            file.status === 'Imported' ? 'bg-green-50 text-green-700' :
-                                                                                file.status === 'Duplicate' ? 'bg-yellow-50 text-yellow-700' :
-                                                                                    'bg-gray-50 text-gray-700'
-                                                                        )}>
-                                                                            {isDatabase ? 'Table' : file.status}
-                                                                        </span>
-                                                                    </div>
-                                                                    <div className="mt-2 grid grid-cols-2 md:grid-cols-4 gap-4 text-sm text-gray-600">
-                                                                        <div>
-                                                                            <span className="text-gray-500">Last Sync:</span>
-                                                                            <p className="font-mono text-xs">{formatTimestamp(file.timestamp)}</p>
-                                                                        </div>
-                                                                        {!isDatabase && (
-                                                                            <div>
-                                                                                <span className="text-gray-500">File Size:</span>
-                                                                                <p className="font-medium">{formatFileSize(file.file_size)}</p>
-                                                                            </div>
-                                                                        )}
-                                                                        <div>
-                                                                            <span className="text-gray-500">Source:</span>
-                                                                            <p className="font-mono text-xs font-bold">{isDatabase ? 'Database' : file.prefix}</p>
-                                                                        </div>
-                                                                    </div>
-                                                                </div>
-                                                                <div className="flex gap-2 ml-4">
-                                                                    <button
-                                                                        onClick={() => handlePreview(file)}
-                                                                        className="p-2 text-blue-600 hover:bg-blue-50 rounded-md transition-colors"
-                                                                        title={isDatabase ? "View Table Data" : "Preview"}
-                                                                    >
-                                                                        <Eye className="h-4 w-4" />
-                                                                    </button>
-                                                                    {!isDatabase ? (
-                                                                        <button
-                                                                            onClick={() => handleDownload(file)}
-                                                                            className="p-2 text-gray-600 hover:bg-gray-100 rounded-md transition-colors"
-                                                                            title="Download"
-                                                                        >
-                                                                            <Download className="h-4 w-4" />
-                                                                        </button>
-                                                                    ) : (
-                                                                        <button
-                                                                            onClick={() => handleDownload(file)}
-                                                                            className="p-2 text-gray-600 hover:bg-gray-100 rounded-md transition-colors"
-                                                                            title="Export as CSV"
-                                                                        >
-                                                                            <Download className="h-4 w-4" />
-                                                                        </button>
-                                                                    )}
-                                                                    <button
-                                                                        onClick={() => handleDelete(file.id)}
-                                                                        className="p-2 text-red-600 hover:bg-red-50 rounded-md transition-colors"
-                                                                        title="Remove"
-                                                                    >
-                                                                        <Trash2 className="h-4 w-4" />
-                                                                    </button>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    );
-                                                })}
-                                            </div>
-                                        </div>
-                                    ) : (
-                                        <div className="py-12 text-center border-2 border-dashed border-gray-200 rounded-lg">
-                                            <div className="flex justify-center mb-3">
-                                                <div className="p-3 bg-gray-50 rounded-full">
-                                                    <Database className="h-6 w-6 text-gray-400" />
-                                                </div>
-                                            </div>
-                                            <h3 className="text-lg font-medium text-gray-900">No Data in {activeSubTab}</h3>
-                                            <p className="text-gray-500 max-w-sm mx-auto mt-1">
-                                                Connect a data source folder or database in the Data Integration tab to import data.
-                                            </p>
-                                        </div>
-                                    )
-                                )}
-                            </div>
->>>>>>> origin/Priyesh
                         </div>
                     </div>
                 )}
@@ -1257,7 +803,6 @@ export default function TrialDataManagement() {
 
                 {/* Preview Modal */}
                 {showPreview && selectedFile && (
-<<<<<<< HEAD
                     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
                         <div className="bg-white rounded-lg shadow-xl w-full max-w-2xl max-h-96 overflow-hidden flex flex-col">
                             <div className="flex justify-between items-center p-6 border-b border-gray-200">
@@ -1265,32 +810,10 @@ export default function TrialDataManagement() {
                                 <button
                                     onClick={() => setShowPreview(false)}
                                     className="text-gray-400 hover:text-gray-600"
-=======
-                    <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 backdrop-blur-sm p-4 animate-in fade-in duration-200">
-                        <div className="bg-white rounded-lg shadow-xl w-full max-w-3xl max-h-[80vh] overflow-hidden flex flex-col">
-                            <div className="flex justify-between items-center p-6 border-b border-gray-200">
-                                <h3 className="text-lg font-semibold flex items-center gap-2">
-                                    {(selectedFile.integration_type === 'Database' || (selectedFile.filename && selectedFile.filename.match(/_[0-9]{8}_[0-9]{6}\.csv$/))) ? (
-                                        <>
-                                            <Database className="h-5 w-5 text-purple-600" />
-                                            Table View - {selectedFile.prefix ? selectedFile.prefix.toUpperCase() : selectedFile.filename.replace(/\.csv$/i, '')}
-                                        </>
-                                    ) : (
-                                        <>
-                                            <FileText className="h-5 w-5 text-blue-600" />
-                                            File Preview - {selectedFile.filename}
-                                        </>
-                                    )}
-                                </h3>
-                                <button
-                                    onClick={() => setShowPreview(false)}
-                                    className="text-gray-400 hover:text-gray-600 transition-colors"
->>>>>>> origin/Priyesh
                                 >
                                     ✕
                                 </button>
                             </div>
-<<<<<<< HEAD
                             <div className="p-6 overflow-auto flex-1 bg-gray-50">
                                 <div className="text-sm text-gray-600 space-y-2">
                                     <p className="font-medium text-gray-900">File Details:</p>
@@ -1328,70 +851,10 @@ export default function TrialDataManagement() {
                                             <p className="text-red-500">{previewData.rows[0].error || 'No preview available.'}</p>
                                         ) : (
                                             <p className="text-gray-500">No preview available.</p>
-=======
-                            <div className="p-0 overflow-auto flex-1 bg-white">
-                                <div className="text-sm">
-                                    {/* Info Header in Preview */}
-                                    <div className="bg-gray-50 p-4 border-b border-gray-100 flex gap-6 text-xs text-gray-600">
-                                        <div>
-                                            <span className="font-semibold text-gray-900 mr-1">Status:</span>
-                                            {selectedFile.status}
-                                        </div>
-                                        <div>
-                                            <span className="font-semibold text-gray-900 mr-1">Section:</span>
-                                            {selectedFile.section}
-                                        </div>
-                                        {(selectedFile.integration_type !== 'Database' && !selectedFile.filename.match(/_[0-9]{8}_[0-9]{6}\.csv$/)) && (
-                                            <div>
-                                                <span className="font-semibold text-gray-900 mr-1">Size:</span>
-                                                {formatFileSize(selectedFile.file_size)}
-                                            </div>
-                                        )}
-                                        <div>
-                                            <span className="font-semibold text-gray-900 mr-1">Records:</span>
-                                            {previewData?.rows?.length === 10 ? '10+ (Preview)' : previewData?.rows?.length || '-'}
-                                        </div>
-                                    </div>
-
-                                    {/* Data Table */}
-                                    <div className="overflow-auto max-h-[50vh]">
-                                        {previewData && previewData.rows && previewData.rows.length > 0 && !previewData.rows[0].error ? (
-                                            <table className="min-w-full text-xs divide-y divide-gray-200">
-                                                <thead className="bg-gray-50 sticky top-0 z-10">
-                                                    <tr>
-                                                        {previewData.columns.map((col) => (
-                                                            <th key={col} className="px-4 py-3 text-left font-medium text-gray-500 uppercase tracking-wider whitespace-nowrap bg-gray-50 border-b border-gray-200">
-                                                                {col}
-                                                            </th>
-                                                        ))}
-                                                    </tr>
-                                                </thead>
-                                                <tbody className="bg-white divide-y divide-gray-200">
-                                                    {previewData.rows.slice(0, 10).map((row, idx) => (
-                                                        <tr key={idx} className="hover:bg-gray-50 transition-colors">
-                                                            {previewData.columns.map((col, i) => (
-                                                                <td key={i} className="px-4 py-2 whitespace-nowrap text-gray-700 border-r border-gray-100 last:border-0 border-b border-gray-100">
-                                                                    {row[col]}
-                                                                </td>
-                                                            ))}
-                                                        </tr>
-                                                    ))}
-                                                </tbody>
-                                            </table>
-                                        ) : previewData && previewData.rows && previewData.rows[0]?.error ? (
-                                            <div className="p-8 text-center">
-                                                <p className="text-red-500">{previewData.rows[0].error || 'No preview available.'}</p>
-                                            </div>
-                                        ) : (
-                                            <div className="p-8 text-center">
-                                                <p className="text-gray-500">No preview available.</p>
-                                            </div>
->>>>>>> origin/Priyesh
                                         )}
                                     </div>
                                 </div>
                             </div>
-<<<<<<< HEAD
                             <div className="p-6 border-t border-gray-200 flex justify-end gap-3">
                                 <button
                                     onClick={() => setShowPreview(false)}
@@ -1407,22 +870,6 @@ export default function TrialDataManagement() {
                                 >
                                     Download
                                 </a>
-=======
-                            <div className="p-4 border-t border-gray-200 flex justify-end gap-3 bg-gray-50">
-                                <button
-                                    onClick={() => handleDownload(selectedFile)}
-                                    className="px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-100 border border-gray-300 rounded-md transition-colors flex items-center gap-2"
-                                >
-                                    <Download className="h-4 w-4" />
-                                    {selectedFile.integration_type === 'Database' || selectedFile.filename.match(/_[0-9]{8}_[0-9]{6}\.csv$/) ? 'Export Data' : 'Download File'}
-                                </button>
-                                <button
-                                    onClick={() => setShowPreview(false)}
-                                    className="px-4 py-2 text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 rounded-md transition-colors"
-                                >
-                                    Close
-                                </button>
->>>>>>> origin/Priyesh
                             </div>
                         </div>
                     </div>
