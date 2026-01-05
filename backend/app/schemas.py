@@ -65,7 +65,7 @@ class IntegrationBase(BaseModel):
     folder_path: Optional[str] = None
 
 class IntegrationCreate(IntegrationBase):
-    pass
+    database_credentials: Optional["DatabaseCredentialCreate"] = None
 
 class IntegrationUpdate(BaseModel):
     name: Optional[str] = None
@@ -102,6 +102,7 @@ class DataFile(DataFileBase):
     integration_id: Optional[int] = None
     created_at: datetime
     last_updated: datetime
+    integration_type: Optional[str] = None # 'Database', 'API', 'Local', etc.
 
     class Config:
         from_attributes = True

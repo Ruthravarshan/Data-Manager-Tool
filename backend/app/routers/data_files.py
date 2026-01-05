@@ -24,12 +24,14 @@ def get_data_files(
     db: Session = Depends(get_db)
 ):
     """Get data files with optional filtering"""
-    query = db.query(DataFile)
+    """Get data files with optional filtering"""
+    # Query DataFile and IntegrationSource.type
+    query = db.query(DataFile, IntegrationSource.type.label("integration_type"))\
+        .outerjoin(IntegrationSource, DataFile.integration_id == IntegrationSource.id)
     
-    # If filtering by protocol, join with IntegrationSource
+    # Apply filters
     if protocol_id:
-        query = query.join(IntegrationSource, DataFile.integration_id == IntegrationSource.id)\
-                     .filter(IntegrationSource.protocol_id == protocol_id)
+        query = query.filter(IntegrationSource.protocol_id == protocol_id)
     
     if section:
         query = query.filter(DataFile.section == section)
@@ -40,7 +42,18 @@ def get_data_files(
     if integration_id:
         query = query.filter(DataFile.integration_id == integration_id)
     
-    return query.order_by(DataFile.created_at.desc()).all()
+    results = query.order_by(DataFile.created_at.desc()).all()
+    
+    # Transform to response schema
+    response_files = []
+    for data_file_orm, integration_type in results:
+        # Create schema instance from ORM
+        # We need to manually inject integration_type since it's not on the model
+        file_data = DataFileSchema.from_orm(data_file_orm)
+        file_data.integration_type = integration_type
+        response_files.append(file_data)
+        
+    return response_files
 
 
 @router.get("/sections", response_model=List[str])

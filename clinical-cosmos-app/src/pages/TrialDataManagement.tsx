@@ -638,67 +638,86 @@ export default function TrialDataManagement() {
 
                                             {/* Files List */}
                                             <div className="space-y-2">
-                                                {currentSectionFiles.map((file) => (
-                                                    <div key={file.id} className="border border-gray-200 rounded-lg p-4 hover:bg-gray-50 transition-colors bg-white">
-                                                        <div className="flex items-start justify-between">
-                                                            <div className="flex-1">
-                                                                <div className="flex items-center gap-2">
-                                                                    <FileSpreadsheet className="h-4 w-4 text-blue-600" />
-                                                                    <h4 className="font-medium text-gray-900">{file.filename}</h4>
-                                                                    <span className={cn(
-                                                                        "text-xs px-2 py-1 rounded-full font-medium",
-                                                                        file.status === 'Imported' ? 'bg-green-50 text-green-700' :
-                                                                            file.status === 'Duplicate' ? 'bg-yellow-50 text-yellow-700' :
-                                                                                'bg-gray-50 text-gray-700'
-                                                                    )}>
-                                                                        {file.status}
-                                                                    </span>
+                                                {currentSectionFiles.map((file) => {
+                                                    const isDatabase = file.integration_type === 'Database' || (file.filename && file.filename.match(/_[0-9]{8}_[0-9]{6}\.csv$/));
+                                                    const displayName = isDatabase
+                                                        ? file.prefix ? file.prefix.toUpperCase() : file.filename.replace(/\.csv$/i, '')
+                                                        : file.filename;
+
+                                                    return (
+                                                        <div key={file.id} className="border border-gray-200 rounded-lg p-4 hover:bg-gray-50 transition-colors bg-white">
+                                                            <div className="flex items-start justify-between">
+                                                                <div className="flex-1">
+                                                                    <div className="flex items-center gap-2">
+                                                                        {isDatabase ? (
+                                                                            <Database className="h-4 w-4 text-purple-600" />
+                                                                        ) : (
+                                                                            <FileSpreadsheet className="h-4 w-4 text-blue-600" />
+                                                                        )}
+                                                                        <h4 className="font-medium text-gray-900">{displayName}</h4>
+                                                                        <span className={cn(
+                                                                            "text-xs px-2 py-1 rounded-full font-medium",
+                                                                            file.status === 'Imported' ? 'bg-green-50 text-green-700' :
+                                                                                file.status === 'Duplicate' ? 'bg-yellow-50 text-yellow-700' :
+                                                                                    'bg-gray-50 text-gray-700'
+                                                                        )}>
+                                                                            {isDatabase ? 'Table' : file.status}
+                                                                        </span>
+                                                                    </div>
+                                                                    <div className="mt-2 grid grid-cols-2 md:grid-cols-4 gap-4 text-sm text-gray-600">
+                                                                        <div>
+                                                                            <span className="text-gray-500">Last Sync:</span>
+                                                                            <p className="font-mono text-xs">{formatTimestamp(file.timestamp)}</p>
+                                                                        </div>
+                                                                        {!isDatabase && (
+                                                                            <div>
+                                                                                <span className="text-gray-500">File Size:</span>
+                                                                                <p className="font-medium">{formatFileSize(file.file_size)}</p>
+                                                                            </div>
+                                                                        )}
+                                                                        <div>
+                                                                            <span className="text-gray-500">Source:</span>
+                                                                            <p className="font-mono text-xs font-bold">{isDatabase ? 'Database' : file.prefix}</p>
+                                                                        </div>
+                                                                    </div>
                                                                 </div>
-                                                                <div className="mt-2 grid grid-cols-2 md:grid-cols-4 gap-4 text-sm text-gray-600">
-                                                                    <div>
-                                                                        <span className="text-gray-500">Timestamp:</span>
-                                                                        <p className="font-mono text-xs">{formatTimestamp(file.timestamp)}</p>
-                                                                    </div>
-                                                                    <div>
-                                                                        <span className="text-gray-500">File Size:</span>
-                                                                        <p className="font-medium">{formatFileSize(file.file_size)}</p>
-                                                                    </div>
-                                                                    <div>
-                                                                        <span className="text-gray-500">Imported:</span>
-                                                                        <p className="font-mono text-xs">{formatDate(file.created_at)}</p>
-                                                                    </div>
-                                                                    <div>
-                                                                        <span className="text-gray-500">Prefix:</span>
-                                                                        <p className="font-mono text-xs font-bold">{file.prefix}</p>
-                                                                    </div>
+                                                                <div className="flex gap-2 ml-4">
+                                                                    <button
+                                                                        onClick={() => handlePreview(file)}
+                                                                        className="p-2 text-blue-600 hover:bg-blue-50 rounded-md transition-colors"
+                                                                        title={isDatabase ? "View Table Data" : "Preview"}
+                                                                    >
+                                                                        <Eye className="h-4 w-4" />
+                                                                    </button>
+                                                                    {!isDatabase ? (
+                                                                        <button
+                                                                            onClick={() => handleDownload(file)}
+                                                                            className="p-2 text-gray-600 hover:bg-gray-100 rounded-md transition-colors"
+                                                                            title="Download"
+                                                                        >
+                                                                            <Download className="h-4 w-4" />
+                                                                        </button>
+                                                                    ) : (
+                                                                        <button
+                                                                            onClick={() => handleDownload(file)}
+                                                                            className="p-2 text-gray-600 hover:bg-gray-100 rounded-md transition-colors"
+                                                                            title="Export as CSV"
+                                                                        >
+                                                                            <Download className="h-4 w-4" />
+                                                                        </button>
+                                                                    )}
+                                                                    <button
+                                                                        onClick={() => handleDelete(file.id)}
+                                                                        className="p-2 text-red-600 hover:bg-red-50 rounded-md transition-colors"
+                                                                        title="Remove"
+                                                                    >
+                                                                        <Trash2 className="h-4 w-4" />
+                                                                    </button>
                                                                 </div>
-                                                            </div>
-                                                            <div className="flex gap-2 ml-4">
-                                                                <button
-                                                                    onClick={() => handlePreview(file)}
-                                                                    className="p-2 text-blue-600 hover:bg-blue-50 rounded-md transition-colors"
-                                                                    title="Preview"
-                                                                >
-                                                                    <Eye className="h-4 w-4" />
-                                                                </button>
-                                                                <button
-                                                                    onClick={() => handleDownload(file)}
-                                                                    className="p-2 text-gray-600 hover:bg-gray-100 rounded-md transition-colors"
-                                                                    title="Download"
-                                                                >
-                                                                    <Download className="h-4 w-4" />
-                                                                </button>
-                                                                <button
-                                                                    onClick={() => handleDelete(file.id)}
-                                                                    className="p-2 text-red-600 hover:bg-red-50 rounded-md transition-colors"
-                                                                    title="Delete"
-                                                                >
-                                                                    <Trash2 className="h-4 w-4" />
-                                                                </button>
                                                             </div>
                                                         </div>
-                                                    </div>
-                                                ))}
+                                                    );
+                                                })}
                                             </div>
                                         </div>
                                     ) : (
@@ -708,9 +727,9 @@ export default function TrialDataManagement() {
                                                     <Database className="h-6 w-6 text-gray-400" />
                                                 </div>
                                             </div>
-                                            <h3 className="text-lg font-medium text-gray-900">No Files in {activeSubTab}</h3>
+                                            <h3 className="text-lg font-medium text-gray-900">No Data in {activeSubTab}</h3>
                                             <p className="text-gray-500 max-w-sm mx-auto mt-1">
-                                                Connect a data source folder in the Data Integration tab to import files. Files will be automatically classified by section.
+                                                Connect a data source folder or database in the Data Integration tab to import data.
                                             </p>
                                         </div>
                                     )
@@ -741,73 +760,104 @@ export default function TrialDataManagement() {
 
                 {/* Preview Modal */}
                 {showPreview && selectedFile && (
-                    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
-                        <div className="bg-white rounded-lg shadow-xl w-full max-w-2xl max-h-96 overflow-hidden flex flex-col">
+                    <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 backdrop-blur-sm p-4 animate-in fade-in duration-200">
+                        <div className="bg-white rounded-lg shadow-xl w-full max-w-3xl max-h-[80vh] overflow-hidden flex flex-col">
                             <div className="flex justify-between items-center p-6 border-b border-gray-200">
-                                <h3 className="text-lg font-semibold">Preview - {selectedFile.filename}</h3>
+                                <h3 className="text-lg font-semibold flex items-center gap-2">
+                                    {(selectedFile.integration_type === 'Database' || (selectedFile.filename && selectedFile.filename.match(/_[0-9]{8}_[0-9]{6}\.csv$/))) ? (
+                                        <>
+                                            <Database className="h-5 w-5 text-purple-600" />
+                                            Table View - {selectedFile.prefix ? selectedFile.prefix.toUpperCase() : selectedFile.filename.replace(/\.csv$/i, '')}
+                                        </>
+                                    ) : (
+                                        <>
+                                            <FileText className="h-5 w-5 text-blue-600" />
+                                            File Preview - {selectedFile.filename}
+                                        </>
+                                    )}
+                                </h3>
                                 <button
                                     onClick={() => setShowPreview(false)}
-                                    className="text-gray-400 hover:text-gray-600"
+                                    className="text-gray-400 hover:text-gray-600 transition-colors"
                                 >
                                     ✕
                                 </button>
                             </div>
-                            <div className="p-6 overflow-auto flex-1 bg-gray-50">
-                                <div className="text-sm text-gray-600 space-y-2">
-                                    <p className="font-medium text-gray-900">File Details:</p>
-                                    <ul className="space-y-1 text-xs">
-                                        <li><span className="text-gray-500">Size:</span> {formatFileSize(selectedFile.file_size)}</li>
-                                        <li><span className="text-gray-500">Timestamp:</span> {formatTimestamp(selectedFile.timestamp)}</li>
-                                        <li><span className="text-gray-500">Status:</span> {selectedFile.status}</li>
-                                        <li><span className="text-gray-500">Section:</span> {selectedFile.section}</li>
-                                    </ul>
-                                    <p className="font-medium text-gray-900 mt-4">Preview Data (First 10 rows):</p>
-                                    <div className="bg-white p-3 rounded border border-gray-200 font-mono text-xs overflow-auto">
+                            <div className="p-0 overflow-auto flex-1 bg-white">
+                                <div className="text-sm">
+                                    {/* Info Header in Preview */}
+                                    <div className="bg-gray-50 p-4 border-b border-gray-100 flex gap-6 text-xs text-gray-600">
+                                        <div>
+                                            <span className="font-semibold text-gray-900 mr-1">Status:</span>
+                                            {selectedFile.status}
+                                        </div>
+                                        <div>
+                                            <span className="font-semibold text-gray-900 mr-1">Section:</span>
+                                            {selectedFile.section}
+                                        </div>
+                                        {(selectedFile.integration_type !== 'Database' && !selectedFile.filename.match(/_[0-9]{8}_[0-9]{6}\.csv$/)) && (
+                                            <div>
+                                                <span className="font-semibold text-gray-900 mr-1">Size:</span>
+                                                {formatFileSize(selectedFile.file_size)}
+                                            </div>
+                                        )}
+                                        <div>
+                                            <span className="font-semibold text-gray-900 mr-1">Records:</span>
+                                            {previewData?.rows?.length === 10 ? '10+ (Preview)' : previewData?.rows?.length || '-'}
+                                        </div>
+                                    </div>
+
+                                    {/* Data Table */}
+                                    <div className="overflow-auto max-h-[50vh]">
                                         {previewData && previewData.rows && previewData.rows.length > 0 && !previewData.rows[0].error ? (
-                                            <>
-                                                <div className="mb-2 text-blue-700 font-semibold">Columns: {previewData.columns.join(', ')}</div>
-                                                <table className="min-w-full text-xs">
-                                                    <thead>
-                                                        <tr>
-                                                            {previewData.columns.map((col) => (
-                                                                <th key={col} className="px-2 py-1 border-b text-left">{col}</th>
+                                            <table className="min-w-full text-xs divide-y divide-gray-200">
+                                                <thead className="bg-gray-50 sticky top-0 z-10">
+                                                    <tr>
+                                                        {previewData.columns.map((col) => (
+                                                            <th key={col} className="px-4 py-3 text-left font-medium text-gray-500 uppercase tracking-wider whitespace-nowrap bg-gray-50 border-b border-gray-200">
+                                                                {col}
+                                                            </th>
+                                                        ))}
+                                                    </tr>
+                                                </thead>
+                                                <tbody className="bg-white divide-y divide-gray-200">
+                                                    {previewData.rows.slice(0, 10).map((row, idx) => (
+                                                        <tr key={idx} className="hover:bg-gray-50 transition-colors">
+                                                            {previewData.columns.map((col, i) => (
+                                                                <td key={i} className="px-4 py-2 whitespace-nowrap text-gray-700 border-r border-gray-100 last:border-0 border-b border-gray-100">
+                                                                    {row[col]}
+                                                                </td>
                                                             ))}
                                                         </tr>
-                                                    </thead>
-                                                    <tbody>
-                                                        {previewData.rows.slice(0, 10).map((row, idx) => (
-                                                            <tr key={idx}>
-                                                                {previewData.columns.map((col, i) => (
-                                                                    <td key={i} className="px-2 py-1 border-b">{row[col]}</td>
-                                                                ))}
-                                                            </tr>
-                                                        ))}
-                                                    </tbody>
-                                                </table>
-                                            </>
+                                                    ))}
+                                                </tbody>
+                                            </table>
                                         ) : previewData && previewData.rows && previewData.rows[0]?.error ? (
-                                            <p className="text-red-500">{previewData.rows[0].error || 'No preview available.'}</p>
+                                            <div className="p-8 text-center">
+                                                <p className="text-red-500">{previewData.rows[0].error || 'No preview available.'}</p>
+                                            </div>
                                         ) : (
-                                            <p className="text-gray-500">No preview available.</p>
+                                            <div className="p-8 text-center">
+                                                <p className="text-gray-500">No preview available.</p>
+                                            </div>
                                         )}
                                     </div>
                                 </div>
                             </div>
-                            <div className="p-6 border-t border-gray-200 flex justify-end gap-3">
+                            <div className="p-4 border-t border-gray-200 flex justify-end gap-3 bg-gray-50">
+                                <button
+                                    onClick={() => handleDownload(selectedFile)}
+                                    className="px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-100 border border-gray-300 rounded-md transition-colors flex items-center gap-2"
+                                >
+                                    <Download className="h-4 w-4" />
+                                    {selectedFile.integration_type === 'Database' || selectedFile.filename.match(/_[0-9]{8}_[0-9]{6}\.csv$/) ? 'Export Data' : 'Download File'}
+                                </button>
                                 <button
                                     onClick={() => setShowPreview(false)}
-                                    className="px-4 py-2 text-gray-700 border border-gray-300 rounded-md hover:bg-gray-50"
+                                    className="px-4 py-2 text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 rounded-md transition-colors"
                                 >
                                     Close
                                 </button>
-                                <a
-                                    href={selectedFile ? `http://localhost:8000/data_source/${encodeURIComponent(selectedFile.filename)}` : '#'}
-                                    download={selectedFile ? selectedFile.filename : undefined}
-                                    className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 text-center"
-                                    style={{ textDecoration: 'none' }}
-                                >
-                                    Download
-                                </a>
                             </div>
                         </div>
                     </div>

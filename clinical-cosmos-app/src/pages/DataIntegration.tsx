@@ -46,6 +46,20 @@ export default function DataIntegration() {
     const [scanningId, setScanningId] = useState<number | null>(null);
     const [scanSuccess, setScanSuccess] = useState<{ [key: number]: boolean }>({});
 
+    // New State for Source Selection & Protocols
+    const [sourceType, setSourceType] = useState<'Local' | 'Database'>('Local');
+    const [availableProtocols, setAvailableProtocols] = useState<string[]>([]);
+
+    // DB Credentials State
+    const [dbCredentials, setDbCredentials] = useState({
+        db_type: 'postgresql',
+        host: '',
+        port: 5432,
+        database_name: '',
+        username: '',
+        password: ''
+    });
+
     // Credentials Modal state
     const [showCredentialsModal, setShowCredentialsModal] = useState(false);
     const [selectedIntegrationForCredentials, setSelectedIntegrationForCredentials] = useState<any>(null);
@@ -87,6 +101,14 @@ export default function DataIntegration() {
             setIntegrations(integrationData);
             setAvailableTypes(typesData || []);
             setAvailableStatuses(statusesData || []);
+
+            // Fetch protocols
+            try {
+                const protocols = await integrationService.getProtocols();
+                setAvailableProtocols(protocols || []);
+            } catch (pError) {
+                console.warn("Failed to fetch protocols", pError);
+            }
         } catch (error) {
             console.error("Failed to fetch integrations", error);
             // Fallback mock data
@@ -215,6 +237,14 @@ export default function DataIntegration() {
         setSubmitError('');
     };
 
+    const handleDbChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+        const { name, value } = e.target;
+        setDbCredentials(prev => ({
+            ...prev,
+            [name]: value
+        }));
+    };
+
     // Handle form submission
     const handleAddIntegration = async (e: React.FormEvent) => {
         e.preventDefault();
@@ -234,15 +264,32 @@ export default function DataIntegration() {
             }
 
             // Call API to create integration
-            const newIntegration = await integrationService.createIntegration({
+            // Call integration service
+            const payload: any = {
                 name: formData.name,
                 type: formData.type,
                 vendor: formData.vendor,
                 frequency: formData.frequency,
                 status: 'Active',
                 protocol_id: formData.protocolId || null,
-                folder_path: formData.folderPath || null
-            });
+            };
+
+            if (sourceType === 'Local') {
+                payload.folder_path = formData.folderPath || null;
+            } else {
+                // Validate DB creds
+                if (!dbCredentials.host || !dbCredentials.username || !dbCredentials.password) {
+                    setSubmitError('Please fill in all database credentials');
+                    setIsSubmitting(false);
+                    return;
+                }
+                payload.database_credentials = {
+                    ...dbCredentials,
+                    integration_id: 0
+                };
+            }
+
+            const newIntegration = await integrationService.createIntegration(payload);
 
             // Refresh the list
             await fetchData(typeFilter, statusFilter);
@@ -256,6 +303,15 @@ export default function DataIntegration() {
                 frequency: 'Daily at 2:00 AM',
                 folderPath: '',
                 launchImmediately: false
+            });
+            setSourceType('Local');
+            setDbCredentials({
+                db_type: 'postgresql',
+                host: '',
+                port: 5432,
+                database_name: '',
+                username: '',
+                password: ''
             });
 
             setShowAddModal(false);
@@ -576,10 +632,10 @@ export default function DataIntegration() {
             {/* Add Integration Modal */}
             {showAddModal && (
                 <div
-                    className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 backdrop-blur-sm"
+                    className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 backdrop-blur-sm p-4"
                     onClick={handleModalBackdropClick}
                 >
-                    <div className="bg-white rounded-lg shadow-xl w-full max-w-md p-6 animate-in fade-in zoom-in-95 duration-200">
+                    <div className="bg-white rounded-lg shadow-xl w-full max-w-md max-h-[90vh] overflow-y-auto p-6 animate-in fade-in zoom-in-95 duration-200">
                         <div className="flex justify-between items-center mb-4">
                             <h2 className="text-xl font-semibold">Add New Data Integration</h2>
                             <button
@@ -614,14 +670,50 @@ export default function DataIntegration() {
                                 <label className="block text-sm font-medium text-gray-700 mb-2">
                                     Protocol ID
                                 </label>
-                                <input
-                                    type="text"
+                                <select
                                     name="protocolId"
                                     value={formData.protocolId}
                                     onChange={handleFormChange}
-                                    placeholder="e.g., PRO001"
                                     className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                                />
+                                >
+                                    <option value="">Select Protocol</option>
+                                    {availableProtocols.map(p => (
+                                        <option key={p} value={p}>{p}</option>
+                                    ))}
+                                </select>
+                            </div>
+
+                            {/* Source Type Selection */}
+                            <div>
+                                <label className="block text-sm font-medium text-gray-700 mb-2">
+                                    Source Type
+                                </label>
+                                <div className="flex bg-gray-100 p-1 rounded-md">
+                                    <button
+                                        type="button"
+                                        onClick={() => setSourceType('Local')}
+                                        className={cn(
+                                            "flex-1 py-1.5 text-sm font-medium rounded-md transition-all",
+                                            sourceType === 'Local'
+                                                ? "bg-white text-blue-600 shadow-sm"
+                                                : "text-gray-500 hover:text-gray-900"
+                                        )}
+                                    >
+                                        Local Folder
+                                    </button>
+                                    <button
+                                        type="button"
+                                        onClick={() => setSourceType('Database')}
+                                        className={cn(
+                                            "flex-1 py-1.5 text-sm font-medium rounded-md transition-all",
+                                            sourceType === 'Database'
+                                                ? "bg-white text-blue-600 shadow-sm"
+                                                : "text-gray-500 hover:text-gray-900"
+                                        )}
+                                    >
+                                        Database
+                                    </button>
+                                </div>
                             </div>
 
                             {/* Integration Type */}
@@ -676,23 +768,106 @@ export default function DataIntegration() {
                                 </select>
                             </div>
 
-                            {/* Data Source Folder Path */}
-                            <div>
-                                <label className="block text-sm font-medium text-gray-700 mb-2">
-                                    Data Source Folder Path
-                                </label>
-                                <input
-                                    type="text"
-                                    name="folderPath"
-                                    value={formData.folderPath}
-                                    onChange={handleFormChange}
-                                    placeholder="e.g., C:\\data_source or /home/data_source"
-                                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm"
-                                />
-                                <p className="text-xs text-gray-500 mt-1">
-                                    Path to folder containing Excel files (.xlsx, .xls)
-                                </p>
-                            </div>
+                            {/* Data Source Folder Path (Conditional) */}
+                            {sourceType === 'Local' && (
+                                <div>
+                                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                                        Data Source Folder Path
+                                    </label>
+                                    <input
+                                        type="text"
+                                        name="folderPath"
+                                        value={formData.folderPath}
+                                        onChange={handleFormChange}
+                                        placeholder="e.g., C:\\data_source or /home/data_source"
+                                        className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm"
+                                    />
+                                    <p className="text-xs text-gray-500 mt-1">
+                                        Path to folder containing Excel files (.xlsx, .xls)
+                                    </p>
+                                </div>
+                            )}
+
+                            {/* Database Credentials Form (Conditional) */}
+                            {sourceType === 'Database' && (
+                                <div className="space-y-3 p-4 bg-gray-50 rounded-lg border border-gray-200">
+                                    <h3 className="text-sm font-medium text-gray-900 mb-2">Database Connection</h3>
+
+                                    <div className="grid grid-cols-2 gap-3">
+                                        <div className="col-span-2">
+                                            <label className="block text-xs font-medium text-gray-500 mb-1">DB Type</label>
+                                            <select
+                                                name="db_type"
+                                                value={dbCredentials.db_type}
+                                                onChange={handleDbChange}
+                                                className="w-full px-3 py-2 border border-gray-300 rounded-md text-sm"
+                                            >
+                                                <option value="postgresql">PostgreSQL</option>
+                                                <option value="sqlserver">SQL Server</option>
+                                                <option value="mysql">MySQL</option>
+                                                <option value="oracle">Oracle</option>
+                                            </select>
+                                        </div>
+
+                                        <div className="col-span-2">
+                                            <label className="block text-xs font-medium text-gray-500 mb-1">Host</label>
+                                            <input
+                                                type="text"
+                                                name="host"
+                                                value={dbCredentials.host}
+                                                onChange={handleDbChange}
+                                                placeholder="e.g. localhost or 192.168.1.1"
+                                                className="w-full px-3 py-2 border border-gray-300 rounded-md text-sm"
+                                            />
+                                        </div>
+
+                                        <div>
+                                            <label className="block text-xs font-medium text-gray-500 mb-1">Port</label>
+                                            <input
+                                                type="number"
+                                                name="port"
+                                                value={dbCredentials.port}
+                                                onChange={handleDbChange}
+                                                className="w-full px-3 py-2 border border-gray-300 rounded-md text-sm"
+                                            />
+                                        </div>
+
+                                        <div>
+                                            <label className="block text-xs font-medium text-gray-500 mb-1">Database Name</label>
+                                            <input
+                                                type="text"
+                                                name="database_name"
+                                                value={dbCredentials.database_name}
+                                                onChange={handleDbChange}
+                                                placeholder="DB Name"
+                                                className="w-full px-3 py-2 border border-gray-300 rounded-md text-sm"
+                                            />
+                                        </div>
+
+                                        <div>
+                                            <label className="block text-xs font-medium text-gray-500 mb-1">Username</label>
+                                            <input
+                                                type="text"
+                                                name="username"
+                                                value={dbCredentials.username}
+                                                onChange={handleDbChange}
+                                                className="w-full px-3 py-2 border border-gray-300 rounded-md text-sm"
+                                            />
+                                        </div>
+
+                                        <div>
+                                            <label className="block text-xs font-medium text-gray-500 mb-1">Password</label>
+                                            <input
+                                                type="password"
+                                                name="password"
+                                                value={dbCredentials.password}
+                                                onChange={handleDbChange}
+                                                className="w-full px-3 py-2 border border-gray-300 rounded-md text-sm"
+                                            />
+                                        </div>
+                                    </div>
+                                </div>
+                            )}
 
                             {/* Checkbox */}
                             <div className="flex items-center">
