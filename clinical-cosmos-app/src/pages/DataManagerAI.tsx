@@ -1,9 +1,17 @@
 import {
+<<<<<<< HEAD
     Cpu, ChevronLeft, ChevronDown, Sparkles, RefreshCw, EyeOff, Eye,
     Maximize2, X, Bot, Activity, Package, Check, Loader2,
     Database, FileText, Share2, ClipboardList, AlertCircle, Play,
     LayoutDashboard, Calendar, Trash2, Settings, ArrowDown, ArrowRight, Plus,
     ChevronsUpDown, Save
+=======
+    ChevronLeft, ChevronDown, Sparkles, RefreshCw, EyeOff, Eye,
+    Maximize2, X, Bot, Activity, Check, Loader2,
+    Database, FileText, Share2, ClipboardList, AlertCircle,
+    LayoutDashboard, Calendar, Trash2, Settings, ArrowDown, ArrowRight, Plus,
+    ChevronsUpDown, Save, Cpu
+>>>>>>> Ruthra
 } from 'lucide-react';
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
@@ -467,6 +475,7 @@ export default function DataManagerAI() {
                 </div>
 
                 {/* Header Card */}
+<<<<<<< HEAD
                 <div className="bg-[#1e293b] rounded-2xl p-8 text-white shadow-2xl relative overflow-hidden border border-slate-700 transition-all duration-200 active:scale-[0.98] cursor-pointer hover:shadow-blue-900/20">
                     <div className="absolute top-0 right-0 w-64 h-64 bg-teal-500/10 blur-[100px] -mr-32 -mt-32 rounded-full"></div>
                     <div className="absolute bottom-0 left-0 w-64 h-64 bg-blue-500/10 blur-[100px] -ml-32 -mb-32 rounded-full"></div>
@@ -476,6 +485,17 @@ export default function DataManagerAI() {
                             <div className="absolute inset-0 bg-gradient-to-br from-teal-900/40 to-transparent rotate-45 rounded-lg"></div>
                             <div className="absolute inset-[3px] border border-teal-500/30 rotate-45 rounded-lg backdrop-blur-sm"></div>
                             <Bot className="h-7 w-7 text-teal-400 relative z-10" />
+=======
+                {/* Header Card - Restored Old Design */}
+                {showAgents && (
+                    <div className="agent-card data-manager-agent mb-6">
+                        <div className="agent-icon-wrapper">
+                            <div className="hexagon-frame">
+                                <div className="glow-effect teal-glow"></div>
+                                <Cpu className="h-24 w-24 agent-icon teal-icon" />
+                                <div className="data-particles"></div>
+                            </div>
+>>>>>>> Ruthra
                         </div>
                         <div className="flex flex-col">
                             <h2 className="text-xl font-bold text-teal-400 mb-0.5 tracking-wide uppercase">The Quantum Analyst</h2>
@@ -617,7 +637,11 @@ export default function DataManagerAI() {
                         {/* 5 Agent Cards */}
                         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4">
                             {/* Card 1: Data Fetch Agent */}
+<<<<<<< HEAD
                             <div className="bg-white p-4 rounded-xl border border-blue-100 shadow-sm hover:shadow-md transition-shadow">
+=======
+                            <div className="bg-white p-4 rounded-xl border border-blue-100 shadow-sm hover:shadow-lg hover:-translate-y-1 transition-all duration-300">
+>>>>>>> Ruthra
                                 <div className="flex justify-between items-start mb-3">
                                     <div className="h-10 w-10 bg-blue-50 rounded-lg flex items-center justify-center text-blue-600">
                                         <Database className="h-5 w-5" />
@@ -644,7 +668,11 @@ export default function DataManagerAI() {
                                 </div>
                             </div>
                             {/* Card 2: DQ Processing */}
+<<<<<<< HEAD
                             <div className="bg-white p-4 rounded-xl border border-blue-100 shadow-sm hover:shadow-md transition-shadow">
+=======
+                            <div className="bg-white p-4 rounded-xl border border-blue-100 shadow-sm hover:shadow-lg hover:-translate-y-1 transition-all duration-300">
+>>>>>>> Ruthra
                                 <div className="flex justify-between items-start mb-3">
                                     <div className="h-10 w-10 bg-indigo-50 rounded-lg flex items-center justify-center text-indigo-600">
                                         <Sparkles className="h-5 w-5" />
@@ -672,7 +700,11 @@ export default function DataManagerAI() {
                             </div>
 
                             {/* Card 3: Reconciliation */}
+<<<<<<< HEAD
                             <div className="bg-white p-4 rounded-xl border border-blue-100 shadow-sm hover:shadow-md transition-shadow">
+=======
+                            <div className="bg-white p-4 rounded-xl border border-blue-100 shadow-sm hover:shadow-lg hover:-translate-y-1 transition-all duration-300">
+>>>>>>> Ruthra
                                 <div className="flex justify-between items-start mb-3">
                                     <div className="h-10 w-10 bg-teal-50 rounded-lg flex items-center justify-center text-teal-600">
                                         <Share2 className="h-5 w-5" />
@@ -700,7 +732,11 @@ export default function DataManagerAI() {
                             </div>
 
                             {/* Card 4: Protocol Check */}
+<<<<<<< HEAD
                             <div className="bg-white p-4 rounded-xl border border-blue-100 shadow-sm hover:shadow-md transition-shadow">
+=======
+                            <div className="bg-white p-4 rounded-xl border border-blue-100 shadow-sm hover:shadow-lg hover:-translate-y-1 transition-all duration-300">
+>>>>>>> Ruthra
                                 <div className="flex justify-between items-start mb-3">
                                     <div className="h-10 w-10 bg-orange-50 rounded-lg flex items-center justify-center text-orange-600">
                                         <FileText className="h-5 w-5" />
@@ -728,7 +764,11 @@ export default function DataManagerAI() {
                             </div>
 
                             {/* Card 5: Task Manager */}
+<<<<<<< HEAD
                             <div className="bg-white p-4 rounded-xl border border-blue-100 shadow-sm hover:shadow-md transition-shadow">
+=======
+                            <div className="bg-white p-4 rounded-xl border border-blue-100 shadow-sm hover:shadow-lg hover:-translate-y-1 transition-all duration-300">
+>>>>>>> Ruthra
                                 <div className="flex justify-between items-start mb-3">
                                     <div className="h-10 w-10 bg-purple-50 rounded-lg flex items-center justify-center text-purple-600">
                                         <ClipboardList className="h-5 w-5" />
@@ -798,12 +838,20 @@ export default function DataManagerAI() {
                 {/* Main Content Sections - Update for Tabs */}
                 <div className="space-y-6">
                     {/* Tabs Navigation */}
+<<<<<<< HEAD
                     <div className="flex bg-white rounded-xl border border-gray-100 p-1.5 shadow-sm overflow-x-auto w-fit">
+=======
+                    <div className="flex bg-slate-100/80 backdrop-blur-sm rounded-xl p-1.5 shadow-inner overflow-x-auto w-fit border border-slate-200">
+>>>>>>> Ruthra
                         {['DQ and Reconciliation', 'Tasks', 'Reports', 'Event Monitoring', 'Domain Progress', 'Agent Workflow', 'Settings'].map((tab) => (
                             <button
                                 key={tab}
                                 onClick={() => setActiveTab(tab)}
+<<<<<<< HEAD
                                 className={`px-5 py-2.5 rounded-lg text-sm font-bold whitespace-nowrap transition-all ${activeTab === tab ? 'bg-[#2563eb] text-white shadow-md' : 'text-gray-500 hover:bg-gray-50'}`}
+=======
+                                className={`px-5 py-2.5 rounded-lg text-sm font-bold whitespace-nowrap transition-all duration-300 ${activeTab === tab ? 'bg-white text-blue-600 shadow-sm shadow-blue-900/5 ring-1 ring-black/5 scale-[1.02]' : 'text-slate-500 hover:bg-white/60 hover:text-slate-700'}`}
+>>>>>>> Ruthra
                             >
                                 {tab}
                             </button>
@@ -829,7 +877,11 @@ export default function DataManagerAI() {
                                             <ChevronDown className={`h-4 w-4 transition-transform duration-200 ${isTypeDropdownOpen ? 'rotate-180' : 'opacity-50'}`} />
                                         </button>
                                         {isTypeDropdownOpen && (
+<<<<<<< HEAD
                                             <div className="absolute top-12 left-0 z-50 w-full rounded-lg border bg-white shadow-xl animate-in fade-in zoom-in-95 p-1 mt-1 border-gray-100">
+=======
+                                            <div className="absolute top-12 left-0 z-50 w-full rounded-xl border border-slate-200/60 bg-white/90 backdrop-blur-xl shadow-2xl shadow-slate-200/50 animate-in fade-in zoom-in-95 slide-in-from-top-2 p-1.5 mt-1 ring-1 ring-black/5">
+>>>>>>> Ruthra
                                                 {filterTypes.map((type) => (
                                                     <div
                                                         key={type}
@@ -837,10 +889,17 @@ export default function DataManagerAI() {
                                                             setSelectedType(type);
                                                             setIsTypeDropdownOpen(false);
                                                         }}
+<<<<<<< HEAD
                                                         className="flex items-center rounded-md px-3 py-2.5 text-sm font-medium hover:bg-gray-50 text-gray-700 cursor-pointer transition-colors"
                                                     >
                                                         <div className="w-5 flex items-center justify-center mr-2">
                                                             {selectedType === type && <Check className="h-4 w-4 text-gray-900" />}
+=======
+                                                        className="flex items-center rounded-md px-3 py-2.5 text-sm font-medium hover:bg-blue-50/50 text-gray-700 cursor-pointer transition-colors"
+                                                    >
+                                                        <div className="w-5 flex items-center justify-center mr-2">
+                                                            {selectedType === type && <Check className="h-4 w-4 text-blue-600" />}
+>>>>>>> Ruthra
                                                         </div>
                                                         <span className={selectedType === type ? 'text-gray-900 font-bold' : ''}>{type}</span>
                                                     </div>
@@ -862,7 +921,11 @@ export default function DataManagerAI() {
                                             <ChevronDown className={`h-4 w-4 transition-transform duration-200 ${isCategoryDropdownOpen ? 'rotate-180' : 'opacity-50'}`} />
                                         </button>
                                         {isCategoryDropdownOpen && (
+<<<<<<< HEAD
                                             <div className="absolute top-12 left-0 z-50 w-full rounded-lg border bg-white shadow-xl animate-in fade-in zoom-in-95 p-1 mt-1 border-gray-100">
+=======
+                                            <div className="absolute top-12 left-0 z-50 w-full rounded-xl border border-slate-200/60 bg-white/90 backdrop-blur-xl shadow-2xl shadow-slate-200/50 animate-in fade-in zoom-in-95 slide-in-from-top-2 p-1.5 mt-1 ring-1 ring-black/5">
+>>>>>>> Ruthra
                                                 {filterCategories.map((cat) => (
                                                     <div
                                                         key={cat}
@@ -870,10 +933,17 @@ export default function DataManagerAI() {
                                                             setSelectedCategory(cat);
                                                             setIsCategoryDropdownOpen(false);
                                                         }}
+<<<<<<< HEAD
                                                         className="flex items-center rounded-md px-3 py-2.5 text-sm font-medium hover:bg-gray-50 text-gray-700 cursor-pointer transition-colors"
                                                     >
                                                         <div className="w-5 flex items-center justify-center mr-2">
                                                             {selectedCategory === cat && <Check className="h-4 w-4 text-gray-900" />}
+=======
+                                                        className="flex items-center rounded-md px-3 py-2.5 text-sm font-medium hover:bg-blue-50/50 text-gray-700 cursor-pointer transition-colors"
+                                                    >
+                                                        <div className="w-5 flex items-center justify-center mr-2">
+                                                            {selectedCategory === cat && <Check className="h-4 w-4 text-blue-600" />}
+>>>>>>> Ruthra
                                                         </div>
                                                         <span className={selectedCategory === cat ? 'text-gray-900 font-bold' : ''}>{cat}</span>
                                                     </div>
@@ -895,7 +965,11 @@ export default function DataManagerAI() {
                                             <ChevronDown className={`h-4 w-4 transition-transform duration-200 ${isStatusDropdownOpen ? 'rotate-180' : 'opacity-50'}`} />
                                         </button>
                                         {isStatusDropdownOpen && (
+<<<<<<< HEAD
                                             <div className="absolute top-12 left-0 z-50 w-full rounded-lg border bg-white shadow-xl animate-in fade-in zoom-in-95 p-1 mt-1 border-gray-100">
+=======
+                                            <div className="absolute top-12 left-0 z-50 w-full rounded-xl border border-slate-200/60 bg-white/90 backdrop-blur-xl shadow-2xl shadow-slate-200/50 animate-in fade-in zoom-in-95 slide-in-from-top-2 p-1.5 mt-1 ring-1 ring-black/5">
+>>>>>>> Ruthra
                                                 {filterStatuses.map((status) => (
                                                     <div
                                                         key={status}
@@ -903,10 +977,17 @@ export default function DataManagerAI() {
                                                             setSelectedStatus(status);
                                                             setIsStatusDropdownOpen(false);
                                                         }}
+<<<<<<< HEAD
                                                         className="flex items-center rounded-md px-3 py-2.5 text-sm font-medium hover:bg-gray-50 text-gray-700 cursor-pointer transition-colors"
                                                     >
                                                         <div className="w-5 flex items-center justify-center mr-2">
                                                             {selectedStatus === status && <Check className="h-4 w-4 text-gray-900" />}
+=======
+                                                        className="flex items-center rounded-md px-3 py-2.5 text-sm font-medium hover:bg-blue-50/50 text-gray-700 cursor-pointer transition-colors"
+                                                    >
+                                                        <div className="w-5 flex items-center justify-center mr-2">
+                                                            {selectedStatus === status && <Check className="h-4 w-4 text-blue-600" />}
+>>>>>>> Ruthra
                                                         </div>
                                                         <span className={selectedStatus === status ? 'text-gray-900 font-bold' : ''}>{status}</span>
                                                     </div>
@@ -941,12 +1022,20 @@ export default function DataManagerAI() {
                                         </thead>
                                         <tbody className="divide-y divide-gray-50">
                                             {filteredData.map((issue) => (
+<<<<<<< HEAD
                                                 <tr key={issue.id} className="hover:bg-blue-50/30 transition-colors group">
+=======
+                                                <tr key={issue.id} className="hover:bg-blue-50/50 transition-all duration-200 group border-b border-gray-50/50 hover:border-blue-100/50">
+>>>>>>> Ruthra
                                                     <td className="px-6 py-4">
                                                         <div className="font-bold text-blue-600 whitespace-nowrap">{issue.id}</div>
                                                     </td>
                                                     <td className="px-6 py-4">
+<<<<<<< HEAD
                                                         <span className={`px-2.5 py-1 rounded-full text-xs font-bold whitespace-nowrap ${issue.type === 'Missing Data' ? 'bg-blue-100 text-blue-700' : 'bg-orange-100 text-orange-800'}`}>
+=======
+                                                        <span className={`px-2.5 py-1 rounded-full text-xs font-bold whitespace-nowrap backdrop-blur-md border ${issue.type === 'Missing Data' ? 'bg-blue-50/80 text-blue-700 border-blue-200' : 'bg-orange-50/80 text-orange-800 border-orange-200'}`}>
+>>>>>>> Ruthra
                                                             {issue.type}
                                                         </span>
                                                     </td>
@@ -1000,7 +1089,11 @@ export default function DataManagerAI() {
                                             <ChevronDown className={`h-4 w-4 transition-transform duration-200 ${isTaskStatusDropdownOpen ? 'rotate-180' : 'opacity-50'}`} />
                                         </button>
                                         {isTaskStatusDropdownOpen && (
+<<<<<<< HEAD
                                             <div className="absolute top-12 left-0 z-50 w-full rounded-lg border bg-white shadow-xl animate-in fade-in zoom-in-95 p-1 mt-1 border-gray-100">
+=======
+                                            <div className="absolute top-12 left-0 z-50 w-full rounded-xl border border-slate-200/60 bg-white/90 backdrop-blur-xl shadow-2xl shadow-slate-200/50 animate-in fade-in zoom-in-95 slide-in-from-top-2 p-1.5 mt-1 ring-1 ring-black/5">
+>>>>>>> Ruthra
                                                 {taskStatuses.map((status) => (
                                                     <div
                                                         key={status}
@@ -1008,10 +1101,17 @@ export default function DataManagerAI() {
                                                             setSelectedTaskStatus(status);
                                                             setIsTaskStatusDropdownOpen(false);
                                                         }}
+<<<<<<< HEAD
                                                         className="flex items-center rounded-md px-3 py-2.5 text-sm font-medium hover:bg-gray-50 text-gray-700 cursor-pointer transition-colors"
                                                     >
                                                         <div className="w-5 flex items-center justify-center mr-2">
                                                             {selectedTaskStatus === status && <Check className="h-4 w-4 text-gray-900" />}
+=======
+                                                        className="flex items-center rounded-md px-3 py-2.5 text-sm font-medium hover:bg-blue-50/50 text-gray-700 cursor-pointer transition-colors"
+                                                    >
+                                                        <div className="w-5 flex items-center justify-center mr-2">
+                                                            {selectedTaskStatus === status && <Check className="h-4 w-4 text-blue-600" />}
+>>>>>>> Ruthra
                                                         </div>
                                                         <span className={selectedTaskStatus === status ? 'text-gray-900 font-bold' : ''}>{status}</span>
                                                     </div>
@@ -1046,7 +1146,11 @@ export default function DataManagerAI() {
                                         </thead>
                                         <tbody className="divide-y divide-gray-50">
                                             {paginatedTasks.map((task) => (
+<<<<<<< HEAD
                                                 <tr key={task.id} className="hover:bg-blue-50/30 transition-colors group">
+=======
+                                                <tr key={task.id} className="hover:bg-blue-50/50 transition-all duration-200 group border-b border-gray-50/50 hover:border-blue-100/50">
+>>>>>>> Ruthra
                                                     <td className="px-6 py-4">
                                                         <div className="font-bold text-blue-600 whitespace-nowrap">{task.id}</div>
                                                     </td>
@@ -1064,7 +1168,11 @@ export default function DataManagerAI() {
                                                     <td className="px-6 py-4 text-sm font-medium text-gray-600 whitespace-nowrap">{task.dueDate}</td>
                                                     <td className="px-6 py-4 text-sm font-medium text-gray-500 whitespace-nowrap">{task.created}</td>
                                                     <td className="px-6 py-4">
+<<<<<<< HEAD
                                                         <span className="px-2.5 py-1 rounded-full text-[10px] font-bold bg-gray-100 text-gray-700 border border-gray-200 uppercase whitespace-nowrap">
+=======
+                                                        <span className="px-2.5 py-1 rounded-full text-[10px] font-bold bg-slate-100 text-slate-700 border border-slate-200 uppercase whitespace-nowrap backdrop-blur-md">
+>>>>>>> Ruthra
                                                             {task.study}
                                                         </span>
                                                     </td>

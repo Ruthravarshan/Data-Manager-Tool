@@ -1,16 +1,78 @@
 import {
     FileText, ChartColumn, CircleArrowUp, FlaskConical, Clock, MessagesSquare,
     AlarmClock, ListChecks, Activity, Flag, CircleCheck, Bell, Award, Microscope,
-    ChevronRight, Eye, CircleAlert, CircleDashed, Database, Link2, FileSpreadsheet
+    ChevronRight, Eye, CircleAlert, CircleDashed, Database, Link2, FileSpreadsheet,
+    ChevronUp, ChevronDown
 } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { useEffect, useState } from 'react';
-import { dashboardService } from '../services/api';
+import { useNavigate } from 'react-router-dom';
+import { dashboardService, studyService, activityService, dataFileService } from '../services/api';
 
 export default function Dashboard() {
+    const navigate = useNavigate();
     const [activeTab, setActiveTab] = useState('tasks');
     const [metrics, setMetrics] = useState<any[]>([]);
+    const [activeStudiesCount, setActiveStudiesCount] = useState<number>(0);
+    const [studies, setStudies] = useState<any[]>([]);
+    const [recentActivities, setRecentActivities] = useState<any[]>([]);
     const [loading, setLoading] = useState(true);
+
+    // SDTM Data State
+    const [sdtmFiles, setSdtmFiles] = useState<any[]>([]);
+    const [selectedProtocol, setSelectedProtocol] = useState<string>('all');
+    const [sdtmDomains, setSdtmDomains] = useState<any[]>([]);
+
+    useEffect(() => {
+        const fetchSDTMData = async () => {
+            try {
+                // Fetch files based on selected protocol
+                const protocol = selectedProtocol === 'all' ? undefined : selectedProtocol;
+                const files = await dataFileService.getDataFiles(undefined, undefined, protocol);
+                setSdtmFiles(files || []);
+
+                // Group by section (domain)
+                const grouped = (files || []).reduce((acc: any, file: any) => {
+                    const domain = file.section || 'Unclassified';
+                    if (!acc[domain]) {
+                        acc[domain] = {
+                            code: domain,
+                            name: getDomainName(domain),
+                            files: [],
+                            totalRecords: 0
+                        };
+                    }
+                    acc[domain].files.push(file);
+                    acc[domain].totalRecords += (file.record_count || 0);
+                    return acc;
+                }, {});
+
+                // Calculate progress/completeness (mock logic for now as we don't have target records)
+                // Removed as per user request since it was hardcoded/mock
+
+                setSdtmDomains(Object.values(grouped).sort((a: any, b: any) => a.code.localeCompare(b.code)));
+            } catch (error) {
+                console.error("Failed to fetch SDTM data", error);
+                setSdtmFiles([]);
+            }
+        };
+
+        fetchSDTMData();
+    }, [selectedProtocol]);
+
+    const getDomainName = (code: string) => {
+        const names: any = {
+            'DM': 'Demographics',
+            'AE': 'Adverse Events',
+            'VS': 'Vital Signs',
+            'LB': 'Laboratory Tests',
+            'CM': 'Concomitant Medications',
+            'EX': 'Exposure',
+            'DS': 'Disposition',
+            'SV': 'Subject Visits'
+        };
+        return names[code] || code;
+    };
 
     useEffect(() => {
         const fetchMetrics = async () => {
@@ -31,6 +93,51 @@ export default function Dashboard() {
             }
         };
         fetchMetrics();
+    }, []);
+
+    useEffect(() => {
+        const fetchActiveStudiesCount = async () => {
+            try {
+                const count = await studyService.getActiveStudiesCount();
+                setActiveStudiesCount(count);
+            } catch (error) {
+                console.error("Failed to fetch active studies count", error);
+                // Fallback to 0 if API fails
+                setActiveStudiesCount(0);
+            }
+        };
+        fetchActiveStudiesCount();
+    }, []);
+
+    useEffect(() => {
+        const fetchStudies = async () => {
+            try {
+                const data = await studyService.getStudies();
+                setStudies(data);
+            } catch (error) {
+                console.error("Failed to fetch studies", error);
+                // Fallback to empty array if API fails
+                setStudies([]);
+            }
+        };
+        fetchStudies();
+    }, []);
+
+    useEffect(() => {
+        const fetchRecentActivities = async () => {
+            try {
+                const data = await activityService.getRecentActivities(10);
+                setRecentActivities(data);
+            } catch (error) {
+                console.error("Failed to fetch recent activities", error);
+                // Fallback to empty array if API fails
+                setRecentActivities([]);
+            }
+        };
+        fetchRecentActivities();
+        // Refresh activities every 5 seconds
+        const interval = setInterval(fetchRecentActivities, 5000);
+        return () => clearInterval(interval);
     }, []);
 
     return (
@@ -58,7 +165,7 @@ export default function Dashboard() {
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
                     <StatCard
                         title="Active Studies"
-                        value="4"
+                        value={activeStudiesCount.toString()}
                         icon={FlaskConical}
                         color="blue"
                         subtext="1 new this month"
@@ -145,40 +252,60 @@ export default function Dashboard() {
                                 </div>
                             </div>
                             <div className="p-6 pt-0 space-y-2">
-                                <StudyItem
-                                    title="Diabetes Type 2 Study"
-                                    description="Investigating efficacy of GLP-1 receptor agonists in glycemic control for T2DM patients"
-                                    phase="Phase III" sites="28 sites" subjects="342 subjects"
-                                    risk="Low Risk" riskColor="green"
-                                    progress={76}
-                                />
-                                <StudyItem
-                                    title="Rheumatoid Arthritis Study"
-                                    description="Evaluation of JAK inhibitor in moderate to severe rheumatoid arthritis"
-                                    phase="Phase II" sites="15 sites" subjects="187 subjects"
-                                    risk="Medium Risk" riskColor="amber"
-                                    progress={45}
-                                />
-                                <StudyItem
-                                    title="Advanced Breast Cancer"
-                                    description="CDK4/6 inhibitor combination therapy in HR+/HER2- advanced breast cancer"
-                                    phase="Phase III" sites="32 sites" subjects="274 subjects"
-                                    risk="High Risk" riskColor="red"
-                                    progress={28}
-                                />
-                                <StudyItem
-                                    title="Alzheimer's Disease"
-                                    description="Beta-amyloid monoclonal antibody for early-stage Alzheimer's disease"
-                                    phase="Phase II" sites="12 sites" subjects="156 subjects"
-                                    risk="Low Risk" riskColor="green"
-                                    progress={64}
-                                />
+                                {studies.length > 0 ? (
+                                    studies.map((study) => (
+                                        <StudyItem
+                                            key={study.id}
+                                            title={study.title}
+                                            description={study.description}
+                                            phase={study.phase}
+                                            sites={`${study.sites_count} sites`}
+                                            subjects={`${study.subjects_count} subjects`}
+                                            risk="Medium Risk"
+                                            riskColor="amber"
+                                            progress={study.completion_percentage || 0}
+                                        />
+                                    ))
+                                ) : (
+                                    <>
+                                        <StudyItem
+                                            title="Diabetes Type 2 Study"
+                                            description="Investigating efficacy of GLP-1 receptor agonists in glycemic control for T2DM patients"
+                                            phase="Phase III" sites="28 sites" subjects="342 subjects"
+                                            risk="Low Risk" riskColor="green"
+                                            progress={76}
+                                        />
+                                        <StudyItem
+                                            title="Rheumatoid Arthritis Study"
+                                            description="Evaluation of JAK inhibitor in moderate to severe rheumatoid arthritis"
+                                            phase="Phase II" sites="15 sites" subjects="187 subjects"
+                                            risk="Medium Risk" riskColor="amber"
+                                            progress={45}
+                                        />
+                                        <StudyItem
+                                            title="Advanced Breast Cancer"
+                                            description="CDK4/6 inhibitor combination therapy in HR+/HER2- advanced breast cancer"
+                                            phase="Phase III" sites="32 sites" subjects="274 subjects"
+                                            risk="High Risk" riskColor="red"
+                                            progress={28}
+                                        />
+                                        <StudyItem
+                                            title="Alzheimer's Disease"
+                                            description="Beta-amyloid monoclonal antibody for early-stage Alzheimer's disease"
+                                            phase="Phase II" sites="12 sites" subjects="156 subjects"
+                                            risk="Low Risk" riskColor="green"
+                                            progress={64}
+                                        />
+                                    </>
+                                )}
                             </div>
                             <div className="flex items-center p-6 pt-0 pb-3">
-                                <button className="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 border border-input bg-background hover:bg-accent hover:text-accent-foreground h-10 px-4 py-2 w-full">
-                                    <FlaskConical className="mr-2 h-4 w-4" />
-                                    Create New Study
-                                </button>
+                                <Link to="/study-management" className="w-full">
+                                    <button className="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 border border-input bg-background hover:bg-accent hover:text-accent-foreground h-10 px-4 py-2 w-full">
+                                        <FlaskConical className="mr-2 h-4 w-4" />
+                                        Create New Study
+                                    </button>
+                                </Link>
                             </div>
                         </div>
 
@@ -214,6 +341,12 @@ export default function Dashboard() {
                                 {/* Tab Navigation */}
                                 <div className="h-10 items-center justify-center rounded-md bg-blue-50 p-1 text-blue-600 grid grid-cols-3 mb-3">
                                     <button
+                                        onClick={() => setActiveTab('activities')}
+                                        className={`inline-flex items-center justify-center whitespace-nowrap rounded-sm px-3 py-1.5 text-sm font-medium ring-offset-background transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 ${activeTab === 'activities' ? 'bg-white text-blue-700 shadow-sm' : 'hover:bg-blue-100 hover:text-blue-800'}`}
+                                    >
+                                        All Activities
+                                    </button>
+                                    <button
                                         onClick={() => setActiveTab('tasks')}
                                         className={`inline-flex items-center justify-center whitespace-nowrap rounded-sm px-3 py-1.5 text-sm font-medium ring-offset-background transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 ${activeTab === 'tasks' ? 'bg-white text-blue-700 shadow-sm' : 'hover:bg-blue-100 hover:text-blue-800'}`}
                                     >
@@ -225,16 +358,24 @@ export default function Dashboard() {
                                     >
                                         Queries
                                     </button>
-                                    <button
-                                        onClick={() => setActiveTab('signals')}
-                                        className={`inline-flex items-center justify-center whitespace-nowrap rounded-sm px-3 py-1.5 text-sm font-medium ring-offset-background transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 ${activeTab === 'signals' ? 'bg-white text-blue-700 shadow-sm' : 'hover:bg-blue-100 hover:text-blue-800'}`}
-                                    >
-                                        Signals
-                                    </button>
                                 </div>
 
                                 {/* Tab Content */}
                                 <div className="space-y-3">
+                                    {activeTab === 'activities' && (
+                                        <>
+                                            {recentActivities.length > 0 ? (
+                                                recentActivities.map((activity) => (
+                                                    <ActivityItem key={activity.id} {...activity} />
+                                                ))
+                                            ) : (
+                                                <div className="text-center text-sm text-neutral-500 py-4">
+                                                    No recent activities
+                                                </div>
+                                            )}
+                                        </>
+                                    )}
+
                                     {activeTab === 'tasks' && (
                                         <>
                                             {RECENT_TASKS.map((task) => (
@@ -247,14 +388,6 @@ export default function Dashboard() {
                                         <>
                                             {RECENT_QUERIES.map((query) => (
                                                 <QueryItem key={query.id} {...query} />
-                                            ))}
-                                        </>
-                                    )}
-
-                                    {activeTab === 'signals' && (
-                                        <>
-                                            {RECENT_SIGNALS.map((signal) => (
-                                                <SignalItem key={signal.id} {...signal} />
                                             ))}
                                         </>
                                     )}
@@ -287,19 +420,42 @@ export default function Dashboard() {
 
                         {/* SDTM Domains */}
                         <div className="rounded-lg border bg-card text-card-foreground shadow-sm">
-                            <div className="flex flex-col space-y-1.5 p-6 pb-2">
-                                <h3 className="font-semibold tracking-tight text-lg flex items-center">
-                                    <Database className="mr-2 h-5 w-5 text-blue-600" />
-                                    SDTM Domains
-                                </h3>
+                            <div className="flex flex-col space-y-3 p-6 pb-2">
+                                <div className="flex justify-between items-center">
+                                    <h3 className="font-semibold tracking-tight text-lg flex items-center">
+                                        <Database className="mr-2 h-5 w-5 text-blue-600" />
+                                        SDTM Domains
+                                    </h3>
+                                    <select
+                                        value={selectedProtocol}
+                                        onChange={(e) => setSelectedProtocol(e.target.value)}
+                                        className="h-8 text-xs border-gray-300 rounded-md shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50"
+                                    >
+                                        <option value="all">All Protocols</option>
+                                        {studies.map(study => (
+                                            <option key={study.id} value={study.protocol_id || study.title}>
+                                                {study.protocol_id || study.title}
+                                            </option>
+                                        ))}
+                                    </select>
+                                </div>
                             </div>
                             <div className="p-6 pt-0 space-y-2">
-                                <SDTMItem code="DM" name="Demographics" records="959" progress="98%" progressColor="green-600" />
-                                <SDTMItem code="VS" name="Vital Signs" records="4,782" progress="93%" progressColor="green-600" />
-                                <SDTMItem code="LB" name="Laboratory Tests" records="12,568" progress="88%" progressColor="amber-600" />
-                                <SDTMItem code="AE" name="Adverse Events" records="873" progress="95%" progressColor="green-600" />
-                                <SDTMItem code="CM" name="Concomitant Medications" records="1,924" progress="82%" progressColor="amber-600" />
-                                <SDTMItem code="EX" name="Exposure" records="959" progress="97%" progressColor="green-600" />
+                                {sdtmDomains.length > 0 ? (
+                                    sdtmDomains.map((domain: any) => (
+                                        <SDTMDomainItem
+                                            key={domain.code}
+                                            code={domain.code}
+                                            name={domain.name}
+                                            records={domain.totalRecords.toLocaleString()}
+                                            fileCount={domain.files.length}
+                                        />
+                                    ))
+                                ) : (
+                                    <div className="text-center py-4 text-gray-500 text-sm">
+                                        No data found for selected protocol
+                                    </div>
+                                )}
                             </div>
                             <div className="flex items-center p-6 pt-0">
                                 <Link to="/trial-data-management" className="w-full">
@@ -469,6 +625,57 @@ function TaskItem({ id, priority, priorityColor, title, due, assignee, status, s
     )
 }
 
+function ActivityItem({ action_type, description, user_name, timestamp, related_entity_type }: any) {
+    const getActionIcon = (type: string) => {
+        if (type.includes('study')) return <FlaskConical className="h-5 w-5 text-blue-600" />;
+        if (type.includes('query')) return <MessagesSquare className="h-5 w-5 text-indigo-600" />;
+        if (type.includes('task')) return <ListChecks className="h-5 w-5 text-emerald-600" />;
+        if (type.includes('document')) return <FileText className="h-5 w-5 text-purple-600" />;
+        if (type.includes('dq')) return <CircleCheck className="h-5 w-5 text-amber-600" />;
+        return <Activity className="h-5 w-5 text-blue-600" />;
+    };
+
+    const getActionLabel = (type: string) => {
+        return type.replace('_', ' ').replace(/\b\w/g, (l: string) => l.toUpperCase());
+    };
+
+    const formatTime = (timestamp: string) => {
+        const date = new Date(timestamp);
+        const now = new Date();
+        const diffMs = now.getTime() - date.getTime();
+        const diffMins = Math.floor(diffMs / 60000);
+        const diffHours = Math.floor(diffMins / 60);
+        const diffDays = Math.floor(diffHours / 24);
+
+        if (diffMins < 1) return 'Just now';
+        if (diffMins < 60) return `${diffMins}m ago`;
+        if (diffHours < 24) return `${diffHours}h ago`;
+        if (diffDays < 7) return `${diffDays}d ago`;
+        return date.toLocaleDateString();
+    };
+
+    return (
+        <div className="flex items-start gap-3 p-3 border rounded-lg hover:bg-slate-50">
+            <div className="mt-1">
+                {getActionIcon(action_type)}
+            </div>
+            <div className="flex-1">
+                <div className="flex items-center justify-between">
+                    <div>
+                        <p className="text-sm font-medium text-gray-900">{getActionLabel(action_type)}</p>
+                        <p className="text-xs text-gray-600 mt-0.5">{description}</p>
+                    </div>
+                </div>
+                <div className="flex items-center gap-2 mt-1 text-xs text-gray-500">
+                    <span>{user_name}</span>
+                    <span>•</span>
+                    <span>{formatTime(timestamp)}</span>
+                </div>
+            </div>
+        </div>
+    )
+}
+
 function DeviationItem({ code, severity, severityColor, desc, site }: any) {
     return (
         <div className="flex items-center p-3 border rounded-lg hover:bg-slate-50">
@@ -491,22 +698,23 @@ function DeviationItem({ code, severity, severityColor, desc, site }: any) {
     )
 }
 
-function SDTMItem({ code, name, records, progress, progressColor }: any) {
+function SDTMDomainItem({ code, name, records, fileCount }: any) {
     return (
-        <div className="flex items-center justify-between p-2 border-b last:border-0 hover:bg-slate-50">
-            <div>
-                <div className="flex items-center">
-                    <div className="bg-blue-100 rounded p-1 mr-2">
-                        <span className="text-xs font-semibold text-blue-700">{code}</span>
-                    </div>
-                    <span className="text-sm">{name}</span>
+        <div className="group flex items-center justify-between p-3 rounded-lg border border-gray-100 bg-white hover:border-blue-200 hover:shadow-sm transition-all duration-200">
+            <div className="flex items-center gap-4">
+                <div className="flex-shrink-0 w-10 h-10 rounded-full bg-blue-50 flex items-center justify-center text-blue-700 font-bold text-xs ring-4 ring-white group-hover:ring-blue-50 transition-all">
+                    {code}
                 </div>
-                <div className="flex mt-1 text-xs text-gray-500">
-                    <span>{records} records</span>
+                <div>
+                    <h4 className="text-sm font-semibold text-gray-900 leading-none mb-1">{name}</h4>
+                    <div className="flex items-center gap-2 text-xs text-gray-500">
+                        <span className="bg-gray-100 px-1.5 py-0.5 rounded text-gray-600 font-medium">{fileCount} files</span>
+                    </div>
                 </div>
             </div>
-            <div className="text-sm font-medium">
-                <span className={`text-${progressColor}`}>{progress}</span>
+            <div className="text-right">
+                <span className="block text-lg font-bold text-gray-900 tracking-tight">{records}</span>
+                <span className="text-[10px] uppercase font-semibold text-gray-400">Records</span>
             </div>
         </div>
     )

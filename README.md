@@ -10,12 +10,15 @@ pip install -r requirements.txt
 
 ```bash
 cd backend
+<<<<<<< HEAD
 python -m venv .venv
 .venv\Scripts\activate
 pip install -r requirements.txt
 python setup_postgres_db.py
 python create_db.py
 python seed_db.py
+=======
+>>>>>>> Ruthra
 uvicorn app.main:app --reload
 ```
 

@@ -20,6 +20,7 @@ class Study(Base):
     indication = Column(String, nullable=True)
     completion_percentage = Column(Integer)
     file_url = Column(String, nullable=True) # URL to PDF in Blob Storage
+    created_at = Column(DateTime, default=datetime.utcnow)
     
     # Relationship
     documents = relationship("Document", back_populates="study", cascade="all, delete-orphan")
@@ -48,6 +49,29 @@ class IntegrationSource(Base):
     frequency = Column(String)
     last_sync = Column(DateTime, default=datetime.utcnow)
     status = Column(String)
+    protocol_id = Column(String, nullable=True)
+    folder_path = Column(String, nullable=True)
+
+class DataFile(Base):
+    __tablename__ = "data_files"
+
+    id = Column(Integer, primary_key=True, index=True)
+    filename = Column(String, index=True)
+    prefix = Column(String, nullable=True)
+    section = Column(String, index=True) # DM, AE, etc.
+    status = Column(String)
+    status = Column(String)
+    file_path = Column(String)
+    table_name = Column(String, nullable=True)
+    file_size = Column(String, nullable=True)
+    timestamp = Column(String, nullable=True)
+    last_updated = Column(DateTime, nullable=True)
+    created_at = Column(DateTime, default=datetime.utcnow)
+    protocol_id = Column(String, nullable=True)
+    integration_id = Column(Integer, ForeignKey("integrations.id"), nullable=True)
+    record_count = Column(Integer, default=0)
+
+    integration = relationship("IntegrationSource")
 
 class Metric(Base):
     __tablename__ = "metrics"
@@ -56,3 +80,13 @@ class Metric(Base):
     value = Column(String)
     label = Column(String)
     trend = Column(String, nullable=True)
+class Activity(Base):
+    __tablename__ = "activities"
+
+    id = Column(Integer, primary_key=True, index=True)
+    action_type = Column(String, index=True)  # e.g., "study_created", "query_raised", "task_closed"
+    description = Column(String)
+    user_name = Column(String, default="User")  # Can be enhanced with actual user tracking
+    timestamp = Column(DateTime, default=datetime.utcnow, index=True)
+    related_entity_id = Column(String, nullable=True)  # Study ID, Query ID, Task ID, etc.
+    related_entity_type = Column(String, nullable=True)  # 'study', 'query', 'task', 'document'
