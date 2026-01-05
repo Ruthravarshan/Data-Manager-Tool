@@ -1,0 +1,135 @@
+study_id,subject_id,condition_number,medical_condition,start_date,end_date,ongoing,severity,diagnosis_confirmed,hospitalization_required,treatment_received,clinically_significant,source_of_information,reporter,relationship_to_study_condition,interferes_with_study
+STUDY001,SUB0001,MH001,Hyperlipidemia,2023-01-26,,Yes,Mild,No,No,No,Yes,Subject Report,Investigator,Possibly Related,No
+STUDY001,SUB0001,MH002,Hyperlipidemia,2019-01-27,2020-01-27,No,Moderate,Yes,No,No,Yes,Prior CRF,Investigator,Possibly Related,No
+STUDY001,SUB0001,MH003,Anxiety,2021-01-26,,Yes,Severe,Yes,Yes,No,No,Subject Report,Investigator,Possibly Related,No
+STUDY001,SUB0001,MH004,Diabetes Mellitus Type 2,2017-01-27,,Yes,Mild,No,No,No,No,Subject Report,Investigator,Not Related,No
+STUDY001,SUB0001,MH005,Arthritis,2010-01-29,,Yes,Mild,Yes,No,Yes,Yes,Medical Records,Investigator,Not Related,No
+STUDY001,SUB0004,MH001,Anxiety,2004-03-02,,Yes,Moderate,No,No,Yes,No,Prior CRF,Investigator,Possibly Related,No
+STUDY001,SUB0004,MH002,Diabetes Mellitus Type 2,2009-03-01,2012-02-29,No,Mild,No,No,No,No,Subject Report,Investigator,Possibly Related,No
+STUDY001,SUB0005,MH001,Arthritis,2012-04-29,,Yes,Mild,Yes,No,Yes,No,Medical Records,Investigator,Possibly Related,No
+STUDY001,SUB0005,MH002,Arthritis,2010-04-30,,Yes,Severe,No,No,No,Yes,Medical Records,Investigator,Not Related,No
+STUDY001,SUB0005,MH003,Arthritis,2009-04-30,2020-04-27,No,Severe,Yes,Yes,Yes,Yes,Medical Records,Investigator,Possibly Related,No
+STUDY001,SUB0005,MH004,Hypertension,2016-04-28,,Yes,Moderate,No,No,No,Yes,Medical Records,Investigator,Not Related,No
+STUDY001,SUB0005,MH005,Hypertension,2021-04-27,,Yes,Moderate,No,Yes,Yes,Yes,Subject Report,Investigator,Possibly Related,No
+STUDY001,SUB0006,MH001,Arthritis,2021-05-05,,Yes,Severe,No,No,No,Yes,Prior CRF,Investigator,Not Related,No
+STUDY001,SUB0006,MH002,Depression,2020-05-05,,Yes,Moderate,No,No,Yes,No,Prior CRF,Investigator,Possibly Related,No
+STUDY001,SUB0006,MH003,Anxiety,2007-05-09,2018-05-06,No,Moderate,Yes,No,Yes,Yes,Medical Records,Investigator,Possibly Related,No
+STUDY001,SUB0006,MH004,Arthritis,2017-05-06,,Yes,Moderate,No,No,No,No,Prior CRF,Investigator,Not Related,No
+STUDY001,SUB0007,MH001,Anxiety,2017-03-14,2019-03-14,No,Moderate,No,No,No,Yes,Subject Report,Investigator,Not Related,No
+STUDY001,SUB0007,MH002,Diabetes Mellitus Type 2,2015-03-15,,Yes,Mild,Yes,No,No,Yes,Prior CRF,Investigator,Not Related,No
+STUDY001,SUB0008,MH001,Depression,2010-03-27,,Yes,Mild,Yes,No,No,Yes,Medical Records,Investigator,Not Related,No
+STUDY001,SUB0009,MH001,Depression,2017-07-08,,Yes,Severe,Yes,No,Yes,Yes,Medical Records,Investigator,Not Related,No
+STUDY001,SUB0009,MH002,Diabetes Mellitus Type 2,2016-07-08,2023-07-07,No,Severe,Yes,Yes,No,Yes,Subject Report,Investigator,Not Related,No
+STUDY001,SUB0009,MH003,Depression,2014-07-09,,Yes,Mild,No,Yes,No,Yes,Medical Records,Investigator,Not Related,No
+STUDY001,SUB0009,MH004,Hyperlipidemia,2012-07-09,,Yes,Moderate,No,No,No,Yes,Subject Report,Investigator,Not Related,No
+STUDY001,SUB0010,MH001,Depression,2014-04-16,,Yes,Severe,No,Yes,Yes,Yes,Prior CRF,Investigator,Possibly Related,No
+STUDY001,SUB0010,MH002,Arthritis,2011-04-17,,Yes,Mild,Yes,Yes,No,Yes,Medical Records,Investigator,Possibly Related,No
+STUDY001,SUB0010,MH003,Hyperlipidemia,2017-04-15,2023-04-14,No,Severe,No,Yes,Yes,Yes,Prior CRF,Investigator,Not Related,No
+STUDY001,SUB0010,MH004,Arthritis,2014-04-16,2020-04-14,No,Severe,Yes,Yes,Yes,No,Medical Records,Investigator,Not Related,No
+STUDY001,SUB0011,MH001,Anxiety,2020-05-25,2022-05-25,No,Mild,Yes,No,No,No,Medical Records,Investigator,Possibly Related,No
+STUDY001,SUB0011,MH002,Hyperlipidemia,2019-05-26,,Yes,Severe,Yes,No,No,Yes,Subject Report,Investigator,Possibly Related,No
+STUDY001,SUB0011,MH003,Arthritis,2014-05-27,,Yes,Moderate,No,No,No,Yes,Medical Records,Investigator,Not Related,No
+STUDY001,SUB0012,MH001,Hyperlipidemia,2013-02-10,,Yes,Mild,Yes,No,Yes,No,Prior CRF,Investigator,Possibly Related,No
+STUDY001,SUB0012,MH002,Depression,2023-02-08,,Yes,Severe,Yes,No,Yes,No,Subject Report,Investigator,Not Related,No
+STUDY001,SUB0012,MH003,Anxiety,2016-02-10,,Yes,Moderate,Yes,No,Yes,No,Subject Report,Investigator,Not Related,No
+STUDY001,SUB0012,MH004,Hypertension,2017-02-09,,Yes,Moderate,No,No,Yes,No,Subject Report,Investigator,Possibly Related,No
+STUDY001,SUB0012,MH005,Depression,2022-02-08,2024-02-08,No,Mild,No,No,Yes,No,Medical Records,Investigator,Not Related,No
+STUDY001,SUB0013,MH001,Hypertension,2017-02-06,,Yes,Severe,Yes,Yes,Yes,No,Prior CRF,Investigator,Possibly Related,No
+STUDY001,SUB0013,MH002,Diabetes Mellitus Type 2,2011-02-08,,Yes,Severe,No,No,No,No,Subject Report,Investigator,Possibly Related,No
+STUDY001,SUB0013,MH003,Diabetes Mellitus Type 2,2016-02-07,,Yes,Severe,No,Yes,No,Yes,Prior CRF,Investigator,Possibly Related,No
+STUDY001,SUB0013,MH004,Hyperlipidemia,2021-02-05,,Yes,Severe,No,No,No,Yes,Medical Records,Investigator,Not Related,No
+STUDY001,SUB0014,MH001,Hyperlipidemia,2018-06-12,,Yes,Moderate,No,Yes,Yes,Yes,Medical Records,Investigator,Possibly Related,No
+STUDY001,SUB0014,MH002,Hypertension,2014-06-13,,Yes,Severe,Yes,Yes,Yes,Yes,Medical Records,Investigator,Not Related,No
+STUDY001,SUB0014,MH003,Hypertension,2012-06-13,2024-06-10,No,Mild,No,No,Yes,Yes,Medical Records,Investigator,Not Related,No
+STUDY001,SUB0014,MH004,Hyperlipidemia,2010-06-14,,Yes,Severe,No,No,Yes,Yes,Subject Report,Investigator,Possibly Related,No
+STUDY001,SUB0014,MH005,Diabetes Mellitus Type 2,2008-06-14,,Yes,Moderate,Yes,No,No,No,Subject Report,Investigator,Not Related,No
+STUDY001,SUB0015,MH001,Diabetes Mellitus Type 2,2023-03-26,,Yes,Moderate,No,No,Yes,Yes,Subject Report,Investigator,Possibly Related,No
+STUDY001,SUB0015,MH002,Diabetes Mellitus Type 2,2006-03-30,2007-03-30,No,Severe,No,Yes,No,Yes,Subject Report,Investigator,Not Related,No
+STUDY001,SUB0015,MH003,Diabetes Mellitus Type 2,2020-03-26,,Yes,Moderate,No,No,No,Yes,Prior CRF,Investigator,Possibly Related,No
+STUDY001,SUB0015,MH004,Hypertension,2015-03-28,2019-03-27,No,Moderate,Yes,Yes,Yes,No,Prior CRF,Investigator,Not Related,No
+STUDY001,SUB0016,MH001,Arthritis,2004-02-24,,Yes,Mild,No,No,No,Yes,Subject Report,Investigator,Possibly Related,No
+STUDY001,SUB0016,MH002,Depression,2016-02-21,2022-02-19,No,Moderate,No,No,Yes,No,Prior CRF,Investigator,Not Related,No
+STUDY001,SUB0016,MH003,Anxiety,2011-02-22,,Yes,Moderate,Yes,Yes,No,Yes,Prior CRF,Investigator,Possibly Related,No
+STUDY001,SUB0016,MH004,Hyperlipidemia,2021-02-19,,Yes,Mild,No,No,No,Yes,Prior CRF,Investigator,Not Related,No
+STUDY001,SUB0017,MH001,Depression,2020-02-26,2023-02-25,No,Moderate,No,No,No,Yes,Prior CRF,Investigator,Not Related,No
+STUDY001,SUB0017,MH002,Hypertension,2004-03-01,,Yes,Severe,Yes,No,Yes,Yes,Subject Report,Investigator,Possibly Related,No
+STUDY001,SUB0017,MH003,Diabetes Mellitus Type 2,2007-03-01,2009-02-28,No,Mild,No,No,No,Yes,Prior CRF,Investigator,Not Related,No
+STUDY001,SUB0017,MH004,Diabetes Mellitus Type 2,2023-02-25,2024-02-25,No,Severe,Yes,No,Yes,Yes,Medical Records,Investigator,Not Related,No
+STUDY001,SUB0017,MH005,Arthritis,2020-02-26,2024-02-25,No,Mild,No,Yes,Yes,No,Subject Report,Investigator,Not Related,No
+STUDY001,SUB0018,MH001,Diabetes Mellitus Type 2,2013-02-19,2023-02-17,No,Severe,Yes,No,Yes,No,Medical Records,Investigator,Possibly Related,No
+STUDY001,SUB0018,MH002,Anxiety,2015-02-19,2022-02-17,No,Mild,Yes,Yes,No,No,Prior CRF,Investigator,Possibly Related,No
+STUDY001,SUB0020,MH001,Hyperlipidemia,2007-04-22,2014-04-20,No,Severe,Yes,No,Yes,Yes,Medical Records,Investigator,Not Related,No
+STUDY001,SUB0020,MH002,Arthritis,2005-04-22,,Yes,Severe,Yes,Yes,Yes,No,Prior CRF,Investigator,Possibly Related,No
+STUDY001,SUB0020,MH003,Diabetes Mellitus Type 2,2013-04-20,2014-04-20,No,Mild,No,No,No,Yes,Subject Report,Investigator,Not Related,No
+STUDY001,SUB0020,MH004,Hyperlipidemia,2004-04-22,,Yes,Mild,No,Yes,No,Yes,Prior CRF,Investigator,Possibly Related,No
+STUDY001,SUB0020,MH005,Anxiety,2014-04-20,,Yes,Moderate,No,No,No,Yes,Prior CRF,Investigator,Not Related,No
+STUDY001,SUB0021,MH001,Arthritis,2012-03-07,,Yes,Severe,No,Yes,Yes,Yes,Subject Report,Investigator,Possibly Related,No
+STUDY001,SUB0021,MH002,Hyperlipidemia,2021-03-05,2024-03-04,No,Severe,Yes,No,No,Yes,Subject Report,Investigator,Not Related,No
+STUDY001,SUB0021,MH003,Arthritis,2022-03-05,,Yes,Mild,No,No,No,Yes,Subject Report,Investigator,Not Related,No
+STUDY001,SUB0023,MH001,Depression,2014-03-06,2021-03-04,No,Severe,Yes,No,No,No,Subject Report,Investigator,Not Related,No
+STUDY001,SUB0023,MH002,Depression,2023-03-04,,Yes,Mild,Yes,No,No,Yes,Medical Records,Investigator,Possibly Related,No
+STUDY001,SUB0024,MH001,Anxiety,2017-05-24,,Yes,Moderate,Yes,No,No,Yes,Prior CRF,Investigator,Not Related,No
+STUDY001,SUB0024,MH002,Diabetes Mellitus Type 2,2010-05-26,,Yes,Mild,Yes,Yes,Yes,No,Prior CRF,Investigator,Possibly Related,No
+STUDY001,SUB0024,MH003,Depression,2007-05-27,2016-05-24,No,Moderate,No,No,Yes,No,Subject Report,Investigator,Possibly Related,No
+STUDY001,SUB0024,MH004,Anxiety,2008-05-26,2016-05-24,No,Moderate,Yes,No,No,Yes,Medical Records,Investigator,Not Related,No
+STUDY001,SUB0024,MH005,Diabetes Mellitus Type 2,2019-05-24,,Yes,Severe,Yes,No,Yes,Yes,Subject Report,Investigator,Possibly Related,No
+STUDY001,SUB0025,MH001,Hyperlipidemia,2007-06-07,2016-06-04,No,Mild,Yes,No,Yes,No,Medical Records,Investigator,Not Related,No
+STUDY001,SUB0026,MH001,Diabetes Mellitus Type 2,2007-01-29,,Yes,Mild,No,No,Yes,Yes,Medical Records,Investigator,Not Related,No
+STUDY001,SUB0026,MH002,Arthritis,2010-01-28,2015-01-27,No,Moderate,Yes,Yes,Yes,No,Medical Records,Investigator,Possibly Related,No
+STUDY001,SUB0026,MH003,Hypertension,2015-01-27,,Yes,Severe,Yes,No,No,Yes,Subject Report,Investigator,Possibly Related,No
+STUDY001,SUB0026,MH004,Diabetes Mellitus Type 2,2011-01-28,2024-01-25,No,Moderate,Yes,No,No,No,Medical Records,Investigator,Not Related,No
+STUDY001,SUB0026,MH005,Diabetes Mellitus Type 2,2006-01-29,,Yes,Moderate,No,No,Yes,No,Medical Records,Investigator,Not Related,No
+STUDY001,SUB0027,MH001,Hyperlipidemia,2010-07-06,2013-07-05,No,Moderate,Yes,Yes,No,Yes,Subject Report,Investigator,Not Related,No
+STUDY001,SUB0028,MH001,Anxiety,2013-01-31,2014-01-31,No,Moderate,Yes,No,Yes,No,Subject Report,Investigator,Not Related,No
+STUDY001,SUB0028,MH002,Hypertension,2010-02-01,2024-01-29,No,Moderate,Yes,No,Yes,No,Subject Report,Investigator,Not Related,No
+STUDY001,SUB0029,MH001,Hyperlipidemia,2019-02-23,2020-02-23,No,Mild,No,No,No,No,Prior CRF,Investigator,Possibly Related,No
+STUDY001,SUB0029,MH002,Diabetes Mellitus Type 2,2021-02-22,2023-02-22,No,Mild,No,Yes,Yes,No,Medical Records,Investigator,Not Related,No
+STUDY001,SUB0029,MH003,Depression,2010-02-25,,Yes,Severe,Yes,Yes,Yes,Yes,Prior CRF,Investigator,Not Related,No
+STUDY001,SUB0031,MH001,Anxiety,2007-05-14,,Yes,Severe,No,No,Yes,No,Medical Records,Investigator,Possibly Related,No
+STUDY001,SUB0031,MH002,Depression,2023-05-10,,Yes,Moderate,No,No,No,No,Prior CRF,Investigator,Possibly Related,No
+STUDY001,SUB0031,MH003,Depression,2008-05-13,,Yes,Moderate,Yes,Yes,No,Yes,Medical Records,Investigator,Possibly Related,No
+STUDY001,SUB0032,MH001,Diabetes Mellitus Type 2,2013-03-23,2018-03-22,No,Severe,No,Yes,Yes,No,Prior CRF,Investigator,Possibly Related,No
+STUDY001,SUB0032,MH002,Diabetes Mellitus Type 2,2006-03-25,,Yes,Moderate,Yes,No,No,No,Medical Records,Investigator,Possibly Related,No
+STUDY001,SUB0032,MH003,Depression,2011-03-24,2018-03-22,No,Mild,No,Yes,Yes,Yes,Medical Records,Investigator,Possibly Related,No
+STUDY001,SUB0033,MH001,Arthritis,2016-04-14,2021-04-13,No,Mild,No,Yes,No,Yes,Medical Records,Investigator,Possibly Related,No
+STUDY001,SUB0034,MH001,Diabetes Mellitus Type 2,2005-05-12,2019-05-09,No,Moderate,Yes,No,Yes,No,Medical Records,Investigator,Not Related,No
+STUDY001,SUB0034,MH002,Hyperlipidemia,2023-05-08,,Yes,Mild,No,Yes,No,Yes,Medical Records,Investigator,Possibly Related,No
+STUDY001,SUB0034,MH003,Hyperlipidemia,2021-05-08,2022-05-08,No,Moderate,No,Yes,No,Yes,Subject Report,Investigator,Possibly Related,No
+STUDY001,SUB0034,MH004,Depression,2011-05-11,,Yes,Severe,Yes,No,No,No,Prior CRF,Investigator,Not Related,No
+STUDY001,SUB0034,MH005,Hypertension,2004-05-12,2017-05-09,No,Moderate,No,No,No,Yes,Prior CRF,Investigator,Possibly Related,No
+STUDY001,SUB0035,MH001,Hyperlipidemia,2005-03-13,2007-03-13,No,Moderate,No,No,No,No,Subject Report,Investigator,Possibly Related,No
+STUDY001,SUB0035,MH002,Anxiety,2012-03-11,2013-03-11,No,Moderate,No,No,No,Yes,Subject Report,Investigator,Not Related,No
+STUDY001,SUB0036,MH001,Anxiety,2021-05-21,,Yes,Moderate,Yes,No,Yes,No,Prior CRF,Investigator,Not Related,No
+STUDY001,SUB0037,MH001,Anxiety,2008-02-27,2013-02-25,No,Moderate,No,Yes,No,Yes,Prior CRF,Investigator,Possibly Related,No
+STUDY001,SUB0037,MH002,Hyperlipidemia,2008-02-27,2009-02-26,No,Severe,Yes,No,No,No,Prior CRF,Investigator,Possibly Related,No
+STUDY001,SUB0039,MH001,Diabetes Mellitus Type 2,2008-06-21,,Yes,Moderate,Yes,Yes,No,No,Prior CRF,Investigator,Not Related,No
+STUDY001,SUB0039,MH002,Diabetes Mellitus Type 2,2017-06-19,,Yes,Mild,Yes,No,No,No,Subject Report,Investigator,Not Related,No
+STUDY001,SUB0039,MH003,Diabetes Mellitus Type 2,2009-06-21,2020-06-18,No,Severe,Yes,No,Yes,Yes,Medical Records,Investigator,Possibly Related,No
+STUDY001,SUB0039,MH004,Diabetes Mellitus Type 2,2011-06-21,2016-06-19,No,Moderate,Yes,No,Yes,No,Medical Records,Investigator,Possibly Related,No
+STUDY001,SUB0040,MH001,Depression,2008-03-23,,Yes,Severe,Yes,No,Yes,No,Medical Records,Investigator,Possibly Related,No
+STUDY001,SUB0040,MH002,Depression,2008-03-23,2013-03-22,No,Severe,No,Yes,Yes,Yes,Medical Records,Investigator,Possibly Related,No
+STUDY001,SUB0040,MH003,Hypertension,2005-03-24,2023-03-20,No,Mild,Yes,Yes,Yes,No,Prior CRF,Investigator,Not Related,No
+STUDY001,SUB0041,MH001,Hyperlipidemia,2019-05-04,2021-05-03,No,Severe,No,Yes,Yes,No,Subject Report,Investigator,Not Related,No
+STUDY001,SUB0041,MH002,Hypertension,2009-05-06,2015-05-05,No,Severe,Yes,No,Yes,No,Subject Report,Investigator,Possibly Related,No
+STUDY001,SUB0041,MH003,Diabetes Mellitus Type 2,2021-05-03,2022-05-03,No,Severe,No,Yes,Yes,No,Subject Report,Investigator,Not Related,No
+STUDY001,SUB0041,MH004,Depression,2021-05-03,2024-05-02,No,Moderate,No,Yes,No,No,Medical Records,Investigator,Not Related,No
+STUDY001,SUB0041,MH005,Hypertension,2016-05-04,,Yes,Severe,Yes,No,Yes,No,Medical Records,Investigator,Possibly Related,No
+STUDY001,SUB0042,MH001,Hyperlipidemia,2007-01-27,,Yes,Severe,Yes,No,No,Yes,Subject Report,Investigator,Not Related,No
+STUDY001,SUB0042,MH002,Diabetes Mellitus Type 2,2019-01-24,,Yes,Severe,Yes,No,Yes,No,Medical Records,Investigator,Not Related,No
+STUDY001,SUB0042,MH003,Depression,2023-01-23,,Yes,Moderate,No,No,Yes,No,Subject Report,Investigator,Possibly Related,No
+STUDY001,SUB0043,MH001,Diabetes Mellitus Type 2,2014-02-05,,Yes,Mild,No,No,Yes,Yes,Medical Records,Investigator,Not Related,No
+STUDY001,SUB0044,MH001,Arthritis,2014-07-11,,Yes,Severe,No,No,No,Yes,Subject Report,Investigator,Not Related,No
+STUDY001,SUB0044,MH002,Anxiety,2017-07-10,2022-07-09,No,Mild,No,Yes,Yes,Yes,Medical Records,Investigator,Not Related,No
+STUDY001,SUB0044,MH003,Depression,2009-07-12,2019-07-10,No,Moderate,No,No,No,Yes,Subject Report,Investigator,Not Related,No
+STUDY001,SUB0044,MH004,Depression,2008-07-12,,Yes,Mild,Yes,No,No,No,Prior CRF,Investigator,Not Related,No
+STUDY001,SUB0045,MH001,Anxiety,2014-07-15,,Yes,Severe,No,Yes,No,Yes,Subject Report,Investigator,Possibly Related,No
+STUDY001,SUB0045,MH002,Arthritis,2009-07-16,,Yes,Mild,Yes,Yes,Yes,Yes,Prior CRF,Investigator,Not Related,No
+STUDY001,SUB0046,MH001,Hypertension,2016-03-29,,Yes,Severe,Yes,Yes,No,No,Prior CRF,Investigator,Not Related,No
+STUDY001,SUB0046,MH002,Hypertension,2006-04-01,2016-03-29,No,Mild,Yes,Yes,No,No,Subject Report,Investigator,Possibly Related,No
+STUDY001,SUB0046,MH003,Diabetes Mellitus Type 2,2009-03-31,,Yes,Mild,Yes,No,Yes,Yes,Medical Records,Investigator,Not Related,No
+STUDY001,SUB0046,MH004,Anxiety,2019-03-29,2021-03-28,No,Moderate,No,No,Yes,No,Medical Records,Investigator,Possibly Related,No
+STUDY001,SUB0048,MH001,Arthritis,2022-05-20,2024-05-19,No,Moderate,No,No,Yes,Yes,Prior CRF,Investigator,Possibly Related,No
+STUDY001,SUB0049,MH001,Hyperlipidemia,2020-06-11,,Yes,Moderate,Yes,Yes,Yes,Yes,Subject Report,Investigator,Possibly Related,No
+STUDY001,SUB0049,MH002,Diabetes Mellitus Type 2,2012-06-13,,Yes,Mild,Yes,No,Yes,No,Subject Report,Investigator,Possibly Related,No
+STUDY001,SUB0050,MH001,Arthritis,2004-06-15,2023-06-11,No,Mild,Yes,Yes,Yes,No,Medical Records,Investigator,Possibly Related,No
+STUDY001,SUB0050,MH002,Hypertension,2020-06-11,,Yes,Severe,No,Yes,Yes,No,Prior CRF,Investigator,Not Related,No

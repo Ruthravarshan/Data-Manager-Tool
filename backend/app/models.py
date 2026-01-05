@@ -49,14 +49,34 @@ class IntegrationSource(Base):
     frequency = Column(String)
     last_sync = Column(DateTime, default=datetime.utcnow)
     status = Column(String)
+<<<<<<< HEAD
     protocol_id = Column(String, nullable=True)
     folder_path = Column(String, nullable=True)
+=======
+    protocol_id = Column(String, nullable=True) # E.g., PRO001
+    folder_path = Column(String, nullable=True)  # Path to data source folder
+
+class DatabaseCredential(Base):
+    __tablename__ = "database_credentials"
+
+    id = Column(Integer, primary_key=True, index=True)
+    integration_id = Column(Integer, ForeignKey("integrations.id"), unique=True)
+    db_type = Column(String)  # sqlserver, postgresql, mysql, oracle
+    host = Column(String)
+    port = Column(Integer)
+    database_name = Column(String)
+    username = Column(String)
+    encrypted_password = Column(String)  # Encrypted password
+    created_at = Column(DateTime, default=datetime.utcnow)
+    last_updated = Column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
+>>>>>>> origin/Priyesh
 
 class DataFile(Base):
     __tablename__ = "data_files"
 
     id = Column(Integer, primary_key=True, index=True)
     filename = Column(String, index=True)
+<<<<<<< HEAD
     prefix = Column(String, nullable=True)
     section = Column(String, index=True) # DM, AE, etc.
     status = Column(String)
@@ -72,6 +92,17 @@ class DataFile(Base):
     record_count = Column(Integer, default=0)
 
     integration = relationship("IntegrationSource")
+=======
+    prefix = Column(String, index=True)  # e.g., ae, dm, sv
+    section = Column(String, index=True)  # e.g., AE, DM, SV
+    file_path = Column(String)
+    file_size = Column(Integer)  # in bytes
+    timestamp = Column(String, nullable=True)  # extracted from filename
+    status = Column(String, default="Imported")  # Imported, Duplicate, Unclassified
+    integration_id = Column(Integer, ForeignKey("integrations.id"), nullable=True)
+    created_at = Column(DateTime, default=datetime.utcnow)
+    last_updated = Column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
+>>>>>>> origin/Priyesh
 
 class Metric(Base):
     __tablename__ = "metrics"

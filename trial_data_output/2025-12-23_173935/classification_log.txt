@@ -1,0 +1,44 @@
+Classification Log - 2025-12-23T17:39:35.402181
+Source: C:\Users\2000171848\Documents\Data-Manager-Tool\data_source
+Output: C:\Users\2000171848\Documents\Data-Manager-Tool\trial_data_output\2025-12-23_173935
+Recursive: True
+
+OK: ae_raw_20251126_074704.csv -> Section 'AE (Adverse Events)' | Copied to: C:\Users\2000171848\Documents\Data-Manager-Tool\trial_data_output\2025-12-23_173935\AE\ae_raw_20251126_074704.csv
+CSV read with encoding='utf-8', sep=','
+
+OK: cm_raw_20251126_074704.csv -> Section 'CM (Concomitant Medications)' | Copied to: C:\Users\2000171848\Documents\Data-Manager-Tool\trial_data_output\2025-12-23_173935\CM\cm_raw_20251126_074704.csv
+CSV read with encoding='utf-8', sep=','
+
+OK: dm_raw_20251126_074704.csv -> Section 'DM (Demographics)' | Copied to: C:\Users\2000171848\Documents\Data-Manager-Tool\trial_data_output\2025-12-23_173935\DM\dm_raw_20251126_074704.csv
+CSV read with encoding='utf-8', sep=','
+
+WARNING: Unclassified file (unknown or missing prefix): eg_raw_20251126_074704.csv
+OK: eg_raw_20251126_074704.csv -> Section 'Unclassified' | Copied to: C:\Users\2000171848\Documents\Data-Manager-Tool\trial_data_output\2025-12-23_173935\Unclassified\eg_raw_20251126_074704.csv
+CSV read with encoding='utf-8', sep=','
+
+OK: ex_raw_20251126_074704.csv -> Section 'EX (Exposure)' | Copied to: C:\Users\2000171848\Documents\Data-Manager-Tool\trial_data_output\2025-12-23_173935\EX\ex_raw_20251126_074704.csv
+CSV read with encoding='utf-8', sep=','
+
+OK: mh_raw_20251126_074704.csv -> Section 'MH (Medical History)' | Copied to: C:\Users\2000171848\Documents\Data-Manager-Tool\trial_data_output\2025-12-23_173935\MH\mh_raw_20251126_074704.csv
+CSV read with encoding='utf-8', sep=','
+
+WARNING: Unclassified file (unknown or missing prefix): pe_raw_20251126_074704.csv
+OK: pe_raw_20251126_074704.csv -> Section 'Unclassified' | Copied to: C:\Users\2000171848\Documents\Data-Manager-Tool\trial_data_output\2025-12-23_173935\Unclassified\pe_raw_20251126_074704.csv
+CSV read with encoding='utf-8', sep=','
+
+SKIP (pattern mismatch): rawlb1_raw_20251126_074704.csv
+SKIP (pattern mismatch): rawlb2_raw_20251126_074704.csv
+SKIP (pattern mismatch): rawlb3_raw_20251126_074704.csv
+SKIP (pattern mismatch): rawpk1_raw_20251126_074704.csv
+SKIP (pattern mismatch): rawpk2_raw_20251126_074704.csv
+SKIP (pattern mismatch): rawtu1_raw_20251126_074704.csv
+SKIP (pattern mismatch): rawtu2_raw_20251126_074704.csv
+SKIP (pattern mismatch): rawtu3_raw_20251126_074704.csv
+SKIP (pattern mismatch): rawvs1_raw_20251126_074704.csv
+SKIP (pattern mismatch): rawvs2_raw_20251126_074704.csv
+WARNING: Unclassified file (unknown or missing prefix): rs_raw_20251126_074704.csv
+OK: rs_raw_20251126_074704.csv -> Section 'Unclassified' | Copied to: C:\Users\2000171848\Documents\Data-Manager-Tool\trial_data_output\2025-12-23_173935\Unclassified\rs_raw_20251126_074704.csv
+CSV read with encoding='utf-8', sep=','
+
+SKIP (pattern mismatch): ex_raw_Unblind_20251126_074704.csv
+SKIP (pattern mismatch): rawlb1_raw_Unblind_20251126_074704.csv

@@ -13,7 +13,15 @@ DATABASE_URL = os.getenv("DATABASE_URL", "postgresql://user:postgres@localhost:5
 engine = create_engine(DATABASE_URL)
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 
+
 Base = declarative_base()
+
+# Automatically create tables if they do not exist (development only)
+def create_all_tables():
+    from . import models  # Ensure all models are imported
+    Base.metadata.create_all(bind=engine)
+
+create_all_tables()
 
 def get_db():
     db = SessionLocal()

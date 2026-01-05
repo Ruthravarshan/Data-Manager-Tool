@@ -1,20 +1,33 @@
 from fastapi import APIRouter, Depends, Query, HTTPException
 from sqlalchemy.orm import Session
+<<<<<<< HEAD
 from sqlalchemy import text
 from typing import List, Optional, Dict, Any
 from app.database import get_db, engine
 from app.models import DataFile, IntegrationSource
 from app.schemas import DataFile as DataFileSchema, ScanFolderRequest, ScanFolderResponse, SectionMetadataResponse
 from app.file_classifier import scan_folder, scan_folder_recursive
+=======
+from typing import List, Optional
+from app.database import get_db
+from app.models import DataFile, IntegrationSource
+from app.schemas import DataFile as DataFileSchema, ScanFolderRequest, ScanFolderResponse
+from app.file_classifier import scan_folder
+>>>>>>> origin/Priyesh
 import logging
 from datetime import datetime
 import pandas as pd
 import os
+<<<<<<< HEAD
 import re
+=======
+from app.schemas import SectionMetadataResponse
+>>>>>>> origin/Priyesh
 
 logger = logging.getLogger(__name__)
 router = APIRouter(prefix="/api/data-files", tags=["data-files"])
 
+<<<<<<< HEAD
 def get_safe_table_name(filename: str) -> str:
     """Generate a safe table name from filename"""
     # Remove extension
@@ -33,6 +46,8 @@ def get_safe_table_name(filename: str) -> str:
     timestamp_suffix = datetime.now().strftime("%Y%m%d%H%M%S")
     return f"dt_{safe_name}_{timestamp_suffix}"
 
+=======
+>>>>>>> origin/Priyesh
 
 @router.get("/", response_model=List[DataFileSchema])
 def get_data_files(
@@ -43,12 +58,23 @@ def get_data_files(
     db: Session = Depends(get_db)
 ):
     """Get data files with optional filtering"""
+<<<<<<< HEAD
     query = db.query(DataFile)
     
     # If filtering by protocol, join with IntegrationSource
     # If filtering by protocol, filter by DataFile.protocol_id
     if protocol_id:
         query = query.filter(DataFile.protocol_id == protocol_id)
+=======
+    """Get data files with optional filtering"""
+    # Query DataFile and IntegrationSource.type
+    query = db.query(DataFile, IntegrationSource.type.label("integration_type"))\
+        .outerjoin(IntegrationSource, DataFile.integration_id == IntegrationSource.id)
+    
+    # Apply filters
+    if protocol_id:
+        query = query.filter(IntegrationSource.protocol_id == protocol_id)
+>>>>>>> origin/Priyesh
     
     if section:
         query = query.filter(DataFile.section == section)
@@ -59,6 +85,7 @@ def get_data_files(
     if integration_id:
         query = query.filter(DataFile.integration_id == integration_id)
     
+<<<<<<< HEAD
     return query.order_by(DataFile.created_at.desc()).all()
 
 
@@ -66,6 +93,35 @@ def get_data_files(
 def get_sections(db: Session = Depends(get_db)):
     """Get list of all unique sections"""
     sections = db.query(DataFile.section).distinct().filter(DataFile.section != None).all()
+=======
+    results = query.order_by(DataFile.created_at.desc()).all()
+    
+    # Transform to response schema
+    response_files = []
+    for data_file_orm, integration_type in results:
+        # Create schema instance from ORM
+        # We need to manually inject integration_type since it's not on the model
+        file_data = DataFileSchema.from_orm(data_file_orm)
+        file_data.integration_type = integration_type
+        response_files.append(file_data)
+        
+    return response_files
+
+
+@router.get("/sections", response_model=List[str])
+def get_sections(
+    protocol_id: Optional[str] = Query(None),
+    db: Session = Depends(get_db)
+):
+    """Get list of unique sections, optionally filtered by protocol"""
+    query = db.query(DataFile.section).distinct().filter(DataFile.section != None)
+    
+    if protocol_id:
+        query = query.join(IntegrationSource, DataFile.integration_id == IntegrationSource.id)\
+                     .filter(IntegrationSource.protocol_id == protocol_id)
+                     
+    sections = query.all()
+>>>>>>> origin/Priyesh
     return sorted([s[0] for s in sections if s[0]])
 
 
@@ -84,6 +140,7 @@ def scan_integration_folder(
         
         logger.info(f"Integration found: {integration.name}, folder: {integration.folder_path}")
         
+<<<<<<< HEAD
         if not integration.folder_path:
             logger.error(f"Folder path not configured for integration {integration_id}")
             raise HTTPException(status_code=400, detail="Folder path not configured for this integration")
@@ -91,6 +148,31 @@ def scan_integration_folder(
         # Scan folder
         logger.info(f"Starting folder scan for: {integration.folder_path}")
         results, warnings = scan_folder_recursive(integration.folder_path)
+=======
+        # Check if folder path is configured
+        if not integration.folder_path:
+            # If no folder path, check if it's a type that might not need one (like API)
+            # For now, we'll simulate a successful sync for non-folder integrations
+            # instead of raising an error
+            logger.info(f"No folder path for integration {integration_id} ({integration.type}). Simulating sync.")
+            
+            # Update integration's last_sync
+            integration.last_sync = datetime.utcnow()
+            db.commit()
+            
+            return ScanFolderResponse(
+                total_files=0,
+                imported_files=0,
+                unclassified_files=0,
+                duplicate_files=0,
+                files=[],
+                warnings=["Integration does not have a local folder path configured. Simulated sync completed."]
+            )
+            
+        # Scan folder
+        logger.info(f"Starting folder scan for: {integration.folder_path}")
+        results, warnings = scan_folder(integration.folder_path)
+>>>>>>> origin/Priyesh
         logger.info(f"Scan completed. Found {len(results)} files")
         
         # Clear existing files for this integration
@@ -104,6 +186,7 @@ def scan_integration_folder(
         stored_files = []
         
         for result in results:
+<<<<<<< HEAD
             # Generate table name and ingest data if imported
             table_name = None
             if result.status == 'Imported' and result.file_path and os.path.exists(result.file_path):
@@ -133,10 +216,13 @@ def scan_integration_folder(
                     # For now, proceeding but table_name will be None
                     pass
 
+=======
+>>>>>>> origin/Priyesh
             data_file = DataFile(
                 filename=result.filename,
                 prefix=result.prefix,
                 section=result.section,
+<<<<<<< HEAD
                 file_path=result.file_path if result.file_path else 
                           f"{integration.folder_path}/{result.filename}",
                 file_size=result.file_size,
@@ -146,6 +232,14 @@ def scan_integration_folder(
                 integration_id=integration_id,
                 record_count=result.record_count,
                 table_name=table_name
+=======
+                file_path=result.file_path if hasattr(result, 'file_path') else 
+                          f"{integration.folder_path}/{result.filename}",
+                file_size=result.file_size,
+                timestamp=result.timestamp,
+                status=result.status,
+                integration_id=integration_id
+>>>>>>> origin/Priyesh
             )
             db.add(data_file)
             
@@ -175,7 +269,11 @@ def scan_integration_folder(
             imported_files=imported_count,
             unclassified_files=unclassified_count,
             duplicate_files=duplicate_count,
+<<<<<<< HEAD
             files=stored_files,
+=======
+            files=[DataFileSchema.from_orm(f) for f in stored_files],
+>>>>>>> origin/Priyesh
             warnings=warnings
         )
     except HTTPException:
@@ -197,8 +295,15 @@ def get_section_metadata(
         # query for the latest file in this section
         query = db.query(DataFile)
         
+<<<<<<< HEAD
         if protocol_id:
             query = query.filter(DataFile.protocol_id == protocol_id)
+=======
+        # Join with IntegrationSource if protocol_id is provided
+        if protocol_id:
+            query = query.join(IntegrationSource, DataFile.integration_id == IntegrationSource.id)\
+                         .filter(IntegrationSource.protocol_id == protocol_id)
+>>>>>>> origin/Priyesh
         
         # Filter by section and get latest
         latest_file = query.filter(DataFile.section == section)\
@@ -357,6 +462,7 @@ def delete_data_file(file_id: int, db: Session = Depends(get_db)):
     db.commit()
     return {"message": "Data file deleted successfully"}
 
+<<<<<<< HEAD
 @router.get("/{file_id}/data")
 def get_file_data(
     file_id: int, 
@@ -403,3 +509,7 @@ def get_file_data(
     except Exception as e:
         logger.error(f"Error fetching data from table {data_file.table_name}: {e}")
         raise HTTPException(status_code=500, detail=f"Error retrieving data: {str(e)}")
+=======
+
+
+>>>>>>> origin/Priyesh
