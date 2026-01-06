@@ -11,30 +11,31 @@ from app.schemas import (
     DatabaseTablesResponse,
     ClassifiedTable
 )
+from app.utils import encrypt_password, decrypt_password
 from app.table_classifier import classify_tables
+from app.database import engine
 import logging
-from cryptography.fernet import Fernet
+import re
 import os
-import base64
+from datetime import datetime
+import pandas as pd
 
 logger = logging.getLogger(__name__)
 router = APIRouter(prefix="/api/database-connections", tags=["database-connections"])
 
-# Encryption key - In production, this should be in environment variables
-ENCRYPTION_KEY = os.getenv("DB_ENCRYPTION_KEY", Fernet.generate_key())
-if isinstance(ENCRYPTION_KEY, str):
-    ENCRYPTION_KEY = ENCRYPTION_KEY.encode()
-cipher_suite = Fernet(ENCRYPTION_KEY)
+# Encryption logic moved to app.utils
 
-
-def encrypt_password(password: str) -> str:
-    """Encrypt a password"""
-    return cipher_suite.encrypt(password.encode()).decode()
-
-
-def decrypt_password(encrypted_password: str) -> str:
-    """Decrypt a password"""
-    return cipher_suite.decrypt(encrypted_password.encode()).decode()
+def get_safe_table_name(filename: str) -> str:
+    """Generate a safe table name from filename"""
+    # Remove extension
+    name = os.path.splitext(filename)[0]
+    # Remove _raw_ suffix if present
+    if "_raw" in name:
+        name = name.split("_raw")[0]
+    # Replace non-alphanumeric with _
+    safe_name = re.sub(r'[^a-zA-Z0-9]', '_', name).lower()
+    timestamp_suffix = datetime.now().strftime("%Y%m%d%H%M%S")
+    return f"dt_{safe_name}_{timestamp_suffix}"
 
 
 def get_db_connection(db_type: str, host: str, port: int, database_name: str, username: str, password: str):
@@ -321,14 +322,20 @@ def import_database_tables(
         ).first()
         
         if not integration:
+            logger.error(f"Integration {integration_id} not found")
             raise HTTPException(status_code=404, detail="Integration not found")
         
         # Get database credentials
+        logger.info(f"Looking up credentials for integration_id: {integration_id}")
         credentials = db.query(DatabaseCredential).filter(
             DatabaseCredential.integration_id == integration_id
         ).first()
         
         if not credentials:
+            logger.error(f"No credentials found for integration_id: {integration_id}")
+            # List all credentials to debug
+            all_creds = db.query(DatabaseCredential).all()
+            logger.info(f"Existing credentials: {[c.integration_id for c in all_creds]}")
             raise HTTPException(status_code=404, detail="Database credentials not found")
         
         # Decrypt password
@@ -376,6 +383,17 @@ def import_database_tables(
                 # Save as CSV
                 df.to_csv(file_path, index=False)
                 
+                # Ingest into local database
+                local_table_name = get_safe_table_name(filename)
+                
+                # Add metadata columns for local ingestion
+                df_local = df.copy()
+                df_local['_imported_at'] = datetime.utcnow()
+                df_local['_source_file'] = filename
+                
+                df_local.to_sql(local_table_name, engine, if_exists='replace', index=False)
+                logger.info(f"Ingested {filename} into table {local_table_name}")
+                
                 # Get file size
                 file_size = os.path.getsize(file_path)
                 
@@ -393,6 +411,10 @@ def import_database_tables(
                     data_file.file_size = file_size
                     data_file.timestamp = timestamp
                     data_file.last_updated = datetime.utcnow()
+                    data_file.table_name = local_table_name
+                    data_file.record_count = len(df)
+                    # Ensure protocol matches (if changed in integration)
+                    data_file.protocol_id = integration.protocol_id
                 else:
                     # Create new
                     data_file = DataFile(
@@ -403,7 +425,10 @@ def import_database_tables(
                         file_size=file_size,
                         timestamp=timestamp,
                         status="Imported",
-                        integration_id=integration_id
+                        integration_id=integration_id,
+                        table_name=local_table_name,
+                        record_count=len(df),
+                        protocol_id=integration.protocol_id
                     )
                     db.add(data_file)
                 
@@ -418,7 +443,7 @@ def import_database_tables(
                     "file_id": data_file.id
                 })
                 
-                logger.info(f"Imported {len(df)} records from {table_name} to {filename}")
+                logger.info(f"Imported {len(df)} records from {table_name} to {filename} and local table {local_table_name}")
                 
             except Exception as e:
                 logger.error(f"Error importing table {table_name}: {str(e)}")

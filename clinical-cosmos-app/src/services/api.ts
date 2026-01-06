@@ -126,8 +126,8 @@ export const dataFileService = {
         return response.data;
     },
 
-    getSections: async () => {
-        const response = await api.get('/data-files/sections');
+    getSections: async (protocol_id?: string) => {
+        const response = await api.get(`/data-files/sections${protocol_id ? `?protocol_id=${protocol_id}` : ''}`);
         return response.data;
     },
 

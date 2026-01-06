@@ -330,8 +330,18 @@ export default function DataIntegration() {
         }
     };
 
-    // Handle scanning folder
+    // Handle scanning folder or database sync
     const handleScanFolder = async (integrationId: number) => {
+        const integration = integrations.find(i => i.id === integrationId);
+        if (!integration) return;
+
+        // If it's a database integration (no folder path), open the credentials/import modal
+        if (!integration.folder_path) {
+            setSelectedIntegrationForCredentials(integration);
+            setShowCredentialsModal(true);
+            return;
+        }
+
         setScanningId(integrationId);
         try {
             const result = await integrationService.scanFolder(integrationId);
