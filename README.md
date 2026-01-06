@@ -1,31 +1,20 @@
-# Setup Guide
+# Data Manager Tool
 
-## Git set-up
+## Project Setup
+For detailed setup instructions (including backend and database duplication), please refer to **[SETUP.md](SETUP.md)**.
 
-python -m venv .venv
-.venv\Scripts\activate
-pip install -r requirements.txt
+## Quick Start
+1. **Backend**:
+   ```bash
+   cd backend
+   python -m venv .venv
+   .venv\Scripts\activate
+   pip install -r requirements.txt
+   uvicorn app.main:app --reload
+   ```
 
-## Backend
-
-```bash
-cd backend
-<<<<<<< HEAD
-python -m venv .venv
-.venv\Scripts\activate
-pip install -r requirements.txt
-python setup_postgres_db.py
-python create_db.py
-python seed_db.py
-=======
->>>>>>> Ruthra
-uvicorn app.main:app --reload
-```
-
-## Frontend
-
-```bash
-cd clinical-cosmos-app
-npm install
-npm run dev
-```
+2. **Frontend**:
+   ```bash
+   cd clinical-cosmos-app
+   npm run dev
+   ```
