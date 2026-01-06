@@ -5,3 +5,5 @@ psycopg2-binary
 python-dotenv
 azure-storage-blob
 python-multipart
+pandas
+openpyxl

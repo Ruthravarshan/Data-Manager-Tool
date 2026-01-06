@@ -59,6 +59,20 @@ def seed_data():
                 completion_percentage=100,
                 therapeutic_area="Cardiology",
                 indication="Myocardial Infarction"
+            ),
+            Study(
+                id="PRO-003",
+                title="Respiratory Outcomes Study",
+                protocol_id="PRO-003",
+                phase="Phase III",
+                status="Active",
+                sites_count=15,
+                subjects_count=200,
+                start_date=date(2024, 6, 1),
+                description="Evaluating long-term outcomes for respiratory conditions",
+                completion_percentage=25,
+                therapeutic_area="Respiratory",
+                indication="Asthma"
             )
         ]
         db.add_all(studies)
@@ -74,7 +88,8 @@ def seed_data():
         integrations = [
             IntegrationSource(name="Medidata Rave", vendor="Medidata", type="EDC", frequency="Daily", status="Active"),
             IntegrationSource(name="Parexel Informatics", vendor="Parexel", type="CTMS", frequency="Daily", status="Active"),
-            IntegrationSource(name="LabCorp Central Labs", vendor="LabCorp", type="Lab", frequency="Weekly", status="Warning")
+            IntegrationSource(name="LabCorp Central Labs", vendor="LabCorp", type="Lab", frequency="Weekly", status="Warning"),
+            IntegrationSource(name="Data Source", vendor="Internal", type="Local Folder", frequency="Daily", status="Active", folder_path="../data_source")
         ]
         db.add_all(integrations)
         db.commit()

@@ -1,0 +1,10 @@
+Columns in integrations:
+- id: INTEGER
+- name: VARCHAR
+- vendor: VARCHAR
+- type: VARCHAR
+- frequency: VARCHAR
+- last_sync: TIMESTAMP
+- status: VARCHAR
+- protocol_id: VARCHAR
+- folder_path: VARCHAR
