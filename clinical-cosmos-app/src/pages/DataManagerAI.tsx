@@ -441,14 +441,14 @@ export default function DataManagerAI() {
             case 'Reviewing':
             case 'Assigned':
             case 'In Progress':
-                return 'bg-[#fef3c7] text-[#92400e] border border-[#fde68a]';
+                return 'bg-amber-100 text-amber-700 border border-amber-200';
             case 'Resolving':
             case 'Responded':
             case 'Under Review':
                 return 'bg-[#dcfce7] text-[#166534] border border-[#bbf7d0]';
             case 'Resolved':
             case 'Completed':
-                return 'bg-green-500 text-white shadow-sm shadow-green-200';
+                return 'bg-emerald-100 text-emerald-700 border border-emerald-200';
             case 'Closed':
             case 'Reopened':
                 return 'bg-gray-100 text-gray-600 border border-gray-200';
@@ -466,124 +466,133 @@ export default function DataManagerAI() {
                     Active monitoring on the data from Trial Data Management
                 </div>
 
-                {/* Header Card */}
-                <div className="bg-[#1e293b] rounded-2xl p-8 text-white shadow-2xl relative overflow-hidden border border-slate-700 transition-all duration-200 active:scale-[0.98] cursor-pointer hover:shadow-blue-900/20">
-                    <div className="absolute top-0 right-0 w-64 h-64 bg-teal-500/10 blur-[100px] -mr-32 -mt-32 rounded-full"></div>
-                    <div className="absolute bottom-0 left-0 w-64 h-64 bg-blue-500/10 blur-[100px] -ml-32 -mb-32 rounded-full"></div>
+                {/* Header Card - The Quantum Analyst */}
+                <div className="bg-[#0f172a] rounded-xl p-6 text-white shadow-lg border border-slate-800 relative overflow-hidden">
+                    {/* Background Glows */}
+                    <div className="absolute top-0 right-0 w-96 h-96 bg-emerald-500/10 blur-[120px] rounded-full pointer-events-none"></div>
 
-                    <div className="relative z-10 flex items-center">
-                        <div className="relative h-16 w-16 mr-6 flex-shrink-0 flex items-center justify-center">
-                            <div className="absolute inset-0 bg-gradient-to-br from-teal-900/40 to-transparent rotate-45 rounded-lg"></div>
-                            <div className="absolute inset-[3px] border border-teal-500/30 rotate-45 rounded-lg backdrop-blur-sm"></div>
-                            <Bot className="h-7 w-7 text-teal-400 relative z-10" />
+                    <div className="relative z-10 flex items-center gap-6">
+                        {/* Avatar/Icon with Glow */}
+                        <div className="relative group">
+                            <div className="absolute -inset-1 bg-emerald-500 rounded-lg blur opacity-25 group-hover:opacity-50 transition duration-1000 group-hover:duration-200"></div>
+                            <div className="relative h-16 w-16 bg-[#1e293b] rounded-lg border border-emerald-500/30 flex items-center justify-center shadow-lg">
+                                <Bot className="h-8 w-8 text-emerald-400" />
+                                <div className="absolute top-1 right-1 h-2 w-2 bg-emerald-400 rounded-full animate-pulse shadow-[0_0_8px_rgba(52,211,153,0.8)]"></div>
+                            </div>
                         </div>
+
+                        {/* Text Content */}
                         <div className="flex flex-col">
-                            <h2 className="text-xl font-bold text-teal-400 mb-0.5 tracking-wide uppercase">The Quantum Analyst</h2>
-                            <div className="text-gray-300 text-sm font-medium mb-3">Data Manager.AI</div>
-                            <div className="flex items-center">
-                                <span className="h-2.5 w-2.5 rounded-full bg-[#2ecc71] mr-2.5 shadow-[0_0_8px_rgba(46,204,113,0.5)]"></span>
-                                <span className="text-gray-400 text-xs font-medium tracking-wide">Optimizing data quality across all domains</span>
+                            <h2 className="text-2xl font-bold text-emerald-400 mb-1 tracking-tight">The Quantum Analyst</h2>
+                            <div className="text-slate-400 text-sm font-medium mb-3">Data Manager.AI</div>
+
+                            <div className="flex items-center gap-2">
+                                <span className="relative flex h-3 w-3">
+                                    <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+                                    <span className="relative inline-flex rounded-full h-3 w-3 bg-emerald-500"></span>
+                                </span>
+                                <span className="text-gray-300 text-xs font-medium tracking-wide">Optimizing data quality across all domains</span>
                             </div>
                         </div>
                     </div>
                 </div>
 
                 {/* Control Bar */}
-                <div className="bg-gradient-to-r from-blue-50 to-white p-4 rounded-xl border border-blue-100 shadow-sm">
-                    <div className="flex flex-wrap items-center justify-between gap-4">
-                        <div className="flex flex-col items-start">
-                            <button
-                                onClick={() => navigate('/ai-agents')}
-                                className="flex items-center gap-2 mb-1.5 px-3 py-1.5 rounded-lg text-sm font-bold text-blue-600 hover:bg-blue-50 transition-all group">
-                                <ChevronLeft className="h-4 w-4 transition-transform group-hover:-translate-x-1" />
-                                <span>Back to AI Agents Hub</span>
-                            </button>
-                            <h1 className="text-2xl font-bold text-blue-900 tracking-tight ml-3">Data Manager.AI</h1>
-                            <p className="text-sm text-gray-500 font-medium ml-3">AI-powered data quality management and reconciliation</p>
-                        </div>
-
-                        <div className="flex flex-wrap items-center gap-3 relative">
-                            {/* Study Dropdown */}
-                            <div className="relative">
-                                <button
-                                    onClick={() => setIsStudyDropdownOpen(!isStudyDropdownOpen)}
-                                    className="flex h-11 items-center justify-between rounded-lg border border-gray-200 bg-white px-4 py-2 text-sm font-bold text-gray-700 w-[280px] hover:border-blue-400 transition-colors shadow-sm">
-                                    <span className="line-clamp-1">{selectedStudy}</span>
-                                    <ChevronDown className="h-4 w-4 opacity-50" />
-                                </button>
-                                {isStudyDropdownOpen && (
-                                    <div className="absolute top-12 left-0 z-50 w-full rounded-lg border bg-white shadow-xl animate-in fade-in zoom-in-95 p-1 mt-1">
-                                        {studies.map((study) => (
-                                            <div
-                                                key={study}
-                                                onClick={() => {
-                                                    setSelectedStudy(study);
-                                                    setIsStudyDropdownOpen(false);
-                                                }}
-                                                className="flex items-center rounded-md px-3 py-2.5 text-sm font-medium hover:bg-blue-50 text-gray-700 cursor-pointer transition-colors"
-                                            >
-                                                {selectedStudy === study && <Check className="h-4 w-4 text-blue-600 mr-2" />}
-                                                <span className={selectedStudy === study ? 'text-blue-600' : ''}>{study}</span>
-                                            </div>
-                                        ))}
-                                    </div>
-                                )}
-                            </div>
-
-                            {/* Mode Toggle */}
-                            <div className="flex items-center gap-3 px-4 py-2 bg-white rounded-lg border border-gray-100 shadow-sm h-11">
-                                <span className="text-sm font-bold text-gray-900 whitespace-nowrap leading-none">Task Assignment Mode:</span>
-                                <span className={`text-sm font-bold min-w-[90px] ${isAgentMode ? 'text-[#2563eb]' : 'text-gray-500'}`}>{isAgentMode ? 'Agent.AI' : 'Human-in-Loop'}</span>
-                                <div
-                                    onClick={toggleAgentMode}
-                                    className={`relative inline-flex h-6 w-11 shrink-0 cursor-pointer items-center rounded-full border-2 border-transparent transition-colors focus:outline-none ${isAgentMode ? 'bg-[#2563eb]' : 'bg-gray-200'}`}
-                                >
-                                    <span className={`pointer-events-none block h-5 w-5 rounded-full bg-white shadow-lg ring-0 transition-transform ${isAgentMode ? 'translate-x-5' : 'translate-x-0'}`} />
-                                </div>
-                            </div>
-
-                            <button
-                                onClick={handleRunMonitor}
-                                disabled={isRunning}
-                                className="inline-flex items-center justify-center gap-2 rounded-lg text-sm font-bold bg-[#2563eb] text-white hover:bg-blue-700 h-11 px-6 shadow-md shadow-blue-200 transition-all active:scale-95 disabled:opacity-50">
-                                {isRunning ? <Loader2 className="h-5 w-5 animate-spin" /> : <Sparkles className="h-5 w-5" />}
-                                {isRunning ? 'Running checks...' : 'Run DQ and Reconciliation'}
-                            </button>
-
-                            <button
-                                onClick={() => {
-                                    setIsRefreshing(true);
-                                    setTimeout(() => setIsRefreshing(false), 3000);
-                                }}
-                                className="inline-flex items-center justify-center gap-2 rounded-lg text-sm font-bold bg-white text-gray-700 border border-gray-200 hover:bg-gray-50 h-11 px-4 shadow-sm transition-all">
-                                <RefreshCw className={`h-4 w-4 text-blue-600 ${isRefreshing ? 'animate-spin' : ''}`} />
-                                Refresh Agents
-                            </button>
-
-                            <button
-                                onClick={() => setShowAgents(!showAgents)}
-                                className="inline-flex items-center justify-center gap-2 rounded-lg text-sm font-bold bg-white text-gray-700 border border-gray-200 hover:bg-gray-50 h-11 px-4 shadow-sm transition-all"
-                            >
-                                {showAgents ? <EyeOff className="h-4 w-4 text-gray-500" /> : <Eye className="h-4 w-4 text-blue-600" />}
-                                {showAgents ? 'Hide Agents' : 'Show Agents'}
-                            </button>
-                        </div>
+                <div className="bg-white p-2 rounded-xl flex flex-wrap items-center justify-between gap-4">
+                    <div className="flex flex-col items-start">
+                        <button
+                            onClick={() => navigate('/ai-agents')}
+                            className="flex items-center gap-2 mb-1 px-3 py-1.5 rounded-lg text-xs font-bold text-red-500 bg-red-50 hover:bg-red-100 transition-all group border border-red-100">
+                            <ChevronLeft className="h-3 w-3 transition-transform group-hover:-translate-x-1" />
+                            <span>Back to AI Agents Hub</span>
+                        </button>
+                        <h1 className="text-2xl font-bold text-blue-700 tracking-tight">Data Manager.AI (v2)</h1>
+                        <p className="text-sm text-gray-500 font-medium">AI-powered data quality management and reconciliation</p>
                     </div>
 
-                    {/* Blue Info Card */}
-                    <div className="mt-6 bg-[#f0f9ff] rounded-xl border border-blue-100 p-6 flex gap-4">
-                        <div className="bg-white p-2.5 rounded-lg border border-blue-50 shadow-sm h-fit">
-                            <Activity className="h-6 w-6 text-blue-600" />
+                    <div className="flex flex-wrap items-center gap-3 relative">
+                        {/* Study Dropdown */}
+                        <div className="relative">
+                            <button
+                                onClick={() => setIsStudyDropdownOpen(!isStudyDropdownOpen)}
+                                className="flex h-10 items-center justify-between rounded-md border border-gray-200 bg-white px-3 py-2 text-sm font-medium text-gray-700 w-[260px] hover:border-blue-400 transition-colors shadow-sm text-left">
+                                <span className="line-clamp-1">{selectedStudy}</span>
+                                <ChevronDown className="h-4 w-4 text-gray-400" />
+                            </button>
+                            {isStudyDropdownOpen && (
+                                <div className="absolute top-12 left-0 z-50 w-full rounded-lg border bg-white shadow-xl animate-in fade-in zoom-in-95 p-1 mt-1">
+                                    {studies.map((study) => (
+                                        <div
+                                            key={study}
+                                            onClick={() => {
+                                                setSelectedStudy(study);
+                                                setIsStudyDropdownOpen(false);
+                                            }}
+                                            className="flex items-center rounded-md px-3 py-2.5 text-sm font-medium hover:bg-blue-50 text-gray-700 cursor-pointer transition-colors"
+                                        >
+                                            {selectedStudy === study && <Check className="h-4 w-4 text-blue-600 mr-2" />}
+                                            <span className={selectedStudy === study ? 'text-blue-600' : ''}>{study}</span>
+                                        </div>
+                                    ))}
+                                </div>
+                            )}
                         </div>
-                        <div className="space-y-4">
-                            <h3 className="text-xl font-bold text-blue-900 leading-none">Intelligent monitoring active</h3>
-                            <ul className="space-y-2.5">
-                                <li className="flex items-center gap-3 text-[15px] font-bold text-[#0369a1]">
-                                    <div className="h-2 w-2 rounded-full bg-blue-500"></div>
+
+                        {/* Mode Toggle */}
+                        <div className="flex items-center gap-3 px-3 py-2 bg-white rounded-md border border-gray-200 shadow-sm h-10">
+                            <span className="text-xs font-bold text-gray-700 whitespace-nowrap uppercase tracking-wider">Task Assignment Mode:</span>
+                            <span className={`text-sm font-bold min-w-[70px] ${isAgentMode ? 'text-blue-600' : 'text-gray-500'}`}>{isAgentMode ? 'Agent.AI' : 'Human'}</span>
+                            <div
+                                onClick={toggleAgentMode}
+                                className={`relative inline-flex h-5 w-9 shrink-0 cursor-pointer items-center rounded-full border-2 border-transparent transition-colors focus:outline-none ${isAgentMode ? 'bg-blue-600' : 'bg-gray-200'}`}
+                            >
+                                <span className={`pointer-events-none block h-4 w-4 rounded-full bg-white shadow-lg ring-0 transition-transform ${isAgentMode ? 'translate-x-4' : 'translate-x-0'}`} />
+                            </div>
+                        </div>
+
+                        <button
+                            onClick={handleRunMonitor}
+                            disabled={isRunning}
+                            className="inline-flex items-center justify-center gap-2 rounded-md text-sm font-semibold bg-[#2563eb] text-white hover:bg-blue-700 h-10 px-5 shadow-sm transition-all active:scale-95 disabled:opacity-50">
+                            {isRunning ? <Loader2 className="h-4 w-4 animate-spin" /> : <Sparkles className="h-4 w-4" />}
+                            {isRunning ? 'Running...' : 'Run DQ and Reconciliation'}
+                        </button>
+
+                        <button
+                            onClick={() => {
+                                setIsRefreshing(true);
+                                setTimeout(() => setIsRefreshing(false), 3000);
+                            }}
+                            className="inline-flex items-center justify-center gap-2 rounded-md text-sm font-medium bg-white text-gray-700 border border-gray-200 hover:bg-gray-50 h-10 px-4 shadow-sm transition-all">
+                            <RefreshCw className={`h-4 w-4 text-gray-500 ${isRefreshing ? 'animate-spin' : ''}`} />
+                            Refresh Agents
+                        </button>
+
+                        <button
+                            onClick={() => setShowAgents(!showAgents)}
+                            className="inline-flex items-center justify-center gap-2 rounded-md text-sm font-medium bg-white text-gray-700 border border-gray-200 hover:bg-gray-50 h-10 px-3 shadow-sm transition-all"
+                        >
+                            {showAgents ? <EyeOff className="h-4 w-4 text-gray-500" /> : <Eye className="h-4 w-4 text-gray-500" />}
+                            <span className="hidden sm:inline">{showAgents ? 'Hide Agents' : 'Show Agents'}</span>
+                        </button>
+                    </div>
+                </div>
+
+                {/* Intelligent Monitoring Info Card */}
+                <div className="mt-2 bg-[#f0f9ff] rounded-lg border border-blue-200 p-5 shadow-sm">
+                    <div className="flex items-start gap-3">
+                        <div className="mt-1">
+                            <Settings className="h-5 w-5 text-blue-600 animate-spin-slow" />
+                        </div>
+                        <div>
+                            <h3 className="text-base font-bold text-blue-800 mb-2">Intelligent monitoring active</h3>
+                            <ul className="space-y-1.5 ml-1">
+                                <li className="flex items-center gap-2 text-sm font-medium text-blue-700">
+                                    <div className="h-1.5 w-1.5 rounded-full bg-blue-500"></div>
                                     AI agents actively monitor data refresh events to automatically trigger quality checks
                                 </li>
-                                <li className="flex items-center gap-3 text-[15px] font-bold text-[#0369a1]">
-                                    <div className="h-2 w-2 rounded-full bg-blue-500"></div>
+                                <li className="flex items-center gap-2 text-sm font-medium text-blue-700">
+                                    <div className="h-1.5 w-1.5 rounded-full bg-blue-500"></div>
                                     Cross-data reconciliation maps subjects across EDC, Labs, and external data sources
                                 </li>
                                 <li className="flex items-center gap-3 text-[15px] font-bold text-[#0369a1]">
@@ -795,15 +804,18 @@ export default function DataManagerAI() {
                     </div>
                 )}
 
-                {/* Main Content Sections - Update for Tabs */}
+                {/* Main Content Sections */}
                 <div className="space-y-6">
                     {/* Tabs Navigation */}
-                    <div className="flex bg-white rounded-xl border border-gray-100 p-1.5 shadow-sm overflow-x-auto w-fit">
+                    <div className="flex flex-wrap gap-2 pb-2">
                         {['DQ and Reconciliation', 'Tasks', 'Reports', 'Event Monitoring', 'Domain Progress', 'Agent Workflow', 'Settings'].map((tab) => (
                             <button
                                 key={tab}
                                 onClick={() => setActiveTab(tab)}
-                                className={`px-5 py-2.5 rounded-lg text-sm font-bold whitespace-nowrap transition-all ${activeTab === tab ? 'bg-[#2563eb] text-white shadow-md' : 'text-gray-500 hover:bg-gray-50'}`}
+                                className={`px-4 py-2 rounded-lg text-sm font-bold whitespace-nowrap transition-all ${activeTab === tab
+                                    ? 'bg-white text-blue-600 border border-blue-600 shadow-sm'
+                                    : 'text-blue-400 hover:text-blue-600 hover:bg-blue-50'
+                                    }`}
                             >
                                 {tab}
                             </button>
@@ -941,17 +953,17 @@ export default function DataManagerAI() {
                                         </thead>
                                         <tbody className="divide-y divide-gray-50">
                                             {filteredData.map((issue) => (
-                                                <tr key={issue.id} className="hover:bg-blue-50/30 transition-colors group">
+                                                <tr key={issue.id} className="hover:bg-blue-50/50 transition-colors group border-b border-gray-50">
                                                     <td className="px-6 py-4">
-                                                        <div className="font-bold text-blue-600 whitespace-nowrap">{issue.id}</div>
+                                                        <div className="font-bold text-blue-600 whitespace-nowrap group-hover:underline cursor-pointer">{issue.id}</div>
                                                     </td>
                                                     <td className="px-6 py-4">
-                                                        <span className={`px-2.5 py-1 rounded-full text-xs font-bold whitespace-nowrap ${issue.type === 'Missing Data' ? 'bg-blue-100 text-blue-700' : 'bg-orange-100 text-orange-800'}`}>
+                                                        <span className={`px-2.5 py-1 rounded-full text-xs font-bold whitespace-nowrap border ${issue.type === 'Missing Data' ? 'bg-blue-50 text-blue-700 border-blue-100' : 'bg-amber-50 text-amber-800 border-amber-100'}`}>
                                                             {issue.type}
                                                         </span>
                                                     </td>
                                                     <td className="px-6 py-4">
-                                                        <span className={`px-2.5 py-1 rounded-full text-xs font-bold whitespace-nowrap ${issue.category === 'DQ' ? 'bg-purple-100 text-purple-700' : 'bg-indigo-100 text-indigo-700'}`}>
+                                                        <span className={`px-2.5 py-1 rounded-full text-xs font-bold whitespace-nowrap border ${issue.category === 'DQ' ? 'bg-purple-50 text-purple-700 border-purple-100' : 'bg-indigo-50 text-indigo-700 border-indigo-100'}`}>
                                                             {issue.category}
                                                         </span>
                                                     </td>
@@ -964,14 +976,14 @@ export default function DataManagerAI() {
                                                         </span>
                                                     </td>
                                                     <td className="px-6 py-4">
-                                                        <span className={`px-2.5 py-1 rounded-full text-xs font-bold whitespace-nowrap ${issue.severity === 'High' ? 'bg-red-100 text-red-700' : 'bg-orange-100 text-orange-700'}`}>
+                                                        <span className={`px-2.5 py-1 rounded-full text-xs font-bold whitespace-nowrap border ${issue.severity === 'High' ? 'bg-red-50 text-red-700 border-red-100' : issue.severity === 'Critical' ? 'bg-red-100 text-red-800 border-red-200' : 'bg-orange-50 text-orange-700 border-orange-100'}`}>
                                                             {issue.severity}
                                                         </span>
                                                     </td>
                                                     <td className="px-6 py-4 text-sm font-medium text-gray-600 whitespace-nowrap">{issue.domain}</td>
                                                     <td className="px-6 py-4 text-sm font-medium text-gray-500 whitespace-nowrap">{issue.created}</td>
                                                     <td className="px-6 py-4 text-right">
-                                                        <button className="text-sm font-bold text-gray-900 hover:text-blue-600 transition-colors whitespace-nowrap">View</button>
+                                                        <button className="text-xs font-bold text-gray-900 hover:text-blue-600 transition-colors whitespace-nowrap uppercase tracking-wide">View</button>
                                                     </td>
                                                 </tr>
                                             ))}
