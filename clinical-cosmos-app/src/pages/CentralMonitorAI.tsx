@@ -1,6 +1,6 @@
 import {
     CircleAlert, Server, ChevronLeft, ChevronDown, RefreshCw, EyeOff, Maximize2,
-    Eye, X, ArrowRight, Check, Loader2, AlertCircle, Activity, FileText, CheckCircle2, AlertTriangle, Settings, Plus, Trash2, Sparkles, Bot
+    Eye, X, ArrowRight, Check, Loader2, AlertCircle, Activity, FileText, CheckCircle2, AlertTriangle, Settings, Plus, Trash2, Sparkles, Bot, ShieldCheck, Shield
 } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { useState } from 'react';
@@ -208,26 +208,33 @@ export default function CentralMonitorAI() {
                         Back to AI Agents Hub
                     </button>
                 </div>
-                <div className="bg-blue-600 py-3 px-4 mb-6 rounded-md shadow-sm flex items-center justify-center">
-                    <CircleAlert className="h-5 w-5 mr-3 text-white stroke-[2]" />
-                    <span className="text-white font-bold text-sm tracking-wide">
-                        Active monitoring on the data from Trial Data Management
+                <div className="bg-gradient-to-r from-rose-600 to-red-600 py-2.5 px-4 mb-6 rounded-md shadow-md flex items-center justify-center border border-rose-500/50">
+                    <ShieldCheck className="h-5 w-5 mr-3 text-white stroke-[2.5]" />
+                    <span className="text-white font-bold text-sm tracking-wide uppercase">
+                        Sentinel Protocol Active • Real-time Safety Scanning
                     </span>
                 </div>
-                <div className="rounded-xl bg-[#282a2f] overflow-hidden mb-6 relative shadow-lg">
-                    <div className="absolute top-0 left-0 w-full h-1.5 bg-gradient-to-r from-teal-400 via-teal-500 to-teal-400"></div>
-                    <div className="flex items-center p-6">
+                <div className="rounded-xl bg-[#0f172a] overflow-hidden mb-6 relative shadow-lg ring-1 ring-slate-900/10">
+                    <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-rose-500 via-red-500 to-rose-500 shadow-[0_0_15px_rgba(244,63,94,0.6)]"></div>
+                    <div className="flex items-center p-6 bg-gradient-to-br from-slate-900 via-[#1e293b] to-slate-900 relative">
+                        <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-10 mix-blend-soft-light"></div>
                         <div className="relative h-16 w-16 mr-6 flex-shrink-0 flex items-center justify-center">
-                            <div className="absolute inset-0 bg-gradient-to-br from-teal-900/40 to-transparent rotate-45 rounded-lg"></div>
-                            <div className="absolute inset-[3px] border border-teal-500/30 rotate-45 rounded-lg backdrop-blur-sm"></div>
-                            <Server className="h-7 w-7 text-teal-400 relative z-10" />
+                            <div className="absolute inset-0 bg-gradient-to-br from-rose-500/20 to-transparent rotate-45 rounded-lg border border-rose-500/20 shadow-[0_0_20px_rgba(244,63,94,0.2)]"></div>
+                            <div className="absolute inset-[4px] border border-rose-400/30 rotate-45 rounded-md backdrop-blur-sm bg-black/20"></div>
+                            <ShieldCheck className="h-8 w-8 text-rose-500 relative z-10 drop-shadow-[0_0_8px_rgba(244,63,94,0.6)]" />
                         </div>
-                        <div className="flex flex-col">
-                            <h2 className="text-xl font-bold text-teal-400 mb-0.5 tracking-wide">The Quantum Analyst</h2>
-                            <div className="text-gray-300 text-sm font-medium mb-3">Data Manager.AI</div>
-                            <div className="flex items-center">
-                                <span className="h-2.5 w-2.5 rounded-full bg-[#2ecc71] mr-2.5 shadow-[0_0_8px_rgba(46,204,113,0.5)]"></span>
-                                <span className="text-gray-400 text-xs font-medium tracking-wide">Optimizing data quality across all domains</span>
+                        <div className="flex flex-col relative z-10">
+                            <h2 className="text-2xl font-black text-transparent bg-clip-text bg-gradient-to-r from-rose-400 via-red-200 to-rose-400 mb-0.5 tracking-wider uppercase drop-shadow-sm font-['Orbitron',_sans-serif]">The Sentinel Guardian</h2>
+                            <div className="text-slate-400 text-sm font-medium mb-3 flex items-center gap-2">
+                                <span className="uppercase tracking-widest text-[10px] bg-slate-800 px-2 py-0.5 rounded border border-slate-700 text-slate-300">Central Monitor.AI</span>
+                                <span className="h-px w-8 bg-slate-700"></span>
+                            </div>
+                            <div className="flex items-center bg-slate-800/50 rounded-full pr-4 w-fit border border-slate-700/50 backdrop-blur-md">
+                                <span className="relative flex h-3 w-3 mr-2.5 ml-1.5">
+                                    <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-rose-400 opacity-75"></span>
+                                    <span className="relative inline-flex rounded-full h-3 w-3 bg-rose-500"></span>
+                                </span>
+                                <span className="text-rose-100/80 text-xs font-medium tracking-wide py-1">Vigilance activated across {studies.length} active protocols</span>
                             </div>
                         </div>
                     </div>
@@ -235,12 +242,12 @@ export default function CentralMonitorAI() {
                 <div className="bg-gradient-to-r from-blue-50 to-white p-4 rounded-lg border border-blue-100 mb-6 shadow-sm">
                     <div className="flex flex-wrap items-center justify-between gap-4">
                         <div>
-                            <div className="flex items-center gap-2 mb-1 text-sm font-medium text-blue-600">
+                            <div className="flex items-center gap-2 mb-1 text-sm font-medium text-rose-600/80">
                                 <ChevronLeft className="h-4 w-4" />
                                 <span>Back to AI Agents Hub</span>
                             </div>
-                            <h1 className="text-2xl font-bold text-blue-800">Data Manager.AI</h1>
-                            <p className="text-gray-600">AI-powered data quality management and reconciliation</p>
+                            <h1 className="text-3xl font-black text-slate-800 tracking-tight">Central Monitor.AI</h1>
+                            <p className="text-slate-500 font-medium">Continuous AI oversight and risk detection dashboard</p>
                         </div>
                         <div className="flex flex-wrap items-center gap-3 relative">
                             <button
@@ -283,9 +290,9 @@ export default function CentralMonitorAI() {
                             <button
                                 onClick={handleRunMonitor}
                                 disabled={isRunning}
-                                className={`inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-bold ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 text-white h-10 px-4 py-2 bg-[#2563eb] hover:bg-blue-700 shadow-sm`}>
-                                {isRunning ? <Loader2 className="h-4 w-4 animate-spin" /> : <Sparkles className="h-4 w-4" />}
-                                {isRunning ? 'Running...' : 'Run DQ and Reconciliation'}
+                                className={`inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-bold ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 text-white h-10 px-6 py-2 bg-gradient-to-r from-red-600 to-rose-600 hover:from-red-700 hover:to-rose-700 shadow-lg shadow-rose-200 active:scale-95 transition-all`}>
+                                {isRunning ? <Loader2 className="h-4 w-4 animate-spin" /> : <ShieldCheck className="h-4 w-4" />}
+                                {isRunning ? 'Scanning Protocols...' : 'Initiate Sentinel Scan'}
                             </button>
                             <button
                                 onClick={() => {
@@ -306,24 +313,24 @@ export default function CentralMonitorAI() {
                     </div>
                 </div>
 
-                <div className="bg-[#f0f7ff] rounded-xl border border-[#d0e7ff] p-6 mb-8">
+                <div className="bg-slate-50 rounded-xl border border-slate-200 p-6 mb-8">
                     <div className="flex items-start gap-4">
-                        <div className="bg-white rounded-lg p-2 border border-[#d0e7ff] shadow-sm">
-                            <Settings className="h-5 w-5 text-blue-600" />
+                        <div className="bg-white rounded-lg p-2 border border-slate-200 shadow-sm">
+                            <Bot className="h-5 w-5 text-rose-500" />
                         </div>
                         <div className="space-y-4">
-                            <h3 className="text-lg font-bold text-blue-900">Intelligent monitoring active</h3>
-                            <ul className="space-y-2 text-sm text-blue-800 font-medium">
+                            <h3 className="text-lg font-bold text-slate-800">Intelligent monitoring active</h3>
+                            <ul className="space-y-2 text-sm text-slate-600 font-medium">
                                 <li className="flex items-center gap-2">
-                                    <div className="h-1.5 w-1.5 rounded-full bg-blue-600"></div>
+                                    <div className="h-1.5 w-1.5 rounded-full bg-rose-500"></div>
                                     AI agents actively monitor data refresh events to automatically trigger quality checks
                                 </li>
                                 <li className="flex items-center gap-2">
-                                    <div className="h-1.5 w-1.5 rounded-full bg-blue-600"></div>
+                                    <div className="h-1.5 w-1.5 rounded-full bg-rose-500"></div>
                                     Cross-data reconciliation maps subjects across EDC, Labs, and external data sources
                                 </li>
                                 <li className="flex items-center gap-2">
-                                    <div className="h-1.5 w-1.5 rounded-full bg-blue-600"></div>
+                                    <div className="h-1.5 w-1.5 rounded-full bg-rose-500"></div>
                                     Protocol compliance verification compares data to study specifications
                                 </li>
                             </ul>
@@ -333,14 +340,14 @@ export default function CentralMonitorAI() {
 
                 {/* Progress Bar */}
                 {isRunning && (
-                    <div className="mb-6 animate-in fade-in slide-in-from-top-2 duration-300">
-                        <div className="flex justify-between text-sm mb-2 font-medium text-gray-700">
-                            <span>Analyzing trial data...</span>
+                    <div className="mb-8 animate-in fade-in slide-in-from-top-2 duration-300">
+                        <div className="flex justify-between text-xs mb-2 font-bold uppercase tracking-wider text-slate-500">
+                            <span>Scanning Protocol Data layers...</span>
                             <span>{Math.round(progress)}%</span>
                         </div>
-                        <div className="h-3 w-full bg-gray-100 rounded-full overflow-hidden">
+                        <div className="h-1.5 w-full bg-slate-100 rounded-full overflow-hidden">
                             <div
-                                className="h-full bg-blue-600 transition-all duration-100 ease-linear rounded-full"
+                                className="h-full bg-rose-500 shadow-[0_0_10px_rgba(244,63,94,0.5)] transition-all duration-100 ease-linear rounded-full"
                                 style={{ width: `${progress}% ` }}
                             ></div>
                         </div>
@@ -358,27 +365,31 @@ export default function CentralMonitorAI() {
                                 Expand
                             </button>
                         </div>
-                        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3">
+                        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4">
                             {[
-                                { title: 'Protocol Monitor', active: true, desc: 'Monitoring protocol deviations', left: '3 deviations detected', right: '2 queries' },
-                                { title: 'Site Performance', active: true, desc: 'Tracking site metrics', left: '12 sites monitored', right: '1 alert' },
-                                { title: 'Lab Data Monitor', active: true, desc: 'Analyzing lab trends', left: '287 values analyzed', right: '8 abnormal' },
-                                { title: 'Safety Signal', active: true, desc: 'Detecting safety signals', left: '42 AEs analyzed', right: '3 signals' }
+                                { title: 'Protocol Deviations', active: true, desc: 'Monitoring adherence', left: '3 critical', right: '2 pending' },
+                                { title: 'Site Performance', active: true, desc: 'Tracking metrics', left: '12 active', right: '1 risk' },
+                                { title: 'Lab Data Security', active: true, desc: 'Analyzing trends', left: 'Live stream', right: 'Secure' },
+                                { title: 'Adverse Events', active: true, desc: 'Safety Signal Detection', left: '42 scanned', right: '3 signals' }
                             ].map((agent, i) => (
-                                <div key={i} className="rounded-lg bg-blue-50/50 p-4 border border-blue-100 shadow-sm hover:shadow-md transition-shadow">
-                                    <div className="flex items-center justify-between mb-3">
-                                        <div className="flex items-center gap-2">
-                                            <div className={`h-2.5 w-2.5 rounded-full ${isRunning ? 'bg-amber-500 animate-ping' : 'bg-green-500 animate-pulse'}`}></div>
-                                            <h4 className="font-semibold text-blue-700 text-base">{agent.title}</h4>
+                                <div key={i} className="group relative rounded-xl bg-white p-5 border border-slate-200 shadow-sm hover:shadow-lg transition-all hover:border-rose-200">
+                                    <div className="absolute top-0 left-0 h-full w-1 bg-slate-200 rounded-l-xl group-hover:bg-rose-500 transition-colors"></div>
+                                    <div className="flex items-center justify-between mb-3 pl-2">
+                                        <div className="flex items-center gap-3">
+                                            <div className="relative flex h-3 w-3">
+                                                <span className={`animate-ping absolute inline-flex h-full w-full rounded-full opacity-75 ${isRunning ? 'bg-amber-400' : 'bg-rose-400'}`}></span>
+                                                <span className={`relative inline-flex rounded-full h-3 w-3 ${isRunning ? 'bg-amber-500' : 'bg-rose-500'}`}></span>
+                                            </div>
+                                            <h4 className="font-bold text-slate-700 text-sm">{agent.title}</h4>
                                         </div>
-                                        <div className={`inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium ${isRunning ? 'bg-amber-100 text-amber-700' : 'bg-green-100 text-green-700'}`}>
-                                            {isRunning ? 'Analyzing' : 'Active'}
+                                        <div className={`inline-flex items-center rounded px-1.5 py-0.5 text-[10px] font-bold uppercase tracking-wider ${isRunning ? 'bg-amber-50 text-amber-700 border border-amber-200' : 'bg-slate-50 text-slate-600 border border-slate-200'}`}>
+                                            {isRunning ? 'Scanning' : 'Active'}
                                         </div>
                                     </div>
-                                    <p className="text-sm text-slate-500 mb-4">{agent.desc}</p>
-                                    <div className="flex justify-between items-end text-sm">
-                                        <span className="text-slate-500">{agent.left}</span>
-                                        <span className="font-semibold text-blue-600 hover:text-blue-700 cursor-pointer hover:underline">{agent.right}</span>
+                                    <p className="text-xs text-slate-500 mb-4 pl-2 font-medium">{agent.desc}</p>
+                                    <div className="flex justify-between items-end text-xs pl-2 border-t border-slate-100 pt-3">
+                                        <span className="text-slate-400 font-semibold">{agent.left}</span>
+                                        <span className="font-bold text-rose-600 hover:text-rose-700 cursor-pointer">{agent.right}</span>
                                     </div>
                                 </div>
                             ))}
@@ -386,12 +397,12 @@ export default function CentralMonitorAI() {
                     </div>
                 )}
                 <div className="flex-1 flex flex-col">
-                    <div className="h-12 items-center justify-center rounded-md bg-[#eef5ff] p-1 text-blue-600 grid grid-cols-6 mb-6 w-full shadow-sm border border-blue-50/50">
+                    <div className="h-12 items-center justify-center rounded-lg bg-slate-100 p-1 text-slate-500 grid grid-cols-6 mb-8 w-full shadow-inner border border-slate-200">
                         {['Dashboard', 'Queries', 'Tasks', 'Event Log', 'Workflows', 'Settings'].map((tab) => (
                             <button
                                 key={tab}
                                 onClick={() => setActiveTab(tab)}
-                                className={`inline-flex items-center justify-center whitespace-nowrap rounded-md px-3 py-2 text-sm font-semibold transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 ${activeTab === tab ? 'bg-white text-[#2563eb] shadow-md' : 'text-[#4b8df8] hover:bg-blue-100/50'}`}
+                                className={`inline-flex items-center justify-center whitespace-nowrap rounded-md px-3 py-2 text-sm font-bold transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 ${activeTab === tab ? 'bg-white text-rose-600 shadow-sm ring-1 ring-black/5' : 'hover:bg-slate-200 hover:text-slate-700'}`}
                             >
                                 {tab}
                             </button>
@@ -399,45 +410,55 @@ export default function CentralMonitorAI() {
                     </div>
                     <div className="mt-2 ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 border-blue-100 bg-white flex-1 animate-in fade-in zoom-in-95 duration-200">
                         {activeTab === 'Dashboard' && (<>
-                            <div className="rounded-lg border bg-card text-card-foreground shadow-sm mb-6 border-blue-100">
-                                <div className="flex flex-col space-y-1.5 p-6 pb-2">
-                                    <h3 className="tracking-tight text-lg font-medium text-blue-800 flex items-center">
-                                        <Server className="h-5 w-5 mr-2 text-blue-600" />
+                            <div className="rounded-xl border bg-white text-slate-800 shadow-sm mb-6 border-slate-200">
+                                <div className="flex flex-col space-y-1.5 p-6 pb-2 border-b border-slate-100">
+                                    <h3 className="tracking-tight text-lg font-bold text-slate-800 flex items-center">
+                                        <Server className="h-5 w-5 mr-2 text-rose-500" />
                                         DB Lock Compliance Overview
                                     </h3>
                                 </div>
                                 <div className="p-6 pt-0">
                                     <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-                                        <div className="bg-gradient-to-r from-blue-50 to-white rounded-md p-4 border border-blue-100">
-                                            <div className="text-sm font-medium text-gray-500 mb-1">Status</div>
-                                            <div className="text-lg font-bold text-blue-700">IN PROGRESS</div>
-                                            <div className="mt-2 text-sm text-gray-500">Est. Lock Date: 09/01/2026</div>
-                                        </div>
-                                        <div className="bg-gradient-to-r from-blue-50 to-white rounded-md p-4 border border-blue-100">
-                                            <div className="text-sm font-medium text-gray-500 mb-1">Overall Readiness</div>
-                                            <div className="text-lg font-bold text-blue-700">75%</div>
-                                            <div className="relative w-full overflow-hidden rounded-full bg-secondary h-2 mt-2">
-                                                <div className="h-full w-full flex-1 bg-primary transition-all" style={{ transform: 'translateX(-25%)' }}></div>
+                                        <div className="bg-gradient-to-br from-slate-50 to-white rounded-lg p-4 border border-slate-200 shadow-sm relative overflow-hidden">
+                                            <div className="absolute top-0 right-0 p-2 opacity-10">
+                                                <Activity className="h-12 w-12 text-slate-900" />
+                                            </div>
+                                            <div className="text-xs font-bold text-slate-500 mb-1 uppercase tracking-wider">Lock Status</div>
+                                            <div className="text-xl font-black text-rose-600">IN PROGRESS</div>
+                                            <div className="mt-2 text-xs font-medium text-slate-500 flex items-center">
+                                                <span className="w-2 h-2 rounded-full bg-amber-400 mr-2"></span>
+                                                Target: 09/01/2026
                                             </div>
                                         </div>
-                                        <div className="bg-gradient-to-r from-blue-50 to-white rounded-md p-4 border border-blue-100">
-                                            <div className="text-sm font-medium text-gray-500 mb-1">Outstanding Issues</div>
-                                            <div className="text-lg font-bold text-amber-600">8</div>
-                                            <div className="mt-2 text-sm text-gray-500">Across 3 sites</div>
+                                        <div className="bg-gradient-to-br from-slate-50 to-white rounded-lg p-4 border border-slate-200 shadow-sm">
+                                            <div className="text-xs font-bold text-slate-500 mb-1 uppercase tracking-wider">Readiness Index</div>
+                                            <div className="text-2xl font-black text-slate-800">75%</div>
+                                            <div className="relative w-full overflow-hidden rounded-full bg-slate-100 h-1.5 mt-3">
+                                                <div className="h-full w-full flex-1 bg-rose-500 transition-all shadow-[0_0_8px_rgba(244,63,94,0.4)]" style={{ transform: 'translateX(-25%)' }}></div>
+                                            </div>
                                         </div>
-                                        <div className="bg-gradient-to-r from-blue-50 to-white rounded-md p-4 border border-blue-100">
-                                            <div className="text-sm font-medium text-gray-500 mb-1">Site Readiness</div>
-                                            <div className="flex items-center justify-between mt-1 text-sm">
-                                                <span>Complete</span>
-                                                <span className="font-medium">0/3</span>
+                                        <div className="bg-gradient-to-br from-slate-50 to-white rounded-lg p-4 border border-slate-200 shadow-sm">
+                                            <div className="text-xs font-bold text-slate-500 mb-1 uppercase tracking-wider">Blockers</div>
+                                            <div className="text-2xl font-black text-slate-800">8</div>
+                                            <div className="mt-1 text-xs text-rose-500 font-medium">Critical across 3 sites</div>
+                                        </div>
+                                        <div className="bg-gradient-to-br from-slate-50 to-white rounded-lg p-3 border border-slate-200 shadow-sm">
+                                            <div className="flex items-center justify-between mb-2">
+                                                <span className="text-xs font-bold text-slate-500 uppercase">Site Readiness</span>
                                             </div>
-                                            <div className="flex items-center justify-between mt-1 text-sm">
-                                                <span>Ready</span>
-                                                <span className="font-medium">1/3</span>
-                                            </div>
-                                            <div className="flex items-center justify-between mt-1 text-sm">
-                                                <span>In Progress</span>
-                                                <span className="font-medium">2/3</span>
+                                            <div className="space-y-1.5">
+                                                <div className="flex items-center justify-between text-xs">
+                                                    <span className="text-slate-600">Complete</span>
+                                                    <span className="font-bold text-emerald-600 bg-emerald-50 px-1.5 rounded">0/3</span>
+                                                </div>
+                                                <div className="flex items-center justify-between text-xs">
+                                                    <span className="text-slate-600">Ready</span>
+                                                    <span className="font-bold text-blue-600 bg-blue-50 px-1.5 rounded">1/3</span>
+                                                </div>
+                                                <div className="flex items-center justify-between text-xs">
+                                                    <span className="text-slate-600">In Progress</span>
+                                                    <span className="font-bold text-amber-600 bg-amber-50 px-1.5 rounded">2/3</span>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
@@ -516,74 +537,71 @@ export default function CentralMonitorAI() {
                                 </div>
                             </div>
 
-                            {/* More Dashboard items - Queries, Sites, etc. */}
                             <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
                                 {/* Queries */}
-                                <div className="rounded-lg border bg-card text-card-foreground shadow-sm">
+                                <div className="rounded-xl border bg-white text-slate-800 shadow-sm border-slate-200">
                                     <div className="flex flex-col space-y-1.5 p-6 pb-2">
-                                        <h3 className="tracking-tight text-lg font-medium text-blue-800">Queries</h3>
+                                        <h3 className="tracking-tight text-lg font-bold text-slate-800">Queries</h3>
                                     </div>
                                     <div className="p-6 pt-0">
-                                        <div className="text-3xl font-bold">24</div>
-                                        <div className="text-sm text-gray-500 mt-1">8 Open • 16 Closed</div>
+                                        <div className="text-3xl font-black text-slate-800">24</div>
+                                        <div className="text-sm text-slate-500 mt-1 font-medium">8 Open • 16 Closed</div>
                                         <div className="mt-4">
                                             <div className="flex justify-between text-sm mb-1">
-                                                <span>Response Rate</span>
-                                                <span className="font-medium">83%</span>
+                                                <span className="text-slate-600 font-medium">Response Rate</span>
+                                                <span className="font-bold text-slate-800">83%</span>
                                             </div>
-                                            <div className="relative w-full overflow-hidden rounded-full bg-secondary h-2">
-                                                <div className="h-full w-full flex-1 bg-primary transition-all" style={{ transform: 'translateX(-17%)' }}></div>
+                                            <div className="relative w-full overflow-hidden rounded-full bg-slate-100 h-1.5">
+                                                <div className="h-full w-full flex-1 bg-green-500 transition-all shadow-[0_0_8px_rgba(34,197,94,0.4)]" style={{ transform: 'translateX(-17%)' }}></div>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
                                 {/* Sites */}
-                                <div className="rounded-lg border bg-card text-card-foreground shadow-sm">
+                                <div className="rounded-xl border bg-white text-slate-800 shadow-sm border-slate-200">
                                     <div className="flex flex-col space-y-1.5 p-6 pb-2">
-                                        <h3 className="tracking-tight text-lg font-medium text-blue-800">Sites</h3>
+                                        <h3 className="tracking-tight text-lg font-bold text-slate-800">Sites</h3>
                                     </div>
                                     <div className="p-6 pt-0">
-                                        <div className="text-3xl font-bold">12</div>
-                                        <div className="text-sm text-gray-500 mt-1">10 Active • 2 Pending</div>
+                                        <div className="text-3xl font-black text-slate-800">12</div>
+                                        <div className="text-sm text-slate-500 mt-1 font-medium">10 Active • 2 Pending</div>
                                         <div className="mt-4">
                                             <div className="flex justify-between text-sm mb-1">
-                                                <span>Enrollment Target</span>
-                                                <span className="font-medium">68%</span>
+                                                <span className="text-slate-600 font-medium">Enrollment Target</span>
+                                                <span className="font-bold text-slate-800">68%</span>
                                             </div>
-                                            <div className="relative w-full overflow-hidden rounded-full bg-secondary h-2">
-                                                <div className="h-full w-full flex-1 bg-primary transition-all" style={{ transform: 'translateX(-32%)' }}></div>
+                                            <div className="relative w-full overflow-hidden rounded-full bg-slate-100 h-1.5">
+                                                <div className="h-full w-full flex-1 bg-blue-500 transition-all shadow-[0_0_8px_rgba(59,130,246,0.4)]" style={{ transform: 'translateX(-32%)' }}></div>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
                                 {/* Issues */}
-                                <div className="rounded-lg border bg-card text-card-foreground shadow-sm">
+                                <div className="rounded-xl border bg-white text-slate-800 shadow-sm border-slate-200">
                                     <div className="flex flex-col space-y-1.5 p-6 pb-2">
-                                        <h3 className="tracking-tight text-lg font-medium text-blue-800">Protocol Deviations</h3>
+                                        <h3 className="tracking-tight text-lg font-bold text-slate-800">Protocol Deviations</h3>
                                     </div>
                                     <div className="p-6 pt-0">
-                                        <div className="text-3xl font-bold">7</div>
-                                        <div className="text-sm text-gray-500 mt-1">3 Major • 4 Minor</div>
+                                        <div className="text-3xl font-black text-slate-800">7</div>
+                                        <div className="text-sm text-slate-500 mt-1 font-medium">3 Major • 4 Minor</div>
                                         <div className="mt-4">
                                             <div className="flex justify-between text-sm mb-1">
-                                                <span>Resolution Rate</span>
-                                                <span className="font-medium">42%</span>
+                                                <span className="text-slate-600 font-medium">Resolution Rate</span>
+                                                <span className="font-bold text-slate-800">42%</span>
                                             </div>
-                                            <div className="relative w-full overflow-hidden rounded-full bg-secondary h-2">
-                                                <div className="h-full w-full flex-1 bg-primary transition-all" style={{ transform: 'translateX(-58%)' }}></div>
+                                            <div className="relative w-full overflow-hidden rounded-full bg-slate-100 h-1.5">
+                                                <div className="h-full w-full flex-1 bg-amber-500 transition-all shadow-[0_0_8px_rgba(245,158,11,0.4)]" style={{ transform: 'translateX(-58%)' }}></div>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
 
-
-                            {/* Recent Activity and Priority Alerts */}
                             <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-6">
                                 {/* Site Performance Overview - Takes up 2 columns */}
-                                <div className="lg:col-span-2 rounded-lg border bg-card text-card-foreground shadow-sm">
-                                    <div className="flex flex-col space-y-1.5 p-6 pb-2">
-                                        <h3 className="tracking-tight text-lg font-medium text-blue-800">Site Performance Overview</h3>
+                                <div className="lg:col-span-2 rounded-xl border bg-white border-slate-200 shadow-sm">
+                                    <div className="flex flex-col space-y-1.5 p-6 pb-2 border-b border-slate-100">
+                                        <h3 className="tracking-tight text-lg font-bold text-slate-800">Site Performance Overview</h3>
                                     </div>
                                     <div className="p-6 pt-0">
                                         <div className="relative w-full overflow-auto">
@@ -624,9 +642,9 @@ export default function CentralMonitorAI() {
                                 </div>
 
                                 {/* Priority Alerts */}
-                                <div className="rounded-lg border bg-card text-card-foreground shadow-sm">
-                                    <div className="flex flex-col space-y-1.5 p-6 pb-2">
-                                        <h3 className="tracking-tight text-lg font-medium text-blue-800">Priority Alerts</h3>
+                                <div className="rounded-xl border bg-white text-slate-800 shadow-sm border-slate-200">
+                                    <div className="flex flex-col space-y-1.5 p-6 pb-2 border-b border-slate-100">
+                                        <h3 className="tracking-tight text-lg font-bold text-slate-800">Priority Alerts</h3>
                                     </div>
                                     <div className="p-6 pt-0 space-y-4">
                                         <div className="bg-red-50 border border-red-100 rounded-lg p-4">
@@ -664,8 +682,8 @@ export default function CentralMonitorAI() {
                             <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
                                 {/* Recent Safety Signals - Takes up 2 columns */}
                                 <div className="lg:col-span-2 rounded-lg border bg-card text-card-foreground shadow-sm">
-                                    <div className="flex flex-col space-y-1.5 p-6 pb-2">
-                                        <h3 className="tracking-tight text-lg font-medium text-blue-800">Recent Safety Signals</h3>
+                                    <div className="flex flex-col space-y-1.5 p-6 pb-2 border-b border-slate-100">
+                                        <h3 className="tracking-tight text-lg font-bold text-slate-800">Recent Safety Signals</h3>
                                     </div>
                                     <div className="p-6 pt-0">
                                         <div className="relative w-full overflow-auto">
@@ -721,8 +739,8 @@ export default function CentralMonitorAI() {
 
                                 {/* Recent Activity */}
                                 <div className="rounded-lg border bg-card text-card-foreground shadow-sm">
-                                    <div className="flex flex-col space-y-1.5 p-6 pb-2">
-                                        <h3 className="tracking-tight text-lg font-medium text-blue-800">Recent Activity</h3>
+                                    <div className="flex flex-col space-y-1.5 p-6 pb-2 border-b border-slate-100">
+                                        <h3 className="tracking-tight text-lg font-bold text-slate-800">Recent Activity</h3>
                                     </div>
                                     <div className="p-6 pt-0">
                                         <div className="space-y-6">
@@ -784,8 +802,8 @@ export default function CentralMonitorAI() {
                             <div className="p-6 space-y-6">
                                 <div className="flex items-center justify-between">
                                     <div className="flex items-center gap-3">
-                                        <h2 className="text-2xl font-bold text-[#1e293b]">Clinical Queries</h2>
-                                        <span className="inline-flex items-center rounded-full bg-blue-100 px-3 py-1 text-xs font-bold text-blue-700">
+                                        <h2 className="text-2xl font-bold text-slate-800">Clinical Queries</h2>
+                                        <span className="inline-flex items-center rounded-full bg-slate-100 px-3 py-1 text-xs font-bold text-slate-700">
                                             24 Total
                                         </span>
                                     </div>
@@ -796,7 +814,7 @@ export default function CentralMonitorAI() {
                                         </button>
                                         <button
                                             onClick={() => setIsCreateQueryModalOpen(true)}
-                                            className="inline-flex items-center justify-center rounded-md text-sm font-bold bg-[#0085ff] text-white hover:bg-blue-600 h-10 px-4 py-2 shadow-sm">
+                                            className="inline-flex items-center justify-center rounded-md text-sm font-bold bg-rose-600 text-white hover:bg-rose-700 h-10 px-4 py-2 shadow-sm transition-all shadow-rose-200">
                                             Create Query
                                         </button>
                                     </div>
@@ -813,7 +831,7 @@ export default function CentralMonitorAI() {
                                         <button
                                             key={tab.id}
                                             onClick={() => setActiveQueryTab(tab.id)}
-                                            className={`inline-flex items-center rounded-full border px-4 py-1.5 text-sm font-bold transition-all ${activeQueryTab === tab.id ? 'bg-[#2563eb] text-white border-transparent shadow-sm' : 'bg-white text-gray-600 border-gray-200 hover:border-gray-300'}`}
+                                            className={`inline-flex items-center rounded-full border px-4 py-1.5 text-sm font-bold transition-all ${activeQueryTab === tab.id ? 'bg-rose-600 text-white border-transparent shadow-sm' : 'bg-white text-slate-600 border-slate-200 hover:border-slate-300'}`}
                                         >
                                             {tab.label}
                                             <span className="ml-1 text-inherit opacity-90">({tab.count})</span>
@@ -838,16 +856,16 @@ export default function CentralMonitorAI() {
                                         <tbody className="[&_tr:last-child]:border-0 text-[#1e293b]">
                                             {queriesData.filter(q => activeQueryTab === 'All' || (activeQueryTab === 'Pending' ? q.status === 'Pending' : q.status === activeQueryTab)).map((query) => (
                                                 <tr key={query.id} className="border-b transition-colors hover:bg-gray-50/50">
-                                                    <td className="p-4 align-middle font-bold text-[#2563eb]">{query.id}</td>
+                                                    <td className="p-4 align-middle font-bold text-rose-600">{query.id}</td>
                                                     <td className="p-4 align-middle font-medium">{query.subject}</td>
                                                     <td className="p-4 align-middle">{query.category}</td>
                                                     <td className="p-4 align-middle">{query.site}</td>
                                                     <td className="p-4 align-middle">{query.created}</td>
                                                     <td className="p-4 align-middle">
                                                         <div className={`inline-flex items-center rounded-full px-3 py-1 text-xs font-bold ${query.status === 'Pending' ? 'bg-[#fef9c3] text-[#a16207]' :
-                                                            query.status === 'Open' ? 'bg-[#dbeafe] text-[#1d4ed8]' :
-                                                                query.status === 'Answered' ? 'bg-[#dcfce7] text-[#15803d]' :
-                                                                    'bg-[#f1f5f9] text-[#475569]'
+                                                            query.status === 'Open' ? 'bg-blue-50 text-blue-700' :
+                                                                query.status === 'Answered' ? 'bg-emerald-50 text-emerald-700' :
+                                                                    'bg-slate-100 text-slate-600'
                                                             }`}>
                                                             {query.status}
                                                         </div>
@@ -862,7 +880,7 @@ export default function CentralMonitorAI() {
                                                     </td>
                                                     <td className="p-4 align-middle">
                                                         <div className="flex items-center justify-end gap-3">
-                                                            <button className="text-gray-600 hover:text-blue-600">
+                                                            <button className="text-slate-400 hover:text-rose-600 transition-colors">
                                                                 <Eye className="h-5 w-5" />
                                                             </button>
                                                             <button className="text-gray-600 hover:text-green-600">
@@ -885,7 +903,7 @@ export default function CentralMonitorAI() {
                                             <button
                                                 key={page}
                                                 onClick={() => setCurrentQueryPage(page)}
-                                                className={`inline-flex items-center justify-center rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:opacity-50 disabled:pointer-events-none h-8 w-8 ${currentQueryPage === page ? 'bg-blue-600 text-white' : 'border border-input bg-background hover:bg-accent hover:text-accent-foreground'}`}>
+                                                className={`inline-flex items-center justify-center rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:opacity-50 disabled:pointer-events-none h-8 w-8 ${currentQueryPage === page ? 'bg-rose-600 text-white shadow-sm' : 'border border-gray-200 bg-white hover:bg-slate-50 text-slate-600'}`}>
                                                 {page}
                                             </button>
                                         ))}
@@ -898,8 +916,8 @@ export default function CentralMonitorAI() {
                             <div className="p-4 space-y-4">
                                 <div className="flex items-center justify-between">
                                     <div className="flex items-center gap-2">
-                                        <h2 className="text-xl font-bold text-blue-900">Monitoring Tasks</h2>
-                                        <span className="inline-flex items-center rounded-full bg-blue-100 px-2.5 py-0.5 text-xs font-medium text-blue-800">
+                                        <h2 className="text-xl font-bold text-slate-900">Monitoring Tasks</h2>
+                                        <span className="inline-flex items-center rounded-full bg-slate-100 px-2.5 py-0.5 text-xs font-medium text-slate-800">
                                             {tasksData.length} Total
                                         </span>
                                     </div>
@@ -910,7 +928,7 @@ export default function CentralMonitorAI() {
                                         </button>
                                         <button
                                             onClick={() => setIsCreateTaskModalOpen(true)}
-                                            className="inline-flex items-center justify-center rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:opacity-50 disabled:pointer-events-none ring-offset-background bg-blue-600 text-white hover:bg-blue-700 h-9 px-4 py-2">
+                                            className="inline-flex items-center justify-center rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:opacity-50 disabled:pointer-events-none ring-offset-background bg-rose-600 text-white hover:bg-rose-700 h-9 px-4 py-2 shadow-sm shadow-rose-100">
                                             Create Task
                                         </button>
                                     </div>
@@ -921,10 +939,10 @@ export default function CentralMonitorAI() {
                                         <button
                                             key={tab}
                                             onClick={() => setActiveTaskTab(tab)}
-                                            className={`inline-flex items-center rounded-full border px-3 py-1 text-sm font-medium transition-colors focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 border-transparent ${activeTaskTab === tab ? 'bg-blue-600 text-white' : 'bg-gray-100 text-gray-600 hover:bg-gray-200'}`}
+                                            className={`inline-flex items-center rounded-full border px-3 py-1 text-sm font-medium transition-colors focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 border-transparent ${activeTaskTab === tab ? 'bg-rose-600 text-white shadow-sm' : 'bg-white text-slate-600 border-slate-200 hover:bg-slate-50'}`}
                                         >
                                             {tab}
-                                            <span className={`ml-2 rounded-full px-1.5 py-0.5 text-xs ${activeTaskTab === tab ? 'bg-blue-500 text-white' : 'bg-gray-200 text-gray-700'}`}>
+                                            <span className={`ml-2 rounded-full px-1.5 py-0.5 text-xs ${activeTaskTab === tab ? 'bg-rose-500 text-white' : 'bg-slate-200 text-slate-700'}`}>
                                                 {tab === 'All' ? tasksData.length : tasksData.filter(t => t.status === tab).length}
                                             </span>
                                         </button>
@@ -1011,8 +1029,8 @@ export default function CentralMonitorAI() {
                             <div className="p-4 space-y-4">
                                 <div className="flex items-center justify-between">
                                     <div className="flex items-center gap-2">
-                                        <h2 className="text-xl font-bold text-blue-900">Event Monitoring Log</h2>
-                                        <span className="inline-flex items-center rounded-full bg-blue-100 px-2.5 py-0.5 text-xs font-medium text-blue-800">
+                                        <h2 className="text-xl font-bold text-slate-900">Event Monitoring Log</h2>
+                                        <span className="inline-flex items-center rounded-full bg-slate-100 px-2.5 py-0.5 text-xs font-medium text-slate-800">
                                             42 Events
                                         </span>
                                     </div>
@@ -1079,7 +1097,7 @@ export default function CentralMonitorAI() {
                                             <button
                                                 key={page}
                                                 onClick={() => setCurrentEventPage(page)}
-                                                className={`inline-flex items-center justify-center rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:opacity-50 disabled:pointer-events-none h-8 w-8 ${currentEventPage === page ? 'bg-blue-600 text-white' : 'border border-input bg-background hover:bg-accent hover:text-accent-foreground'}`}>
+                                                className={`inline-flex items-center justify-center rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:opacity-50 disabled:pointer-events-none h-8 w-8 ${currentEventPage === page ? 'bg-rose-600 text-white shadow-sm' : 'border border-input bg-background hover:bg-accent hover:text-accent-foreground'}`}>
                                                 {page}
                                             </button>
                                         ))}
@@ -1090,12 +1108,12 @@ export default function CentralMonitorAI() {
                         {activeTab === 'Workflows' && (
                             <div className="p-6 space-y-6">
                                 <div className="flex flex-col space-y-1">
-                                    <h2 className="text-2xl font-bold text-[#1e293b]">Agent Workflow Management</h2>
+                                    <h2 className="text-2xl font-bold text-slate-900">Agent Workflow Management</h2>
                                 </div>
 
-                                <div className="rounded-xl border border-blue-100 bg-white shadow-sm overflow-hidden">
-                                    <div className="p-6 border-b border-blue-50">
-                                        <h3 className="text-lg font-bold text-[#2563eb] mb-2 font-['Inter']">Configure Agent Dependencies</h3>
+                                <div className="rounded-xl border border-slate-100 bg-white shadow-sm overflow-hidden">
+                                    <div className="p-6 border-b border-slate-50">
+                                        <h3 className="text-lg font-bold text-rose-600 mb-2 font-['Inter']">Configure Agent Dependencies</h3>
                                         <p className="text-sm text-gray-500">
                                             Define how Central Monitor AI agents work together. Use sequential mode to ensure agents run in a specific order, or independent mode for parallel execution.
                                         </p>
@@ -1106,7 +1124,7 @@ export default function CentralMonitorAI() {
                                             <h3 className="text-lg font-bold text-gray-900">Agent Workflow Dependencies</h3>
                                             <button
                                                 onClick={() => setIsCreateWorkflowModalOpen(true)}
-                                                className="inline-flex items-center justify-center rounded-md text-sm font-bold bg-[#0085ff] text-white hover:bg-blue-600 h-10 px-4 py-2 gap-2 shadow-sm transition-colors">
+                                                className="inline-flex items-center justify-center rounded-md text-sm font-bold bg-rose-600 text-white hover:bg-rose-700 h-10 px-4 py-2 gap-2 shadow-sm transition-colors shadow-rose-200">
                                                 <Plus className="h-4 w-4" />
                                                 Add Workflow
                                             </button>
@@ -1142,7 +1160,7 @@ export default function CentralMonitorAI() {
                                                             <td className="p-6 align-middle">
                                                                 <div className="flex flex-wrap gap-2">
                                                                     {wf.dependencies.map((dep, idx) => (
-                                                                        <span key={idx} className="inline-flex items-center rounded-full bg-[#f0f9ff] px-3 py-1 text-xs font-bold text-[#0369a1] border border-[#bae6fd]">
+                                                                        <span key={idx} className="inline-flex items-center rounded-full bg-slate-50 px-3 py-1 text-xs font-bold text-slate-700 border border-slate-200">
                                                                             {dep}
                                                                         </span>
                                                                     ))}
@@ -1169,7 +1187,7 @@ export default function CentralMonitorAI() {
                                                                             });
                                                                             setIsEditWorkflowModalOpen(true);
                                                                         }}
-                                                                        className="text-gray-900 hover:text-blue-600 transition-colors">
+                                                                        className="text-slate-900 hover:text-rose-600 transition-colors">
                                                                         <Settings className="h-5 w-5" />
                                                                     </button>
                                                                     <button className="text-red-500 hover:text-red-700 transition-colors">
@@ -1201,13 +1219,13 @@ export default function CentralMonitorAI() {
                         {activeTab === 'Settings' && (
                             <div className="p-6 space-y-8 animate-in fade-in duration-500">
                                 <div className="flex items-center justify-between">
-                                    <h2 className="text-2xl font-bold text-blue-900">Settings Configuration</h2>
+                                    <h2 className="text-2xl font-bold text-slate-900">Settings Configuration</h2>
                                     <button
                                         onClick={() => {
                                             console.log('Saving settings:', settings);
                                             // Mock save success
                                         }}
-                                        className="inline-flex items-center justify-center rounded-lg bg-[#2563eb] px-6 py-2.5 text-sm font-bold text-white shadow-md hover:bg-blue-700 transition-all gap-2"
+                                        className="inline-flex items-center justify-center rounded-lg bg-rose-600 px-6 py-2.5 text-sm font-bold text-white shadow-md hover:bg-rose-700 transition-all gap-2 shadow-rose-200"
                                     >
                                         <Settings className="h-4 w-4" />
                                         Save Settings
@@ -1227,7 +1245,7 @@ export default function CentralMonitorAI() {
                                                 </div>
                                                 <button
                                                     onClick={() => setSettings({ ...settings, activeMonitoring: !settings.activeMonitoring })}
-                                                    className={`relative inline-flex h-7 w-14 shrink-0 cursor-pointer items-center rounded-full border-2 border-transparent transition-colors focus:outline-none ${settings.activeMonitoring ? 'bg-blue-600' : 'bg-gray-200'}`}
+                                                    className={`relative inline-flex h-7 w-14 shrink-0 cursor-pointer items-center rounded-full border-2 border-transparent transition-colors focus:outline-none ${settings.activeMonitoring ? 'bg-rose-600' : 'bg-slate-200'}`}
                                                 >
                                                     <span className={`pointer-events-none block h-5 w-5 rounded-full bg-white shadow-lg ring-0 transition-transform ${settings.activeMonitoring ? 'translate-x-7' : 'translate-x-0'}`} />
                                                 </button>
@@ -1243,7 +1261,7 @@ export default function CentralMonitorAI() {
                                                     <button
                                                         disabled={settings.activeMonitoring}
                                                         onClick={() => setSettings({ ...settings, scheduledMonitoring: !settings.scheduledMonitoring })}
-                                                        className={`relative inline-flex h-7 w-14 shrink-0 cursor-pointer items-center rounded-full border-2 border-transparent transition-colors focus:outline-none ${settings.scheduledMonitoring ? 'bg-blue-600' : 'bg-gray-200'}`}
+                                                        className={`relative inline-flex h-7 w-14 shrink-0 cursor-pointer items-center rounded-full border-2 border-transparent transition-colors focus:outline-none ${settings.scheduledMonitoring ? 'bg-rose-600' : 'bg-slate-200'}`}
                                                     >
                                                         <span className={`pointer-events-none block h-5 w-5 rounded-full bg-white shadow-lg ring-0 transition-transform ${settings.scheduledMonitoring ? 'translate-x-7' : 'translate-x-0'}`} />
                                                     </button>
@@ -1262,7 +1280,7 @@ export default function CentralMonitorAI() {
                                                                         ...settings,
                                                                         scheduleFrequency: { ...settings.scheduleFrequency, [key]: !val }
                                                                     })}
-                                                                    className="w-5 h-5 rounded border-gray-300 text-blue-600 focus:ring-blue-500"
+                                                                    className="w-5 h-5 rounded border-slate-300 text-rose-600 focus:ring-rose-500"
                                                                 />
                                                                 <span className="text-sm font-medium text-gray-700 capitalize">{key.replace(/([A-Z])/g, '-$1')}</span>
                                                             </label>
@@ -1282,7 +1300,7 @@ export default function CentralMonitorAI() {
                                                     <button
                                                         disabled={settings.activeMonitoring}
                                                         onClick={() => setSettings({ ...settings, eventTriggeredMonitoring: !settings.eventTriggeredMonitoring })}
-                                                        className={`relative inline-flex h-7 w-14 shrink-0 cursor-pointer items-center rounded-full border-2 border-transparent transition-colors focus:outline-none ${settings.eventTriggeredMonitoring ? 'bg-blue-600' : 'bg-gray-200'}`}
+                                                        className={`relative inline-flex h-7 w-14 shrink-0 cursor-pointer items-center rounded-full border-2 border-transparent transition-colors focus:outline-none ${settings.eventTriggeredMonitoring ? 'bg-rose-600' : 'bg-slate-200'}`}
                                                     >
                                                         <span className={`pointer-events-none block h-5 w-5 rounded-full bg-white shadow-lg ring-0 transition-transform ${settings.eventTriggeredMonitoring ? 'translate-x-7' : 'translate-x-0'}`} />
                                                     </button>
@@ -1361,7 +1379,7 @@ export default function CentralMonitorAI() {
                                             <div className="space-y-2">
                                                 <p className="text-[15px] font-bold text-gray-900">Email Recipients</p>
                                                 <textarea
-                                                    className="w-full h-24 rounded-lg border border-gray-200 p-4 text-sm focus:border-blue-500 focus:ring-1 focus:ring-blue-500 bg-gray-50/20 resize-none"
+                                                    className="w-full h-24 rounded-lg border border-slate-200 p-4 text-sm focus:border-rose-500 focus:ring-1 focus:ring-rose-500 bg-slate-50/20 resize-none"
                                                     value={settings.emailRecipients}
                                                     onChange={(e) => setSettings({ ...settings, emailRecipients: e.target.value })}
                                                 />
@@ -1389,7 +1407,7 @@ export default function CentralMonitorAI() {
                                                         </div>
                                                         <button
                                                             onClick={() => setSettings({ ...settings, [item.key]: !settings[item.key as keyof typeof settings] })}
-                                                            className={`relative inline-flex h-7 w-14 shrink-0 cursor-pointer items-center rounded-full border-2 border-transparent transition-colors focus:outline-none ${settings[item.key as keyof typeof settings] ? 'bg-blue-600' : 'bg-gray-200'}`}
+                                                            className={`relative inline-flex h-7 w-14 shrink-0 cursor-pointer items-center rounded-full border-2 border-transparent transition-colors focus:outline-none ${settings[item.key as keyof typeof settings] ? 'bg-rose-600' : 'bg-slate-200'}`}
                                                         >
                                                             <span className={`pointer-events-none block h-5 w-5 rounded-full bg-white shadow-lg ring-0 transition-transform ${settings[item.key as keyof typeof settings] ? 'translate-x-7' : 'translate-x-0'}`} />
                                                         </button>
@@ -1429,7 +1447,7 @@ export default function CentralMonitorAI() {
                                                 <p className="text-[15px] font-bold text-gray-900">AI Provider</p>
                                                 <div className="relative">
                                                     <select
-                                                        className="w-full h-12 appearance-none items-center justify-between rounded-lg border border-gray-200 bg-white px-4 py-2 text-sm focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-all font-medium text-gray-700"
+                                                        className="w-full h-12 appearance-none items-center justify-between rounded-lg border border-slate-200 bg-white px-4 py-2 text-sm focus:border-rose-500 focus:ring-1 focus:ring-rose-500 transition-all font-medium text-slate-700"
                                                         value={settings.aiProvider}
                                                         onChange={(e) => setSettings({ ...settings, aiProvider: e.target.value })}
                                                     >
@@ -1479,81 +1497,83 @@ export default function CentralMonitorAI() {
 
 
             {/* Chatbot specific to this page */}
-            {isChatbotOpen && (
-                <div className={`fixed bottom-6 right-6 z-50 transition-all duration-300 ${isChatbotMinimized ? 'scale-0 opacity-0 pointer-events-none' : 'scale-100 opacity-100'}`}>
-                    <div className="rounded-xl border text-card-foreground shadow-2xl bg-white w-[400px] h-[550px] flex flex-col overflow-hidden">
-                        <div className="bg-[#2563eb] text-white px-4 py-3 flex items-center justify-between">
-                            <div className="flex items-center space-x-3">
-                                <Bot className="h-6 w-6" />
-                                <span className="text-lg font-bold">Data Manager Assistant</span>
-                            </div>
-                            <div className="flex items-center gap-2">
-                                <button
-                                    onClick={() => setIsChatbotMinimized(true)}
-                                    className="p-1.5 hover:bg-white/10 rounded-md transition-colors">
-                                    <Maximize2 className="h-4 w-4" />
-                                </button>
-                                <button
-                                    onClick={() => {
-                                        setIsChatbotMinimized(true);
-                                    }}
-                                    className="p-1.5 hover:bg-white/10 rounded-md transition-colors">
-                                    <X className="h-5 w-5 font-bold" />
-                                </button>
-                            </div>
-                        </div>
-                        {/* Chat Content */}
-                        <div className="flex-1 overflow-hidden flex flex-col">
-                            <div className="p-4 bg-white border-b flex flex-wrap gap-2">
-                                {['Run DQ Checks', 'Create Task', 'Assign Task', 'View Task', 'Trial Health'].map((action) => (
-                                    <button key={action} className="inline-flex items-center justify-center rounded-md border border-gray-200 bg-white px-3 py-1.5 text-sm font-bold text-gray-900 hover:bg-gray-50 shadow-sm transition-colors">
-                                        {action}
+            {
+                isChatbotOpen && (
+                    <div className={`fixed bottom-6 right-6 z-50 transition-all duration-300 ${isChatbotMinimized ? 'scale-0 opacity-0 pointer-events-none' : 'scale-100 opacity-100'}`}>
+                        <div className="rounded-xl border text-card-foreground shadow-2xl bg-white w-[400px] h-[550px] flex flex-col overflow-hidden">
+                            <div className="bg-slate-900 text-white px-4 py-3 flex items-center justify-between">
+                                <div className="flex items-center space-x-3">
+                                    <Bot className="h-6 w-6" />
+                                    <span className="text-lg font-bold">Data Manager Assistant</span>
+                                </div>
+                                <div className="flex items-center gap-2">
+                                    <button
+                                        onClick={() => setIsChatbotMinimized(true)}
+                                        className="p-1.5 hover:bg-white/10 rounded-md transition-colors">
+                                        <Maximize2 className="h-4 w-4" />
                                     </button>
-                                ))}
+                                    <button
+                                        onClick={() => {
+                                            setIsChatbotMinimized(true);
+                                        }}
+                                        className="p-1.5 hover:bg-white/10 rounded-md transition-colors">
+                                        <X className="h-5 w-5 font-bold" />
+                                    </button>
+                                </div>
                             </div>
-                            <div className="flex-1 overflow-y-auto p-4 space-y-6 bg-gray-50/30">
-                                <div className="flex items-start gap-3">
-                                    <div className="h-9 w-9 rounded-full bg-blue-100 flex items-center justify-center flex-shrink-0 border border-blue-200">
-                                        <Bot className="h-5 w-5 text-blue-600" />
-                                    </div>
-                                    <div className="max-w-[85%] rounded-2xl p-4 bg-white text-gray-800 shadow-sm border border-gray-100">
-                                        <div className="text-[15px] leading-relaxed">
-                                            Hello! I'm your Data Manager AI assistant. How can I help you with data quality management for Diabetes Type 2 Study?
-                                            <br /><br />
-                                            You can ask me about:
-                                            <ul className="mt-2 space-y-1">
-                                                <li>• Trial health summary</li>
-                                                <li>• Data source health status</li>
-                                                <li>• Domain completeness</li>
-                                            </ul>
+                            {/* Chat Content */}
+                            <div className="flex-1 overflow-hidden flex flex-col">
+                                <div className="p-4 bg-white border-b flex flex-wrap gap-2">
+                                    {['Run DQ Checks', 'Create Task', 'Assign Task', 'View Task', 'Trial Health'].map((action) => (
+                                        <button key={action} className="inline-flex items-center justify-center rounded-md border border-gray-200 bg-white px-3 py-1.5 text-sm font-bold text-gray-900 hover:bg-gray-50 shadow-sm transition-colors">
+                                            {action}
+                                        </button>
+                                    ))}
+                                </div>
+                                <div className="flex-1 overflow-y-auto p-4 space-y-6 bg-gray-50/30">
+                                    <div className="flex items-start gap-3">
+                                        <div className="h-9 w-9 rounded-full bg-rose-100 flex items-center justify-center flex-shrink-0 border border-rose-200">
+                                            <Bot className="h-5 w-5 text-rose-600" />
+                                        </div>
+                                        <div className="max-w-[85%] rounded-2xl p-4 bg-white text-gray-800 shadow-sm border border-gray-100">
+                                            <div className="text-[15px] leading-relaxed">
+                                                Hello! I'm your Data Manager AI assistant. How can I help you with data quality management for Diabetes Type 2 Study?
+                                                <br /><br />
+                                                You can ask me about:
+                                                <ul className="mt-2 space-y-1">
+                                                    <li>• Trial health summary</li>
+                                                    <li>• Data source health status</li>
+                                                    <li>• Domain completeness</li>
+                                                </ul>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
-                            </div>
-                            <div className="p-4 bg-white border-t space-y-3">
-                                <div className="flex items-center justify-between px-3 py-2 bg-gray-50 rounded-lg border border-gray-100">
-                                    <span className="text-sm font-bold text-gray-900 leading-none">Task Assignment Mode: <span className="text-gray-500 font-medium ml-1">{isAgentMode ? 'Agent.AI' : 'Human in Loop'}</span></span>
-                                    <div
-                                        onClick={toggleAgentMode}
-                                        className={`relative inline-flex h-6 w-11 shrink-0 cursor-pointer items-center rounded-full border-2 border-transparent transition-colors focus:outline-none ${isAgentMode ? 'bg-[#2563eb]' : 'bg-gray-300'}`}
-                                    >
-                                        <span className={`pointer-events-none block h-5 w-5 rounded-full bg-white shadow-lg ring-0 transition-transform ${isAgentMode ? 'translate-x-5' : 'translate-x-0'}`} />
+                                <div className="p-4 bg-white border-t space-y-3">
+                                    <div className="flex items-center justify-between px-3 py-2 bg-gray-50 rounded-lg border border-gray-100">
+                                        <span className="text-sm font-bold text-gray-900 leading-none">Task Assignment Mode: <span className="text-gray-500 font-medium ml-1">{isAgentMode ? 'Agent.AI' : 'Human in Loop'}</span></span>
+                                        <div
+                                            onClick={toggleAgentMode}
+                                            className={`relative inline-flex h-6 w-11 shrink-0 cursor-pointer items-center rounded-full border-2 border-transparent transition-colors focus:outline-none ${isAgentMode ? 'bg-rose-600' : 'bg-slate-300'}`}
+                                        >
+                                            <span className={`pointer-events-none block h-5 w-5 rounded-full bg-white shadow-lg ring-0 transition-transform ${isAgentMode ? 'translate-x-5' : 'translate-x-0'}`} />
+                                        </div>
                                     </div>
-                                </div>
-                                <div className="flex gap-2 relative">
-                                    <input
-                                        className="flex h-12 w-full rounded-lg border border-gray-200 bg-white px-4 py-2 text-[15px] focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-all placeholder:text-gray-400"
-                                        placeholder="Ask about DQ checks, settings, monitoring..."
-                                    />
-                                    <button className="h-12 w-12 rounded-lg bg-[#a5b4fc] text-white flex items-center justify-center flex-shrink-0 hover:bg-blue-600 transition-colors shadow-sm">
-                                        <Sparkles className="h-6 w-6" />
-                                    </button>
+                                    <div className="flex gap-2 relative">
+                                        <input
+                                            className="flex h-12 w-full rounded-lg border border-slate-200 bg-white px-4 py-2 text-[15px] focus:outline-none focus:border-rose-500 focus:ring-1 focus:ring-rose-500 transition-all placeholder:text-slate-400"
+                                            placeholder="Ask about DQ checks, settings, monitoring..."
+                                        />
+                                        <button className="h-12 w-12 rounded-lg bg-rose-400 text-white flex items-center justify-center flex-shrink-0 hover:bg-rose-600 transition-colors shadow-sm">
+                                            <Sparkles className="h-6 w-6" />
+                                        </button>
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-                </div>
-            )}
+                )
+            }
 
             {/* Minimized Chatbot Icon */}
             <div
@@ -1563,7 +1583,7 @@ export default function CentralMonitorAI() {
                 }}
                 className={`fixed bottom-6 right-6 z-50 cursor-pointer transition-all duration-300 ${(!isChatbotOpen || isChatbotMinimized) ? 'scale-100 opacity-100' : 'scale-0 opacity-0 pointer-events-none'}`}
             >
-                <div className="h-14 w-14 rounded-full bg-[#2563eb] flex items-center justify-center text-white shadow-xl hover:shadow-2xl hover:bg-blue-700 transition-all">
+                <div className="h-14 w-14 rounded-full bg-rose-600 flex items-center justify-center text-white shadow-xl hover:shadow-2xl hover:bg-rose-700 transition-all shadow-rose-200">
                     <Bot className="h-7 w-7" />
                 </div>
             </div>
@@ -1644,7 +1664,7 @@ export default function CentralMonitorAI() {
                                             <div className="flex justify-between items-start mb-3">
                                                 <div className="flex items-center gap-2">
                                                     <div className="h-3 w-3 rounded-full bg-green-500 animate-pulse"></div>
-                                                    <h3 className="font-semibold text-blue-800 text-lg">{agent.title}</h3>
+                                                    <h3 className="font-semibold text-slate-800 text-lg">{agent.title}</h3>
                                                 </div>
                                                 <span className="bg-green-100 text-green-700 text-xs px-2 py-1 rounded-full font-medium">Active</span>
                                             </div>
@@ -1724,25 +1744,25 @@ export default function CentralMonitorAI() {
                             </button>
 
                             <div className="p-8">
-                                <h2 className="text-2xl font-bold text-blue-800 mb-2">Monitoring Analysis Complete</h2>
+                                <h2 className="text-2xl font-bold text-slate-800 mb-2">Monitoring Analysis Complete</h2>
                                 <p className="text-gray-500 mb-8">Here's a summary of issues detected in {selectedStudy.split('-')[0]}</p>
 
                                 <div className="grid grid-cols-2 gap-4 mb-8">
                                     {[
-                                        { count: 4, label: 'New Queries', color: 'text-blue-600' },
-                                        { count: 6, label: 'New Tasks', color: 'text-blue-600' },
-                                        { count: 1, label: 'Issues Found', color: 'text-blue-600' },
-                                        { count: 2, label: 'Signals Detected', color: 'text-blue-600' }
+                                        { count: 4, label: 'New Queries', color: 'text-rose-600' },
+                                        { count: 6, label: 'New Tasks', color: 'text-rose-600' },
+                                        { count: 1, label: 'Issues Found', color: 'text-rose-600' },
+                                        { count: 2, label: 'Signals Detected', color: 'text-rose-600' }
                                     ].map((stat, i) => (
-                                        <div key={i} className="border border-blue-100 rounded-lg p-6 flex flex-col items-center justify-center bg-white text-center shadow-sm">
+                                        <div key={i} className="border border-slate-100 rounded-lg p-6 flex flex-col items-center justify-center bg-white text-center shadow-sm">
                                             <span className={`text - 4xl font - bold ${stat.color} mb - 1`}>{stat.count}</span>
                                             <span className="text-gray-600">{stat.label}</span>
                                         </div>
                                     ))}
                                 </div>
 
-                                <div className="bg-blue-50/50 rounded-lg p-6 mb-8 border border-blue-100">
-                                    <h3 className="font-semibold text-blue-800 mb-4 text-lg">Key Findings</h3>
+                                <div className="bg-slate-50/50 rounded-lg p-6 mb-8 border border-slate-100">
+                                    <h3 className="font-semibold text-slate-800 mb-4 text-lg">Key Findings</h3>
                                     <ul className="space-y-3">
                                         <li className="flex items-start gap-3">
                                             <AlertCircle className="h-5 w-5 text-amber-500 shrink-0 mt-0.5" />
@@ -1765,7 +1785,7 @@ export default function CentralMonitorAI() {
 
                                 <button
                                     onClick={() => setShowCompletionModal(false)}
-                                    className="w-full bg-blue-600 hover:bg-blue-700 text-white font-medium py-3 rounded-md transition-colors text-lg shadow-sm"
+                                    className="w-full bg-rose-600 hover:bg-rose-700 text-white font-medium py-3 rounded-md transition-colors text-lg shadow-sm shadow-rose-200"
                                 >
                                     View Dashboard
                                 </button>
@@ -1864,7 +1884,7 @@ export default function CentralMonitorAI() {
                                         console.log('Creating query:', newQuery);
                                         setIsCreateQueryModalOpen(false);
                                     }}
-                                    className="inline-flex items-center justify-center rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-blue-600 text-white hover:bg-blue-700 h-10 px-4 py-2">
+                                    className="inline-flex items-center justify-center rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-rose-600 text-white hover:bg-rose-700 h-10 px-4 py-2 shadow-sm shadow-rose-200">
                                     Create Query
                                 </button>
                             </div>
@@ -1874,340 +1894,346 @@ export default function CentralMonitorAI() {
             }
 
             {/* Create Task Modal */}
-            {isCreateTaskModalOpen && (
-                <div className="fixed inset-0 z-50 bg-background/80 backdrop-blur-sm flex items-center justify-center">
-                    <div className="bg-white rounded-lg shadow-lg w-full max-w-lg p-6 border border-gray-200">
-                        <div className="flex items-center justify-between mb-4">
-                            <div>
-                                <h3 className="text-xl font-semibold text-gray-900">Create New Task</h3>
-                                <p className="text-sm text-gray-500">Create a new task for site monitoring activities.</p>
-                            </div>
-                            <button onClick={() => setIsCreateTaskModalOpen(false)} className="text-gray-400 hover:text-gray-500 p-1">
-                                <X className="h-5 w-5" />
-                            </button>
-                        </div>
-                        <div className="space-y-4">
-                            <div className="space-y-2">
-                                <label className="text-sm font-semibold text-gray-700">Task Title</label>
-                                <input
-                                    className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
-                                    placeholder="Enter task title"
-                                    value={newTask.title}
-                                    onChange={(e) => setNewTask({ ...newTask, title: e.target.value })}
-                                />
-                            </div>
-                            <div className="space-y-2">
-                                <label className="text-sm font-semibold text-gray-700">Assignee</label>
-                                <select
-                                    className="flex h-10 w-full items-center justify-between rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2"
-                                    value={newTask.assignee}
-                                    onChange={(e) => setNewTask({ ...newTask, assignee: e.target.value })}
-                                >
-                                    <option value="">Select an assignee</option>
-                                    <option value="Michael Wong (CRA)">Michael Wong (CRA)</option>
-                                    <option value="Jennifer Lee (CRA)">Jennifer Lee (CRA)</option>
-                                    <option value="Robert Chen (Data Manager)">Robert Chen (Data Manager)</option>
-                                    <option value="Sarah Johnson (Medical Monitor)">Sarah Johnson (Medical Monitor)</option>
-                                </select>
-                            </div>
-                            <div className="grid grid-cols-2 gap-4">
-                                <div className="space-y-2">
-                                    <label className="text-sm font-semibold text-gray-700">Priority</label>
-                                    <select
-                                        className="flex h-10 w-full items-center justify-between rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2"
-                                        value={newTask.priority}
-                                        onChange={(e) => setNewTask({ ...newTask, priority: e.target.value })}
-                                    >
-                                        <option value="Low">Low</option>
-                                        <option value="Medium">Medium</option>
-                                        <option value="High">High</option>
-                                    </select>
+            {
+                isCreateTaskModalOpen && (
+                    <div className="fixed inset-0 z-50 bg-background/80 backdrop-blur-sm flex items-center justify-center">
+                        <div className="bg-white rounded-lg shadow-lg w-full max-w-lg p-6 border border-gray-200">
+                            <div className="flex items-center justify-between mb-4">
+                                <div>
+                                    <h3 className="text-xl font-semibold text-gray-900">Create New Task</h3>
+                                    <p className="text-sm text-gray-500">Create a new task for site monitoring activities.</p>
                                 </div>
+                                <button onClick={() => setIsCreateTaskModalOpen(false)} className="text-gray-400 hover:text-gray-500 p-1">
+                                    <X className="h-5 w-5" />
+                                </button>
+                            </div>
+                            <div className="space-y-4">
                                 <div className="space-y-2">
-                                    <label className="text-sm font-semibold text-gray-700">Due Date</label>
+                                    <label className="text-sm font-semibold text-gray-700">Task Title</label>
                                     <input
-                                        type="date"
-                                        className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
-                                        value={newTask.dueDate}
-                                        onChange={(e) => setNewTask({ ...newTask, dueDate: e.target.value })}
+                                        className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
+                                        placeholder="Enter task title"
+                                        value={newTask.title}
+                                        onChange={(e) => setNewTask({ ...newTask, title: e.target.value })}
                                     />
                                 </div>
-                            </div>
-                            <div className="space-y-2">
-                                <label className="text-sm font-semibold text-gray-700">Description</label>
-                                <textarea
-                                    className="flex min-h-[100px] w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
-                                    placeholder="Enter task description..."
-                                    value={newTask.description}
-                                    onChange={(e) => setNewTask({ ...newTask, description: e.target.value })}
-                                />
-                            </div>
-                            <div className="space-y-2">
-                                <label className="text-sm font-semibold text-gray-700">Related Items</label>
                                 <div className="space-y-2">
-                                    <div className="flex items-center space-x-2">
-                                        <input type="checkbox" id="link-qry" className="rounded border-gray-300 text-blue-600 focus:ring-blue-500" />
-                                        <label htmlFor="link-qry" className="text-sm text-gray-700">Link to Query #QRY-132</label>
+                                    <label className="text-sm font-semibold text-gray-700">Assignee</label>
+                                    <select
+                                        className="flex h-10 w-full items-center justify-between rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2"
+                                        value={newTask.assignee}
+                                        onChange={(e) => setNewTask({ ...newTask, assignee: e.target.value })}
+                                    >
+                                        <option value="">Select an assignee</option>
+                                        <option value="Michael Wong (CRA)">Michael Wong (CRA)</option>
+                                        <option value="Jennifer Lee (CRA)">Jennifer Lee (CRA)</option>
+                                        <option value="Robert Chen (Data Manager)">Robert Chen (Data Manager)</option>
+                                        <option value="Sarah Johnson (Medical Monitor)">Sarah Johnson (Medical Monitor)</option>
+                                    </select>
+                                </div>
+                                <div className="grid grid-cols-2 gap-4">
+                                    <div className="space-y-2">
+                                        <label className="text-sm font-semibold text-gray-700">Priority</label>
+                                        <select
+                                            className="flex h-10 w-full items-center justify-between rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2"
+                                            value={newTask.priority}
+                                            onChange={(e) => setNewTask({ ...newTask, priority: e.target.value })}
+                                        >
+                                            <option value="Low">Low</option>
+                                            <option value="Medium">Medium</option>
+                                            <option value="High">High</option>
+                                        </select>
                                     </div>
-                                    <div className="flex items-center space-x-2">
-                                        <input type="checkbox" id="link-site" className="rounded border-gray-300 text-blue-600 focus:ring-blue-500" />
-                                        <label htmlFor="link-site" className="text-sm text-gray-700">Link to Site 101</label>
+                                    <div className="space-y-2">
+                                        <label className="text-sm font-semibold text-gray-700">Due Date</label>
+                                        <input
+                                            type="date"
+                                            className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
+                                            value={newTask.dueDate}
+                                            onChange={(e) => setNewTask({ ...newTask, dueDate: e.target.value })}
+                                        />
+                                    </div>
+                                </div>
+                                <div className="space-y-2">
+                                    <label className="text-sm font-semibold text-gray-700">Description</label>
+                                    <textarea
+                                        className="flex min-h-[100px] w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
+                                        placeholder="Enter task description..."
+                                        value={newTask.description}
+                                        onChange={(e) => setNewTask({ ...newTask, description: e.target.value })}
+                                    />
+                                </div>
+                                <div className="space-y-2">
+                                    <label className="text-sm font-semibold text-gray-700">Related Items</label>
+                                    <div className="space-y-2">
+                                        <div className="flex items-center space-x-2">
+                                            <input type="checkbox" id="link-qry" className="rounded border-gray-300 text-blue-600 focus:ring-blue-500" />
+                                            <label htmlFor="link-qry" className="text-sm text-gray-700">Link to Query #QRY-132</label>
+                                        </div>
+                                        <div className="flex items-center space-x-2">
+                                            <input type="checkbox" id="link-site" className="rounded border-gray-300 text-blue-600 focus:ring-blue-500" />
+                                            <label htmlFor="link-site" className="text-sm text-gray-700">Link to Site 101</label>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
-                        </div>
-                        <div className="flex justify-end gap-3 mt-8">
-                            <button
-                                onClick={() => setIsCreateTaskModalOpen(false)}
-                                className="inline-flex items-center justify-center rounded-md text-sm font-medium border border-input bg-background hover:bg-gray-100 h-10 px-6 py-2 transition-colors">
-                                Cancel
-                            </button>
-                            <button
-                                onClick={() => {
-                                    console.log('Creating task:', newTask);
-                                    setIsCreateTaskModalOpen(false);
-                                }}
-                                className="inline-flex items-center justify-center rounded-md text-sm font-medium bg-blue-600 text-white hover:bg-blue-700 h-10 px-6 py-2 shadow-sm transition-colors">
-                                Create Task
-                            </button>
+                            <div className="flex justify-end gap-3 mt-8">
+                                <button
+                                    onClick={() => setIsCreateTaskModalOpen(false)}
+                                    className="inline-flex items-center justify-center rounded-md text-sm font-medium border border-input bg-background hover:bg-gray-100 h-10 px-6 py-2 transition-colors">
+                                    Cancel
+                                </button>
+                                <button
+                                    onClick={() => {
+                                        console.log('Creating task:', newTask);
+                                        setIsCreateTaskModalOpen(false);
+                                    }}
+                                    className="inline-flex items-center justify-center rounded-md text-sm font-medium bg-rose-600 text-white hover:bg-rose-700 h-10 px-6 py-2 shadow-sm transition-colors shadow-rose-200">
+                                    Create Task
+                                </button>
+                            </div>
                         </div>
                     </div>
-                </div>
-            )}
+                )
+            }
 
             {/* Create Workflow Modal */}
-            {isCreateWorkflowModalOpen && (
-                <div className="fixed inset-0 z-[100] bg-black/50 backdrop-blur-[2px] flex items-center justify-center p-4">
-                    <div className="bg-white rounded-xl shadow-2xl w-full max-w-[580px] overflow-hidden border border-gray-100 italic-none">
-                        <div className="flex items-center justify-between px-8 py-6 border-b border-gray-100">
-                            <div>
-                                <h3 className="text-[22px] font-bold text-gray-900">Create Agent Workflow</h3>
-                                <p className="text-sm text-gray-500 mt-0.5">Configure how agents work together in the CentralMonitorAI system.</p>
+            {
+                isCreateWorkflowModalOpen && (
+                    <div className="fixed inset-0 z-[100] bg-black/50 backdrop-blur-[2px] flex items-center justify-center p-4">
+                        <div className="bg-white rounded-xl shadow-2xl w-full max-w-[580px] overflow-hidden border border-gray-100 italic-none">
+                            <div className="flex items-center justify-between px-8 py-6 border-b border-gray-100">
+                                <div>
+                                    <h3 className="text-[22px] font-bold text-gray-900">Create Agent Workflow</h3>
+                                    <p className="text-sm text-gray-500 mt-0.5">Configure how agents work together in the CentralMonitorAI system.</p>
+                                </div>
+                                <button onClick={() => setIsCreateWorkflowModalOpen(false)} className="text-gray-400 hover:text-gray-600 transition-colors">
+                                    <X className="h-6 w-6" />
+                                </button>
                             </div>
-                            <button onClick={() => setIsCreateWorkflowModalOpen(false)} className="text-gray-400 hover:text-gray-600 transition-colors">
-                                <X className="h-6 w-6" />
-                            </button>
-                        </div>
-                        <div className="p-8 space-y-6">
-                            <div className="grid grid-cols-[130px_1fr] gap-6 items-center">
-                                <label className="text-[15px] font-bold text-gray-900 text-right">Name</label>
-                                <input
-                                    className="flex h-11 w-full rounded-lg border border-gray-200 bg-gray-50/30 px-4 py-2 text-sm focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-all"
-                                    placeholder="Test"
-                                    value={newWorkflow.name}
-                                    onChange={(e) => setNewWorkflow({ ...newWorkflow, name: e.target.value })}
-                                />
-                            </div>
-                            <div className="grid grid-cols-[130px_1fr] gap-6 items-start">
-                                <label className="text-[15px] font-bold text-gray-900 text-right mt-2">Description</label>
-                                <textarea
-                                    className="flex min-h-[100px] w-full rounded-lg border border-gray-200 bg-gray-50/30 px-4 py-3 text-sm focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-all resize-none"
-                                    placeholder="What this workflow does..."
-                                    value={newWorkflow.description}
-                                    onChange={(e) => setNewWorkflow({ ...newWorkflow, description: e.target.value })}
-                                />
-                            </div>
-                            <div className="grid grid-cols-[130px_1fr] gap-6 items-center">
-                                <label className="text-[15px] font-bold text-gray-900 text-right">Agent Type</label>
-                                <div className="relative">
-                                    <select
-                                        className="flex h-11 w-full appearance-none items-center justify-between rounded-lg border border-gray-200 bg-gray-50/30 px-4 py-2 text-sm focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-all"
-                                        value={newWorkflow.agentType}
-                                        onChange={(e) => setNewWorkflow({ ...newWorkflow, agentType: e.target.value })}
-                                    >
-                                        <option value="Signal Detection">Signal Detection</option>
-                                        <option value="Task Manager">Task Manager</option>
-                                        <option value="Query Manager">Query Manager</option>
-                                        <option value="Site Monitor">Site Monitor</option>
-                                    </select>
-                                    <ChevronDown className="absolute right-4 top-3.5 h-4 w-4 text-gray-400 pointer-events-none" />
+                            <div className="p-8 space-y-6">
+                                <div className="grid grid-cols-[130px_1fr] gap-6 items-center">
+                                    <label className="text-[15px] font-bold text-gray-900 text-right">Name</label>
+                                    <input
+                                        className="flex h-11 w-full rounded-lg border border-slate-200 bg-slate-50/30 px-4 py-2 text-sm focus:border-rose-500 focus:ring-1 focus:ring-rose-500 transition-all"
+                                        placeholder="Test"
+                                        value={newWorkflow.name}
+                                        onChange={(e) => setNewWorkflow({ ...newWorkflow, name: e.target.value })}
+                                    />
+                                </div>
+                                <div className="grid grid-cols-[130px_1fr] gap-6 items-start">
+                                    <label className="text-[15px] font-bold text-gray-900 text-right mt-2">Description</label>
+                                    <textarea
+                                        className="flex min-h-[100px] w-full rounded-lg border border-slate-200 bg-slate-50/30 px-4 py-3 text-sm focus:border-rose-500 focus:ring-1 focus:ring-rose-500 transition-all resize-none"
+                                        placeholder="What this workflow does..."
+                                        value={newWorkflow.description}
+                                        onChange={(e) => setNewWorkflow({ ...newWorkflow, description: e.target.value })}
+                                    />
+                                </div>
+                                <div className="grid grid-cols-[130px_1fr] gap-6 items-center">
+                                    <label className="text-[15px] font-bold text-gray-900 text-right">Agent Type</label>
+                                    <div className="relative">
+                                        <select
+                                            className="flex h-11 w-full appearance-none items-center justify-between rounded-lg border border-slate-200 bg-slate-50/30 px-4 py-2 text-sm focus:border-rose-500 focus:ring-1 focus:ring-rose-500 transition-all"
+                                            value={newWorkflow.agentType}
+                                            onChange={(e) => setNewWorkflow({ ...newWorkflow, agentType: e.target.value })}
+                                        >
+                                            <option value="Signal Detection">Signal Detection</option>
+                                            <option value="Task Manager">Task Manager</option>
+                                            <option value="Query Manager">Query Manager</option>
+                                            <option value="Site Monitor">Site Monitor</option>
+                                        </select>
+                                        <ChevronDown className="absolute right-4 top-3.5 h-4 w-4 text-gray-400 pointer-events-none" />
+                                    </div>
+                                </div>
+                                <div className="grid grid-cols-[130px_1fr] gap-6 items-center">
+                                    <label className="text-[15px] font-bold text-gray-900 text-right">Execution Mode</label>
+                                    <div className="relative">
+                                        <select
+                                            className="flex h-11 w-full appearance-none items-center justify-between rounded-lg border border-gray-200 bg-gray-50/30 px-4 py-2 text-sm focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-all"
+                                            value={newWorkflow.executionMode}
+                                            onChange={(e) => setNewWorkflow({ ...newWorkflow, executionMode: e.target.value })}
+                                        >
+                                            <option value="sequential">sequential</option>
+                                            <option value="independent">independent</option>
+                                            <option value="conditional">conditional</option>
+                                        </select>
+                                        <ChevronDown className="absolute right-4 top-3.5 h-4 w-4 text-gray-400 pointer-events-none" />
+                                    </div>
+                                </div>
+                                <div className="grid grid-cols-[130px_1fr] gap-6 items-start">
+                                    <label className="text-[15px] font-bold text-gray-900 text-right mt-2">Prerequisites</label>
+                                    <div className="bg-white border border-gray-200 rounded-lg p-4 space-y-3">
+                                        {['Signal Detection', 'Task Manager', 'Query Manager'].map((dep) => (
+                                            <label key={dep} className="flex items-center gap-3 cursor-pointer group">
+                                                <input
+                                                    type="checkbox"
+                                                    checked={newWorkflow.prerequisites.includes(dep)}
+                                                    onChange={(e) => {
+                                                        if (e.target.checked) {
+                                                            setNewWorkflow({ ...newWorkflow, prerequisites: [...newWorkflow.prerequisites, dep] });
+                                                        } else {
+                                                            setNewWorkflow({ ...newWorkflow, prerequisites: newWorkflow.prerequisites.filter(p => p !== dep) });
+                                                        }
+                                                    }}
+                                                    className="w-5 h-5 rounded border-slate-300 text-rose-600 focus:ring-rose-500 transition-all cursor-pointer"
+                                                />
+                                                <span className="text-[15px] font-bold text-gray-900 group-hover:text-blue-600 transition-colors">{dep}</span>
+                                            </label>
+                                        ))}
+                                    </div>
+                                </div>
+                                <div className="grid grid-cols-[130px_1fr] gap-6 items-center">
+                                    <label className="text-[15px] font-bold text-gray-900 text-right">Enabled</label>
+                                    <div className="flex items-center gap-4">
+                                        <button
+                                            onClick={() => setNewWorkflow({ ...newWorkflow, enabled: !newWorkflow.enabled })}
+                                            className={`relative inline-flex h-7 w-14 shrink-0 cursor-pointer items-center rounded-full border-2 border-transparent transition-colors focus:outline-none ${newWorkflow.enabled ? 'bg-rose-600' : 'bg-slate-200'}`}
+                                        >
+                                            <span className={`pointer-events-none block h-5 w-5 rounded-full bg-white shadow-lg ring-0 transition-transform ${newWorkflow.enabled ? 'translate-x-7' : 'translate-x-0'}`} />
+                                        </button>
+                                        <span className="text-[15px] font-bold text-gray-900">Active</span>
+                                    </div>
                                 </div>
                             </div>
-                            <div className="grid grid-cols-[130px_1fr] gap-6 items-center">
-                                <label className="text-[15px] font-bold text-gray-900 text-right">Execution Mode</label>
-                                <div className="relative">
-                                    <select
-                                        className="flex h-11 w-full appearance-none items-center justify-between rounded-lg border border-gray-200 bg-gray-50/30 px-4 py-2 text-sm focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-all"
-                                        value={newWorkflow.executionMode}
-                                        onChange={(e) => setNewWorkflow({ ...newWorkflow, executionMode: e.target.value })}
-                                    >
-                                        <option value="sequential">sequential</option>
-                                        <option value="independent">independent</option>
-                                        <option value="conditional">conditional</option>
-                                    </select>
-                                    <ChevronDown className="absolute right-4 top-3.5 h-4 w-4 text-gray-400 pointer-events-none" />
-                                </div>
+                            <div className="px-8 py-6 bg-gray-50/50 border-t border-gray-100 flex justify-end gap-3">
+                                <button
+                                    onClick={() => setIsCreateWorkflowModalOpen(false)}
+                                    className="h-11 px-8 rounded-lg border border-gray-200 bg-white text-sm font-bold text-gray-700 hover:bg-gray-50 transition-all">
+                                    Cancel
+                                </button>
+                                <button
+                                    onClick={() => {
+                                        console.log('Adding workflow:', newWorkflow);
+                                        setIsCreateWorkflowModalOpen(false);
+                                    }}
+                                    className="h-11 px-8 rounded-lg bg-rose-600 text-white text-sm font-bold hover:bg-rose-700 shadow-md shadow-rose-200 transition-all">
+                                    Create Workflow
+                                </button>
                             </div>
-                            <div className="grid grid-cols-[130px_1fr] gap-6 items-start">
-                                <label className="text-[15px] font-bold text-gray-900 text-right mt-2">Prerequisites</label>
-                                <div className="bg-white border border-gray-200 rounded-lg p-4 space-y-3">
-                                    {['Signal Detection', 'Task Manager', 'Query Manager'].map((dep) => (
-                                        <label key={dep} className="flex items-center gap-3 cursor-pointer group">
-                                            <input
-                                                type="checkbox"
-                                                checked={newWorkflow.prerequisites.includes(dep)}
-                                                onChange={(e) => {
-                                                    if (e.target.checked) {
-                                                        setNewWorkflow({ ...newWorkflow, prerequisites: [...newWorkflow.prerequisites, dep] });
-                                                    } else {
-                                                        setNewWorkflow({ ...newWorkflow, prerequisites: newWorkflow.prerequisites.filter(p => p !== dep) });
-                                                    }
-                                                }}
-                                                className="w-5 h-5 rounded border-gray-300 text-blue-600 focus:ring-blue-500 transition-all cursor-pointer"
-                                            />
-                                            <span className="text-[15px] font-bold text-gray-900 group-hover:text-blue-600 transition-colors">{dep}</span>
-                                        </label>
-                                    ))}
-                                </div>
-                            </div>
-                            <div className="grid grid-cols-[130px_1fr] gap-6 items-center">
-                                <label className="text-[15px] font-bold text-gray-900 text-right">Enabled</label>
-                                <div className="flex items-center gap-4">
-                                    <button
-                                        onClick={() => setNewWorkflow({ ...newWorkflow, enabled: !newWorkflow.enabled })}
-                                        className={`relative inline-flex h-7 w-14 shrink-0 cursor-pointer items-center rounded-full border-2 border-transparent transition-colors focus:outline-none ${newWorkflow.enabled ? 'bg-blue-600' : 'bg-gray-200'}`}
-                                    >
-                                        <span className={`pointer-events-none block h-5 w-5 rounded-full bg-white shadow-lg ring-0 transition-transform ${newWorkflow.enabled ? 'translate-x-7' : 'translate-x-0'}`} />
-                                    </button>
-                                    <span className="text-[15px] font-bold text-gray-900">Active</span>
-                                </div>
-                            </div>
-                        </div>
-                        <div className="px-8 py-6 bg-gray-50/50 border-t border-gray-100 flex justify-end gap-3">
-                            <button
-                                onClick={() => setIsCreateWorkflowModalOpen(false)}
-                                className="h-11 px-8 rounded-lg border border-gray-200 bg-white text-sm font-bold text-gray-700 hover:bg-gray-50 transition-all">
-                                Cancel
-                            </button>
-                            <button
-                                onClick={() => {
-                                    console.log('Adding workflow:', newWorkflow);
-                                    setIsCreateWorkflowModalOpen(false);
-                                }}
-                                className="h-11 px-8 rounded-lg bg-[#0085ff] text-white text-sm font-bold hover:bg-blue-600 shadow-md shadow-blue-200 transition-all">
-                                Create Workflow
-                            </button>
                         </div>
                     </div>
-                </div>
-            )}
+                )
+            }
 
             {/* Edit Workflow Modal */}
-            {isEditWorkflowModalOpen && (
-                <div className="fixed inset-0 z-[100] bg-black/50 backdrop-blur-[2px] flex items-center justify-center p-4">
-                    <div className="bg-white rounded-xl shadow-2xl w-full max-w-[580px] overflow-hidden border border-gray-100 italic-none">
-                        <div className="flex items-center justify-between px-8 py-6 border-b border-gray-100">
-                            <div>
-                                <h3 className="text-[22px] font-bold text-gray-900">Edit Agent Workflow</h3>
-                                <p className="text-sm text-gray-500">Edit existing agent workflow parameters.</p>
+            {
+                isEditWorkflowModalOpen && (
+                    <div className="fixed inset-0 z-[100] bg-black/50 backdrop-blur-[2px] flex items-center justify-center p-4">
+                        <div className="bg-white rounded-xl shadow-2xl w-full max-w-[580px] overflow-hidden border border-gray-100 italic-none">
+                            <div className="flex items-center justify-between px-8 py-6 border-b border-gray-100">
+                                <div>
+                                    <h3 className="text-[22px] font-bold text-gray-900">Edit Agent Workflow</h3>
+                                    <p className="text-sm text-gray-500">Edit existing agent workflow parameters.</p>
+                                </div>
+                                <button onClick={() => setIsEditWorkflowModalOpen(false)} className="text-gray-400 hover:text-gray-600 transition-colors">
+                                    <X className="h-6 w-6" />
+                                </button>
                             </div>
-                            <button onClick={() => setIsEditWorkflowModalOpen(false)} className="text-gray-400 hover:text-gray-600 transition-colors">
-                                <X className="h-6 w-6" />
-                            </button>
-                        </div>
-                        <div className="p-8 space-y-6">
-                            <div className="grid grid-cols-[130px_1fr] gap-6 items-center">
-                                <label className="text-[15px] font-bold text-gray-900 text-right">Name</label>
-                                <input
-                                    className="flex h-11 w-full rounded-lg border border-gray-200 bg-gray-50/30 px-4 py-2 text-sm focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-all"
-                                    placeholder="Enter workflow name"
-                                    value={editingWorkflow.name}
-                                    onChange={(e) => setEditingWorkflow({ ...editingWorkflow, name: e.target.value })}
-                                />
-                            </div>
-                            <div className="grid grid-cols-[130px_1fr] gap-6 items-start">
-                                <label className="text-[15px] font-bold text-gray-900 text-right mt-2">Description</label>
-                                <textarea
-                                    className="flex min-h-[100px] w-full rounded-lg border border-gray-200 bg-gray-50/30 px-4 py-3 text-sm focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-all resize-none"
-                                    placeholder="What this workflow does..."
-                                    value={editingWorkflow.description}
-                                    onChange={(e) => setEditingWorkflow({ ...editingWorkflow, description: e.target.value })}
-                                />
-                            </div>
-                            <div className="grid grid-cols-[130px_1fr] gap-6 items-center">
-                                <label className="text-[15px] font-bold text-gray-900 text-right">Agent Type</label>
-                                <div className="relative">
-                                    <select
-                                        className="flex h-11 w-full appearance-none items-center justify-between rounded-lg border border-gray-200 bg-gray-50/30 px-4 py-2 text-sm focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-all"
-                                        value={editingWorkflow.agentType}
-                                        onChange={(e) => setEditingWorkflow({ ...editingWorkflow, agentType: e.target.value })}
-                                    >
-                                        <option value="Signal Detection">Signal Detection</option>
-                                        <option value="Task Manager">Task Manager</option>
-                                        <option value="Query Manager">Query Manager</option>
-                                        <option value="Site Monitor">Site Monitor</option>
-                                    </select>
-                                    <ChevronDown className="absolute right-4 top-3.5 h-4 w-4 text-gray-400 pointer-events-none" />
+                            <div className="p-8 space-y-6">
+                                <div className="grid grid-cols-[130px_1fr] gap-6 items-center">
+                                    <label className="text-[15px] font-bold text-gray-900 text-right">Name</label>
+                                    <input
+                                        className="flex h-11 w-full rounded-lg border border-gray-200 bg-gray-50/30 px-4 py-2 text-sm focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-all"
+                                        placeholder="Enter workflow name"
+                                        value={editingWorkflow.name}
+                                        onChange={(e) => setEditingWorkflow({ ...editingWorkflow, name: e.target.value })}
+                                    />
+                                </div>
+                                <div className="grid grid-cols-[130px_1fr] gap-6 items-start">
+                                    <label className="text-[15px] font-bold text-gray-900 text-right mt-2">Description</label>
+                                    <textarea
+                                        className="flex min-h-[100px] w-full rounded-lg border border-gray-200 bg-gray-50/30 px-4 py-3 text-sm focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-all resize-none"
+                                        placeholder="What this workflow does..."
+                                        value={editingWorkflow.description}
+                                        onChange={(e) => setEditingWorkflow({ ...editingWorkflow, description: e.target.value })}
+                                    />
+                                </div>
+                                <div className="grid grid-cols-[130px_1fr] gap-6 items-center">
+                                    <label className="text-[15px] font-bold text-gray-900 text-right">Agent Type</label>
+                                    <div className="relative">
+                                        <select
+                                            className="flex h-11 w-full appearance-none items-center justify-between rounded-lg border border-gray-200 bg-gray-50/30 px-4 py-2 text-sm focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-all"
+                                            value={editingWorkflow.agentType}
+                                            onChange={(e) => setEditingWorkflow({ ...editingWorkflow, agentType: e.target.value })}
+                                        >
+                                            <option value="Signal Detection">Signal Detection</option>
+                                            <option value="Task Manager">Task Manager</option>
+                                            <option value="Query Manager">Query Manager</option>
+                                            <option value="Site Monitor">Site Monitor</option>
+                                        </select>
+                                        <ChevronDown className="absolute right-4 top-3.5 h-4 w-4 text-gray-400 pointer-events-none" />
+                                    </div>
+                                </div>
+                                <div className="grid grid-cols-[130px_1fr] gap-6 items-center">
+                                    <label className="text-[15px] font-bold text-gray-900 text-right">Execution Mode</label>
+                                    <div className="relative">
+                                        <select
+                                            className="flex h-11 w-full appearance-none items-center justify-between rounded-lg border border-gray-200 bg-gray-50/30 px-4 py-2 text-sm focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-all"
+                                            value={editingWorkflow.executionMode}
+                                            onChange={(e) => setEditingWorkflow({ ...editingWorkflow, executionMode: e.target.value })}
+                                        >
+                                            <option value="sequential">sequential</option>
+                                            <option value="independent">independent</option>
+                                            <option value="conditional">conditional</option>
+                                        </select>
+                                        <ChevronDown className="absolute right-4 top-3.5 h-4 w-4 text-gray-400 pointer-events-none" />
+                                    </div>
+                                </div>
+                                <div className="grid grid-cols-[130px_1fr] gap-6 items-start">
+                                    <label className="text-[15px] font-bold text-gray-900 text-right mt-2">Prerequisites</label>
+                                    <div className="bg-white border border-gray-200 rounded-lg p-4 space-y-3">
+                                        {['Signal Detection', 'Task Manager', 'Query Manager'].map((dep) => (
+                                            <label key={dep} className="flex items-center gap-3 cursor-pointer group">
+                                                <input
+                                                    type="checkbox"
+                                                    checked={editingWorkflow.prerequisites.includes(dep)}
+                                                    onChange={(e) => {
+                                                        if (e.target.checked) {
+                                                            setEditingWorkflow({ ...editingWorkflow, prerequisites: [...editingWorkflow.prerequisites, dep] });
+                                                        } else {
+                                                            setEditingWorkflow({ ...editingWorkflow, prerequisites: editingWorkflow.prerequisites.filter(p => p !== dep) });
+                                                        }
+                                                    }}
+                                                    className="w-5 h-5 rounded border-gray-300 text-blue-600 focus:ring-blue-500 transition-all cursor-pointer"
+                                                />
+                                                <span className="text-[15px] font-bold text-gray-900 group-hover:text-blue-600 transition-colors">{dep}</span>
+                                            </label>
+                                        ))}
+                                    </div>
+                                </div>
+                                <div className="grid grid-cols-[130px_1fr] gap-6 items-center">
+                                    <label className="text-[15px] font-bold text-gray-900 text-right">Enabled</label>
+                                    <div className="flex items-center gap-4">
+                                        <button
+                                            onClick={() => setEditingWorkflow({ ...editingWorkflow, enabled: !editingWorkflow.enabled })}
+                                            className={`relative inline-flex h-7 w-14 shrink-0 cursor-pointer items-center rounded-full border-2 border-transparent transition-colors focus:outline-none ${editingWorkflow.enabled ? 'bg-rose-600' : 'bg-slate-200'}`}
+                                        >
+                                            <span className={`pointer-events-none block h-5 w-5 rounded-full bg-white shadow-lg ring-0 transition-transform ${editingWorkflow.enabled ? 'translate-x-7' : 'translate-x-0'}`} />
+                                        </button>
+                                        <span className="text-[15px] font-bold text-gray-900">Active</span>
+                                    </div>
                                 </div>
                             </div>
-                            <div className="grid grid-cols-[130px_1fr] gap-6 items-center">
-                                <label className="text-[15px] font-bold text-gray-900 text-right">Execution Mode</label>
-                                <div className="relative">
-                                    <select
-                                        className="flex h-11 w-full appearance-none items-center justify-between rounded-lg border border-gray-200 bg-gray-50/30 px-4 py-2 text-sm focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-all"
-                                        value={editingWorkflow.executionMode}
-                                        onChange={(e) => setEditingWorkflow({ ...editingWorkflow, executionMode: e.target.value })}
-                                    >
-                                        <option value="sequential">sequential</option>
-                                        <option value="independent">independent</option>
-                                        <option value="conditional">conditional</option>
-                                    </select>
-                                    <ChevronDown className="absolute right-4 top-3.5 h-4 w-4 text-gray-400 pointer-events-none" />
-                                </div>
+                            <div className="px-8 py-6 bg-gray-50/50 border-t border-gray-100 flex justify-end gap-3">
+                                <button
+                                    onClick={() => setIsEditWorkflowModalOpen(false)}
+                                    className="h-11 px-8 rounded-lg border border-gray-200 bg-white text-sm font-bold text-gray-700 hover:bg-gray-50 transition-all">
+                                    Cancel
+                                </button>
+                                <button
+                                    onClick={() => {
+                                        console.log('Updating workflow:', editingWorkflow);
+                                        setIsEditWorkflowModalOpen(false);
+                                    }}
+                                    className="h-11 px-8 rounded-lg bg-[#0085ff] text-white text-sm font-bold hover:bg-blue-600 shadow-md shadow-blue-200 transition-all">
+                                    Save Changes
+                                </button>
                             </div>
-                            <div className="grid grid-cols-[130px_1fr] gap-6 items-start">
-                                <label className="text-[15px] font-bold text-gray-900 text-right mt-2">Prerequisites</label>
-                                <div className="bg-white border border-gray-200 rounded-lg p-4 space-y-3">
-                                    {['Signal Detection', 'Task Manager', 'Query Manager'].map((dep) => (
-                                        <label key={dep} className="flex items-center gap-3 cursor-pointer group">
-                                            <input
-                                                type="checkbox"
-                                                checked={editingWorkflow.prerequisites.includes(dep)}
-                                                onChange={(e) => {
-                                                    if (e.target.checked) {
-                                                        setEditingWorkflow({ ...editingWorkflow, prerequisites: [...editingWorkflow.prerequisites, dep] });
-                                                    } else {
-                                                        setEditingWorkflow({ ...editingWorkflow, prerequisites: editingWorkflow.prerequisites.filter(p => p !== dep) });
-                                                    }
-                                                }}
-                                                className="w-5 h-5 rounded border-gray-300 text-blue-600 focus:ring-blue-500 transition-all cursor-pointer"
-                                            />
-                                            <span className="text-[15px] font-bold text-gray-900 group-hover:text-blue-600 transition-colors">{dep}</span>
-                                        </label>
-                                    ))}
-                                </div>
-                            </div>
-                            <div className="grid grid-cols-[130px_1fr] gap-6 items-center">
-                                <label className="text-[15px] font-bold text-gray-900 text-right">Enabled</label>
-                                <div className="flex items-center gap-4">
-                                    <button
-                                        onClick={() => setEditingWorkflow({ ...editingWorkflow, enabled: !editingWorkflow.enabled })}
-                                        className={`relative inline-flex h-7 w-14 shrink-0 cursor-pointer items-center rounded-full border-2 border-transparent transition-colors focus:outline-none ${editingWorkflow.enabled ? 'bg-blue-600' : 'bg-gray-200'}`}
-                                    >
-                                        <span className={`pointer-events-none block h-5 w-5 rounded-full bg-white shadow-lg ring-0 transition-transform ${editingWorkflow.enabled ? 'translate-x-7' : 'translate-x-0'}`} />
-                                    </button>
-                                    <span className="text-[15px] font-bold text-gray-900">Active</span>
-                                </div>
-                            </div>
-                        </div>
-                        <div className="px-8 py-6 bg-gray-50/50 border-t border-gray-100 flex justify-end gap-3">
-                            <button
-                                onClick={() => setIsEditWorkflowModalOpen(false)}
-                                className="h-11 px-8 rounded-lg border border-gray-200 bg-white text-sm font-bold text-gray-700 hover:bg-gray-50 transition-all">
-                                Cancel
-                            </button>
-                            <button
-                                onClick={() => {
-                                    console.log('Updating workflow:', editingWorkflow);
-                                    setIsEditWorkflowModalOpen(false);
-                                }}
-                                className="h-11 px-8 rounded-lg bg-[#0085ff] text-white text-sm font-bold hover:bg-blue-600 shadow-md shadow-blue-200 transition-all">
-                                Save Changes
-                            </button>
                         </div>
                     </div>
-                </div>
-            )}
-        </div>
+                )
+            }
+        </div >
     );
 }
