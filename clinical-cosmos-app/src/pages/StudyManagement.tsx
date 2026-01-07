@@ -6,32 +6,6 @@ import { studyService, documentService } from '../services/api';
 function StudyDetail({ study, onBack }: { study: any, onBack: () => void }) {
     const [activeTab, setActiveTab] = useState('overview');
 
-    // Sites Tab State (Mock Data)
-    const [sites] = useState([
-        { id: 'SITE001-001', name: 'Memorial Research Hospital', location: 'Boston, MA', status: 'Active', enrollment: '0/0', pi: 'Dr. James Wilson' },
-        { id: 'SITE001-002', name: 'City Medical Center', location: 'Chicago, IL', status: 'Active', enrollment: '0/0', pi: 'Dr. Sarah Johnson' },
-        { id: 'SITE001-003', name: 'University Hospital', location: 'San Francisco, CA', status: 'Active', enrollment: '0/0', pi: 'Dr. Robert Chen' },
-        { id: 'SITE001-004', name: 'Pacific Research Institute', location: 'Seattle, WA', status: 'Active', enrollment: '0/0', pi: 'Dr. Emily Parker' },
-        { id: 'SITE001-005', name: 'Southside Medical Center', location: 'Atlanta, GA', status: 'Active', enrollment: '0/0', pi: 'Dr. Michael Davis' },
-    ]);
-
-    // Study Contacts State
-    const [contacts, setContacts] = useState([
-        { name: 'Maria Rodriguez', role: 'Clinical Operations Manager', org: 'Internal', email: 'maria@cboat.example.com', phone: '555-123-4567' },
-        { name: 'David Park', role: 'Clinical Monitor', org: 'Internal', email: 'david@cboat.example.com', phone: '555-123-4567' },
-        { name: 'Lisa Wong', role: 'Medical Advisor', org: 'Internal', email: 'lisa@cboat.example.com', phone: '555-123-4567' },
-        { name: 'Mark Johnson', role: 'Project Manager', org: 'Internal', email: 'mark@cboat.example.com', phone: '555-123-4567' },
-    ]);
-    const [isAddContactModalOpen, setIsAddContactModalOpen] = useState(false);
-    const [newContact, setNewContact] = useState({
-        name: '',
-        role: '',
-        email: '',
-        phone: '',
-        org: 'Internal',
-        availability: '100'
-    });
-
     // Document Management State
     const [documents, setDocuments] = useState<any[]>([]);
     const [isPreviewOpen, setIsPreviewOpen] = useState(false);
@@ -97,23 +71,6 @@ function StudyDetail({ study, onBack }: { study: any, onBack: () => void }) {
                 console.error("Delete failed", error);
             }
         }
-    };
-
-    const handleSaveContact = () => {
-        if (!newContact.name || !newContact.role) {
-            alert("Name and Role are required");
-            return;
-        }
-        setContacts([...contacts, { ...newContact }]);
-        setIsAddContactModalOpen(false);
-        setNewContact({
-            name: '',
-            role: '',
-            email: '',
-            phone: '',
-            org: 'Internal',
-            availability: '100'
-        });
     };
 
     return (
@@ -302,53 +259,11 @@ function StudyDetail({ study, onBack }: { study: any, onBack: () => void }) {
                     </div>
                 )}
 
-                {activeTab === 'sites' && (
-                    <div className="bg-white border border-gray-200 rounded-lg overflow-hidden">
-                        <div className="p-4 border-b border-gray-200 flex justify-between items-center">
-                            <h3 className="text-lg font-bold text-gray-900">Study Sites</h3>
-                            <button className="px-3 py-1.5 bg-blue-600 text-white text-sm font-medium rounded hover:bg-blue-700">
-                                Add Site
-                            </button>
-                        </div>
-                        <table className="w-full text-sm text-left">
-                            <thead className="bg-gray-50 text-gray-700 font-medium border-b border-gray-200">
-                                <tr>
-                                    <th className="px-6 py-3">Site ID</th>
-                                    <th className="px-6 py-3">Name</th>
-                                    <th className="px-6 py-3">Location</th>
-                                    <th className="px-6 py-3">Status</th>
-                                    <th className="px-6 py-3">Enrollment</th>
-                                    <th className="px-6 py-3">Principal Investigator</th>
-                                </tr>
-                            </thead>
-                            <tbody className="divide-y divide-gray-200">
-                                {sites.map((site, idx) => (
-                                    <tr key={idx} className="hover:bg-gray-50">
-                                        <td className="px-6 py-4 font-medium text-gray-900">{site.id}</td>
-                                        <td className="px-6 py-4 text-gray-900">{site.name}</td>
-                                        <td className="px-6 py-4 text-gray-600">{site.location}</td>
-                                        <td className="px-6 py-4">
-                                            <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
-                                                {site.status}
-                                            </span>
-                                        </td>
-                                        <td className="px-6 py-4 text-gray-600">{site.enrollment}</td>
-                                        <td className="px-6 py-4 text-gray-600">{site.pi}</td>
-                                    </tr>
-                                ))}
-                            </tbody>
-                        </table>
-                    </div>
-                )}
-
                 {activeTab === 'study contacts' && (
                     <div className="bg-white border border-gray-200 rounded-lg overflow-hidden">
                         <div className="p-4 border-b border-gray-200 flex justify-between items-center">
                             <h3 className="text-lg font-bold text-gray-900">Study Contacts</h3>
-                            <button
-                                onClick={() => setIsAddContactModalOpen(true)}
-                                className="px-3 py-1.5 bg-blue-600 text-white text-sm font-medium rounded hover:bg-blue-700"
-                            >
+                            <button className="px-3 py-1.5 bg-blue-600 text-white text-sm font-medium rounded hover:bg-blue-700">
                                 Add Contact
                             </button>
                         </div>
@@ -363,7 +278,12 @@ function StudyDetail({ study, onBack }: { study: any, onBack: () => void }) {
                                 </tr>
                             </thead>
                             <tbody className="divide-y divide-gray-200">
-                                {contacts.map((contact, idx) => (
+                                {[
+                                    { name: 'Maria Rodriguez', role: 'Clinical Operations Manager', org: 'Internal', email: 'maria@cboat.example.com', phone: '555-123-4567' },
+                                    { name: 'David Park', role: 'Clinical Monitor', org: 'Internal', email: 'david@cboat.example.com', phone: '555-123-4567' },
+                                    { name: 'Lisa Wong', role: 'Medical Advisor', org: 'Internal', email: 'lisa@cboat.example.com', phone: '555-123-4567' },
+                                    { name: 'Mark Johnson', role: 'Project Manager', org: 'Internal', email: 'mark@cboat.example.com', phone: '555-123-4567' },
+                                ].map((contact, idx) => (
                                     <tr key={idx} className="hover:bg-gray-50">
                                         <td className="px-6 py-4 font-medium text-gray-900">{contact.name}</td>
                                         <td className="px-6 py-4 text-gray-600">{contact.role}</td>
@@ -616,122 +536,6 @@ function StudyDetail({ study, onBack }: { study: any, onBack: () => void }) {
                                     className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
                                 >
                                     Save Changes
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            )}
-            {/* Add Contact Modal */}
-            {isAddContactModalOpen && (
-                <div className="fixed inset-0 bg-black/50 z-[70] flex items-center justify-center p-4">
-                    <div className="bg-white rounded-lg p-6 w-full max-w-md max-h-[90vh] overflow-y-auto">
-                        <div className="flex justify-between items-center mb-1">
-                            <h3 className="text-xl font-bold text-gray-900">Add Study Contact</h3>
-                            <button onClick={() => setIsAddContactModalOpen(false)} className="text-gray-400 hover:text-gray-600">
-                                <X className="h-5 w-5" />
-                            </button>
-                        </div>
-                        <p className="text-gray-500 text-sm mb-6">
-                            Add a new contact to this study. Contacts are study team members who play specific roles in the clinical trial.
-                        </p>
-
-                        <div className="space-y-4">
-                            <div>
-                                <label className="block text-sm font-bold text-gray-900 mb-1">Name</label>
-                                <input
-                                    type="text"
-                                    placeholder="Full Name"
-                                    value={newContact.name}
-                                    onChange={(e) => setNewContact({ ...newContact, name: e.target.value })}
-                                    className="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 outline-none"
-                                />
-                            </div>
-
-                            <div>
-                                <label className="block text-sm font-bold text-gray-900 mb-1">Role</label>
-                                <select
-                                    value={newContact.role}
-                                    onChange={(e) => setNewContact({ ...newContact, role: e.target.value })}
-                                    className="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 outline-none bg-white"
-                                >
-                                    <option value="">Select role</option>
-                                    {[
-                                        'Clinical Research Associate',
-                                        'Data Manager',
-                                        'Medical Monitor',
-                                        'Clinical Trial Manager',
-                                        'Clinical Research Coordinator',
-                                        'Safety Specialist',
-                                        'Regulatory Specialist',
-                                        'Project Manager',
-                                        'Biostatistician',
-                                        'Central Data Quality Monitor'
-                                    ].map(role => (
-                                        <option key={role} value={role}>{role}</option>
-                                    ))}
-                                </select>
-                            </div>
-
-                            <div>
-                                <label className="block text-sm font-bold text-gray-900 mb-1">Email</label>
-                                <input
-                                    type="email"
-                                    placeholder="email@example.com"
-                                    value={newContact.email}
-                                    onChange={(e) => setNewContact({ ...newContact, email: e.target.value })}
-                                    className="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 outline-none"
-                                />
-                                <p className="text-xs text-gray-500 mt-1">Contact email for communications</p>
-                            </div>
-
-                            <div>
-                                <label className="block text-sm font-bold text-gray-900 mb-1">Phone Number</label>
-                                <input
-                                    type="tel"
-                                    placeholder="+1 (555) 123-4567"
-                                    value={newContact.phone}
-                                    onChange={(e) => setNewContact({ ...newContact, phone: e.target.value })}
-                                    className="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 outline-none"
-                                />
-                            </div>
-
-                            <div>
-                                <label className="block text-sm font-bold text-gray-900 mb-1">Organization</label>
-                                <input
-                                    type="text"
-                                    value={newContact.org}
-                                    onChange={(e) => setNewContact({ ...newContact, org: e.target.value })}
-                                    className="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 outline-none"
-                                />
-                                <p className="text-xs text-gray-500 mt-1">Study team contacts are managed as internal resources.</p>
-                            </div>
-
-                            <div>
-                                <label className="block text-sm font-bold text-gray-900 mb-1">Availability (%)</label>
-                                <input
-                                    type="number"
-                                    min="0"
-                                    max="100"
-                                    value={newContact.availability}
-                                    onChange={(e) => setNewContact({ ...newContact, availability: e.target.value })}
-                                    className="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 outline-none"
-                                />
-                                <p className="text-xs text-gray-500 mt-1">Percentage of time allocated to this study</p>
-                            </div>
-
-                            <div className="flex justify-end gap-3 mt-8">
-                                <button
-                                    onClick={() => setIsAddContactModalOpen(false)}
-                                    className="px-4 py-2 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50 font-medium"
-                                >
-                                    Cancel
-                                </button>
-                                <button
-                                    onClick={handleSaveContact}
-                                    className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 font-medium"
-                                >
-                                    Add Contact
                                 </button>
                             </div>
                         </div>

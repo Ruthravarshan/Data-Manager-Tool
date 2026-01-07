@@ -1,0 +1,61 @@
+Classification Log - 2026-01-02T18:01:43.210853
+Source: C:\Users\2000171692\Desktop\Data-Manager-Tool\data_source
+Output: C:\Users\2000171692\Desktop\Data-Manager-Tool\trial_data_output\2026-01-02_180143
+Recursive: True
+
+OK: ae_raw_20251126_074704.csv -> Section 'AE (Adverse Events)' | Copied to: C:\Users\2000171692\Desktop\Data-Manager-Tool\trial_data_output\2026-01-02_180143\AE\ae_raw_20251126_074704.csv
+CSV read with encoding='utf-8', sep=','
+
+OK: cm_raw_20251126_074704.csv -> Section 'CM (Concomitant Medications)' | Copied to: C:\Users\2000171692\Desktop\Data-Manager-Tool\trial_data_output\2026-01-02_180143\CM\cm_raw_20251126_074704.csv
+CSV read with encoding='utf-8', sep=','
+
+OK: dm_raw_20251126_074704.csv -> Section 'DM (Demographics)' | Copied to: C:\Users\2000171692\Desktop\Data-Manager-Tool\trial_data_output\2026-01-02_180143\DM\dm_raw_20251126_074704.csv
+CSV read with encoding='utf-8', sep=','
+
+WARNING: Unclassified file (unknown or missing prefix): eg_raw_20251126_074704.csv
+OK: eg_raw_20251126_074704.csv -> Section 'Unclassified' | Copied to: C:\Users\2000171692\Desktop\Data-Manager-Tool\trial_data_output\2026-01-02_180143\Unclassified\eg_raw_20251126_074704.csv
+CSV read with encoding='utf-8', sep=','
+
+OK: ex_raw_20251126_074704.csv -> Section 'EX (Exposure)' | Copied to: C:\Users\2000171692\Desktop\Data-Manager-Tool\trial_data_output\2026-01-02_180143\EX\ex_raw_20251126_074704.csv
+CSV read with encoding='utf-8', sep=','
+
+OK: mh_raw_20251126_074704.csv -> Section 'MH (Medical History)' | Copied to: C:\Users\2000171692\Desktop\Data-Manager-Tool\trial_data_output\2026-01-02_180143\MH\mh_raw_20251126_074704.csv
+CSV read with encoding='utf-8', sep=','
+
+WARNING: Unclassified file (unknown or missing prefix): pe_raw_20251126_074704.csv
+OK: pe_raw_20251126_074704.csv -> Section 'Unclassified' | Copied to: C:\Users\2000171692\Desktop\Data-Manager-Tool\trial_data_output\2026-01-02_180143\Unclassified\pe_raw_20251126_074704.csv
+CSV read with encoding='utf-8', sep=','
+
+OK: rawlb1_raw_20251126_074704.csv -> Section 'LB (Laboratory)' | Copied to: C:\Users\2000171692\Desktop\Data-Manager-Tool\trial_data_output\2026-01-02_180143\LB\rawlb1_raw_20251126_074704.csv
+CSV read with encoding='utf-8', sep=','
+
+OK: rawlb2_raw_20251126_074704.csv -> Section 'LB (Laboratory)' | Copied to: C:\Users\2000171692\Desktop\Data-Manager-Tool\trial_data_output\2026-01-02_180143\LB\rawlb2_raw_20251126_074704.csv
+CSV read with encoding='utf-8', sep=','
+
+OK: rawlb3_raw_20251126_074704.csv -> Section 'LB (Laboratory)' | Copied to: C:\Users\2000171692\Desktop\Data-Manager-Tool\trial_data_output\2026-01-02_180143\LB\rawlb3_raw_20251126_074704.csv
+CSV read with encoding='utf-8', sep=','
+
+OK: rawpk1_raw_20251126_074704.csv -> Section 'PK (Pharmacokinetics)' | Copied to: C:\Users\2000171692\Desktop\Data-Manager-Tool\trial_data_output\2026-01-02_180143\PK\rawpk1_raw_20251126_074704.csv
+CSV read with encoding='utf-8', sep=','
+
+OK: rawpk2_raw_20251126_074704.csv -> Section 'PK (Pharmacokinetics)' | Copied to: C:\Users\2000171692\Desktop\Data-Manager-Tool\trial_data_output\2026-01-02_180143\PK\rawpk2_raw_20251126_074704.csv
+CSV read with encoding='utf-8', sep=','
+
+OK: rawtu1_raw_20251126_074704.csv -> Section 'TU (Tumor Identification)' | Copied to: C:\Users\2000171692\Desktop\Data-Manager-Tool\trial_data_output\2026-01-02_180143\TU\rawtu1_raw_20251126_074704.csv
+CSV read with encoding='utf-8', sep=','
+
+OK: rawtu2_raw_20251126_074704.csv -> Section 'TU (Tumor Identification)' | Copied to: C:\Users\2000171692\Desktop\Data-Manager-Tool\trial_data_output\2026-01-02_180143\TU\rawtu2_raw_20251126_074704.csv
+CSV read with encoding='utf-8', sep=','
+
+OK: rawtu3_raw_20251126_074704.csv -> Section 'TU (Tumor Identification)' | Copied to: C:\Users\2000171692\Desktop\Data-Manager-Tool\trial_data_output\2026-01-02_180143\TU\rawtu3_raw_20251126_074704.csv
+CSV read with encoding='utf-8', sep=','
+
+OK: rawvs1_raw_20251126_074704.csv -> Section 'VS (Vitals)' | Copied to: C:\Users\2000171692\Desktop\Data-Manager-Tool\trial_data_output\2026-01-02_180143\VS\rawvs1_raw_20251126_074704.csv
+CSV read with encoding='utf-8', sep=','
+
+OK: rawvs2_raw_20251126_074704.csv -> Section 'VS (Vitals)' | Copied to: C:\Users\2000171692\Desktop\Data-Manager-Tool\trial_data_output\2026-01-02_180143\VS\rawvs2_raw_20251126_074704.csv
+CSV read with encoding='utf-8', sep=','
+
+OK: rs_raw_20251126_074704.csv -> Section 'RS (Response)' | Copied to: C:\Users\2000171692\Desktop\Data-Manager-Tool\trial_data_output\2026-01-02_180143\RS\rs_raw_20251126_074704.csv
+CSV read with encoding='utf-8', sep=','
+

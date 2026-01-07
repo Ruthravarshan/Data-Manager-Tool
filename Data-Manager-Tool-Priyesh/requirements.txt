@@ -1,0 +1,6 @@
+dotenv
+greenlet
+psycopg2
+python-dotenv
+SQLAlchemy
+typing_extensions

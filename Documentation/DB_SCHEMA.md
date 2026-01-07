@@ -1,4 +1,4 @@
-# Database Schema (NOT COMPLETED YET)
+# Database Schema
 
 ## Current Implementation
 

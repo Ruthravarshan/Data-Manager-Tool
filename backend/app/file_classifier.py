@@ -133,7 +133,9 @@ def classify_file(file_path: str) -> FileClassificationResult:
                     df = pd.read_csv(file_path, nrows=None)
                     record_count = len(df)
             except Exception as e:
-                # If cannot read, just log/ignore count
+                # If cannot read, just log/ignore count, don't fail classification purely on reading data
+                # But maybe we should warn?
+                print(f"Failed to count records in {filename}: {e}")
                 pass
         
         return FileClassificationResult(
@@ -191,7 +193,10 @@ def scan_folder_recursive(folder_path: str) -> Tuple[List[FileClassificationResu
                         result.protocol_id = protocol_id
                         result.file_path = file_path
                         
-                        # Check for duplicates
+                        # Check for duplicates (globally in this scan or per protocol? Assuming global for now)
+                        # Actually if same filename exists in different protocols, they are different files logically.
+                        # But typically filenames should be unique or we check if we've seen it.
+                        # For now, let's treat (protocol_id, filename) as unique key if protocol exists, else filename.
                         unique_key = (protocol_id, result.filename) if protocol_id else result.filename
                         
                         if unique_key in seen_filenames:

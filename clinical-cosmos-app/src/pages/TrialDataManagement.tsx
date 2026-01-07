@@ -63,11 +63,6 @@ export default function TrialDataManagement() {
     const [previewData, setPreviewData] = useState<{ columns: string[]; rows: any[] } | null>(null);
     const [showPreview, setShowPreview] = useState(false);
 
-    // Data View State
-    const [selectedVersion, setSelectedVersion] = useState<number | null>(null);
-    const [tableData, setTableData] = useState<{ columns: string[]; rows: any[]; total_rows_fetched: number } | null>(null);
-    const [dataLoading, setDataLoading] = useState(false);
-
     // New State for Metadata
     const [viewMode, setViewMode] = useState<'metadata' | 'data'>('data');
     const [metadata, setMetadata] = useState<SectionMetadata | null>(null);
@@ -122,7 +117,7 @@ export default function TrialDataManagement() {
                 setLoading(true);
                 const [filesData, sectionsData] = await Promise.all([
                     dataFileService.getDataFiles(undefined, undefined, selectedProtocol),
-                    dataFileService.getSections(selectedProtocol)
+                    dataFileService.getSections()
                 ]);
                 setDataFiles(filesData || []);
                 setSections(sectionsData || []);
@@ -147,53 +142,6 @@ export default function TrialDataManagement() {
         };
         fetchData();
     }, [selectedProtocol]);
-
-    // Update Version Selector when SubTab changes or Files change
-    useEffect(() => {
-        // Find latest file for the current section
-        if (!activeSubTab) {
-            setSelectedVersion(null);
-            return;
-        }
-        const relevantFiles = dataFiles.filter(f => f.section === activeSubTab);
-        /* 
-           Sort by created_at desc (already sorted by backend usually, but let's be safe). 
-           Actually backend sorts. so first one is latest.
-        */
-        if (relevantFiles.length > 0) {
-            // Select the most recent one by default if none selected or if switching tabs
-            // We want to reset selection when tab changes.
-            // But we need to distinguish between files update vs user selection diff.
-            // Simplified: Always select top 1 when tab changes.
-            setSelectedVersion(relevantFiles[0].id);
-        } else {
-            setSelectedVersion(null);
-            setTableData(null);
-        }
-    }, [activeSubTab, dataFiles]); // removed 'files' dependency if it causes loops, but 'dataFiles' changes only on fetch.
-
-    // Fetch Table Data when selectedVersion changes
-    useEffect(() => {
-        const fetchTableData = async () => {
-            if (!selectedVersion) return;
-            // Don't re-fetch if we already have this data?
-            // Actually simpler to just fetch.
-            setDataLoading(true);
-            try {
-                const data = await dataFileService.getFileData(selectedVersion);
-                setTableData(data);
-            } catch (err) {
-                console.error("Failed to fetch table data", err);
-                setTableData(null);
-            } finally {
-                setDataLoading(false);
-            }
-        };
-
-        if (viewMode === 'data') {
-            fetchTableData();
-        }
-    }, [selectedVersion, viewMode]);
 
     // Fetch metadata when subtab or protocol changes
     useEffect(() => {
@@ -263,19 +211,10 @@ export default function TrialDataManagement() {
     const handlePreview = async (file: any) => {
         setSelectedFile(file);
         try {
-            // Use DB fetch if it's a new file with ID, else fallback? 
-            // The file object has an ID.
-            const data = await dataFileService.getFileData(file.id);
+            const data = await dataFileService.getFilePreview(file.file_path);
             setPreviewData(data);
         } catch (err) {
-            console.error(err);
-            // Fallback to legacy preview if DB fetch fails (e.g. for old files not in DB yet)
-            try {
-                const data = await dataFileService.getFilePreview(file.file_path);
-                setPreviewData(data);
-            } catch (fallbackErr) {
-                setPreviewData({ columns: [], rows: [{ error: 'Failed to load file data from database or file preview.' }] });
-            }
+            setPreviewData({ columns: [], rows: [{ error: 'Failed to load file preview.' }] });
         }
         setShowPreview(true);
     };
@@ -672,100 +611,130 @@ export default function TrialDataManagement() {
                                             </div>
                                         )
                                     ) : (
-                                        /* DB Data Grid View */
-                                        <div className="space-y-4">
-                                            {/* Controls: Version Selector & Actions */}
-                                            <div className="flex flex-col sm:flex-row justify-between items-center gap-4 bg-gray-50 p-3 rounded-md border border-gray-100">
-
-                                                {/* Version Selector */}
-                                                <div className="flex items-center gap-3 w-full sm:w-auto">
-                                                    <label className="text-sm font-medium text-gray-700 whitespace-nowrap">Dataset Version:</label>
-                                                    <select
-                                                        value={selectedVersion || ''}
-                                                        onChange={(e) => setSelectedVersion(Number(e.target.value))}
-                                                        className="h-9 block w-full rounded-md border-gray-300 bg-white py-1.5 text-base shadow-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500 sm:text-sm"
-                                                        disabled={currentSectionFiles.length === 0}
-                                                    >
-                                                        {currentSectionFiles.length === 0 ? (
-                                                            <option>No data available</option>
-                                                        ) : (
-                                                            currentSectionFiles.map(f => (
-                                                                <option key={f.id} value={f.id}>
-                                                                    {formatDate(f.created_at)} - {f.record_count ? f.record_count.toLocaleString() : 'N/A'} Records
-                                                                </option>
-                                                            ))
-                                                        )}
-                                                    </select>
-                                                    {selectedVersion && (
-                                                        <span className="inline-flex items-center rounded-md bg-green-50 px-2 py-1 text-xs font-medium text-green-700 ring-1 ring-inset ring-green-600/20">
-                                                            Active Source
-                                                        </span>
-                                                    )}
-                                                </div>
-
-                                                <div className="flex gap-2 w-full sm:w-auto justify-end">
-                                                    <div className="relative">
+                                        /* Existing Data View */
+                                        loading ? (
+                                            <div className="py-12 text-center">
+                                                <RefreshCw className="h-8 w-8 text-gray-400 animate-spin mx-auto mb-3" />
+                                                <p className="text-gray-500">Loading data files...</p>
+                                            </div>
+                                        ) : currentSectionFiles.length > 0 ? (
+                                            <div className="space-y-4">
+                                                {/* Files List Header/Description if needed, but we have the control bar now */}
+                                                {/* Note: In Data View we might want to keep the "Files" approach or the "Records" approach. 
+                                                The screenshot shows "Records" view. But we only have files. 
+                                                The user said "features missing example meta data". 
+                                                The screenshot SHOWS a "Data" tab selected which shows a record list.
+                                                However, our current backend is file-based not record-based database.
+                                                Constructing a full record database is a huge task.
+                                                I will keep the "Files" list as the "Data" view for now, as it's the closest equivalent we have.
+                                            */}
+                                                <div className="flex justify-between items-center bg-gray-50 p-3 rounded-md border border-gray-100">
+                                                    <div className="relative w-full max-w-sm">
                                                         <input
                                                             type="text"
                                                             placeholder="Search records..."
-                                                            className="w-48 pl-8 pr-3 py-1.5 text-sm border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                                            className="w-full pl-9 pr-4 py-2 text-sm border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                                                         />
-                                                        <Eye className="absolute left-2.5 top-2 h-3.5 w-3.5 text-gray-400" />
+                                                        <Eye className="absolute left-3 top-2.5 h-4 w-4 text-gray-400" />
                                                     </div>
-                                                    <button className="flex items-center gap-2 px-3 py-1.5 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md hover:bg-gray-50">
-                                                        <Download className="w-4 h-4" /> Export
+                                                    <div className="flex gap-2">
+                                                        <button className="flex items-center gap-2 px-3 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md hover:bg-gray-50">
+                                                            <span className="w-4 h-4">▼</span> Filter
+                                                        </button>
+                                                        <button className="flex items-center gap-2 px-3 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md hover:bg-gray-50">
+                                                            <Download className="w-4 h-4" /> Export
+                                                        </button>
+                                                        <button className="flex items-center gap-2 px-3 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md hover:bg-gray-50">
+                                                            <ClipboardList className="w-4 h-4" /> Copy
+                                                        </button>
+                                                    </div>
+                                                </div>
+
+                                                <div className="flex justify-between items-center">
+                                                    <button className="text-sm font-medium text-gray-600 flex items-center gap-1 hover:text-gray-900">
+                                                        › Show All Columns
                                                     </button>
+                                                    <div className="flex gap-2">
+                                                        <button className="flex items-center gap-2 px-3 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md hover:bg-gray-50">
+                                                            <RefreshCw className="w-4 h-4" /> Refresh
+                                                        </button>
+                                                        <button className="flex items-center gap-2 px-3 py-2 text-sm font-medium text-white bg-blue-600 rounded-md hover:bg-blue-700">
+                                                            + Add Record
+                                                        </button>
+                                                    </div>
+                                                </div>
+
+                                                {/* Files List */}
+                                                <div className="space-y-2">
+                                                    {currentSectionFiles.map((file) => (
+                                                        <div key={file.id} className="border border-gray-200 rounded-lg p-4 hover:bg-gray-50 transition-colors bg-white">
+                                                            <div className="flex items-start justify-between">
+                                                                <div className="flex-1">
+                                                                    <div className="flex items-center gap-2">
+                                                                        <FileSpreadsheet className="h-4 w-4 text-blue-600" />
+                                                                        <h4 className="font-medium text-gray-900">{file.filename}</h4>
+                                                                        <span className={cn(
+                                                                            "text-xs px-2 py-1 rounded-full font-medium",
+                                                                            file.status === 'Imported' ? 'bg-green-50 text-green-700' :
+                                                                                file.status === 'Duplicate' ? 'bg-yellow-50 text-yellow-700' :
+                                                                                    'bg-gray-50 text-gray-700'
+                                                                        )}>
+                                                                            {file.status}
+                                                                        </span>
+                                                                    </div>
+                                                                    <div className="mt-2 grid grid-cols-2 md:grid-cols-2 gap-4 text-sm text-gray-600">
+                                                                        <div>
+                                                                            <span className="text-gray-500">File Size:</span>
+                                                                            <p className="font-medium">{formatFileSize(file.file_size)}</p>
+                                                                        </div>
+                                                                        <div>
+                                                                            <span className="text-gray-500">Imported:</span>
+                                                                            <p className="font-mono text-xs">{formatDate(file.created_at)}</p>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                                <div className="flex gap-2 ml-4">
+                                                                    <button
+                                                                        onClick={() => handlePreview(file)}
+                                                                        className="p-2 text-blue-600 hover:bg-blue-50 rounded-md transition-colors"
+                                                                        title="Preview"
+                                                                    >
+                                                                        <Eye className="h-4 w-4" />
+                                                                    </button>
+                                                                    <button
+                                                                        onClick={() => handleDownload(file)}
+                                                                        className="p-2 text-gray-600 hover:bg-gray-100 rounded-md transition-colors"
+                                                                        title="Download"
+                                                                    >
+                                                                        <Download className="h-4 w-4" />
+                                                                    </button>
+                                                                    <button
+                                                                        onClick={() => handleDelete(file.id)}
+                                                                        className="p-2 text-red-600 hover:bg-red-50 rounded-md transition-colors"
+                                                                        title="Delete"
+                                                                    >
+                                                                        <Trash2 className="h-4 w-4" />
+                                                                    </button>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    ))}
                                                 </div>
                                             </div>
-
-                                            {/* Data Table */}
-                                            {dataLoading ? (
-                                                <div className="py-12 text-center">
-                                                    <RefreshCw className="h-8 w-8 text-blue-600 animate-spin mx-auto mb-3" />
-                                                    <p className="text-gray-500">Fetching records from database...</p>
-                                                </div>
-                                            ) : tableData && tableData.rows.length > 0 ? (
-                                                <div className="border border-gray-200 rounded-lg overflow-hidden bg-white shadow-sm">
-                                                    <div className="overflow-x-auto max-h-[600px]">
-                                                        <table className="min-w-full text-sm divide-y divide-gray-200">
-                                                            <thead className="bg-gray-50 sticky top-0 z-10">
-                                                                <tr>
-                                                                    {tableData.columns.map((col: string) => (
-                                                                        <th key={col} className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider whitespace-nowrap bg-gray-50">
-                                                                            {col}
-                                                                        </th>
-                                                                    ))}
-                                                                </tr>
-                                                            </thead>
-                                                            <tbody className="bg-white divide-y divide-gray-200">
-                                                                {tableData.rows.map((row: any, idx: number) => (
-                                                                    <tr key={idx} className="hover:bg-gray-50 transition-colors">
-                                                                        {tableData.columns.map((col: string) => (
-                                                                            <td key={`${idx}-${col}`} className="px-4 py-2.5 whitespace-nowrap text-gray-700">
-                                                                                {row[col] !== null ? String(row[col]) : <span className="text-gray-300 italic">null</span>}
-                                                                            </td>
-                                                                        ))}
-                                                                    </tr>
-                                                                ))}
-                                                            </tbody>
-                                                        </table>
-                                                    </div>
-                                                    <div className="px-4 py-3 border-t border-gray-200 bg-gray-50 text-xs text-gray-500 flex justify-between items-center">
-                                                        <span>Showing {tableData.rows.length} records</span>
-                                                        {tableData.total_rows_fetched >= 100 && (
-                                                            <span className="text-orange-600 font-medium">Limited to first 100 records (Pagination coming soon)</span>
-                                                        )}
+                                        ) : (
+                                            <div className="py-12 text-center border-2 border-dashed border-gray-200 rounded-lg">
+                                                <div className="flex justify-center mb-3">
+                                                    <div className="p-3 bg-gray-50 rounded-full">
+                                                        <Database className="h-6 w-6 text-gray-400" />
                                                     </div>
                                                 </div>
-                                            ) : (
-                                                <div className="py-12 text-center border-2 border-dashed border-gray-200 rounded-lg">
-                                                    <Database className="h-8 w-8 text-gray-300 mx-auto mb-3" />
-                                                    <p className="text-gray-500">No data found in selected dataset version.</p>
-                                                </div>
-                                            )}
-                                        </div>
-                                    )
-                                    }
+                                                <h3 className="text-lg font-medium text-gray-900">No Files in {activeSubTab}</h3>
+                                                <p className="text-gray-500 max-w-sm mx-auto mt-1">
+                                                    Connect a data source folder in the Data Integration tab to import files. Files will be automatically classified by section.
+                                                </p>
+                                            </div>
+                                        )
+                                    )}
                                 </div>
                             ) : (
                                 <div className="py-16 text-center border-2 border-dashed border-gray-200 rounded-lg bg-gray-50/50">

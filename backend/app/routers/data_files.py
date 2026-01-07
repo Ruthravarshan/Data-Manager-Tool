@@ -1,8 +1,7 @@
 from fastapi import APIRouter, Depends, Query, HTTPException
 from sqlalchemy.orm import Session
-from sqlalchemy import text
-from typing import List, Optional, Dict, Any
-from app.database import get_db, engine
+from typing import List, Optional
+from app.database import get_db
 from app.models import DataFile, IntegrationSource
 from app.schemas import DataFile as DataFileSchema, ScanFolderRequest, ScanFolderResponse, SectionMetadataResponse
 from app.file_classifier import scan_folder, scan_folder_recursive
@@ -10,22 +9,10 @@ import logging
 from datetime import datetime
 import pandas as pd
 import os
-import re
 
 logger = logging.getLogger(__name__)
 router = APIRouter(prefix="/api/data-files", tags=["data-files"])
 
-def get_safe_table_name(filename: str) -> str:
-    """Generate a safe table name from filename"""
-    # Remove extension
-    name = os.path.splitext(filename)[0]
-    # Remove _raw_ suffix if present
-    if "_raw" in name:
-        name = name.split("_raw")[0]
-    # Replace non-alphanumeric with _
-    safe_name = re.sub(r'[^a-zA-Z0-9]', '_', name).lower()
-    timestamp_suffix = datetime.now().strftime("%Y%m%d%H%M%S")
-    return f"dt_{safe_name}_{timestamp_suffix}"
 
 @router.get("/", response_model=List[DataFileSchema])
 def get_data_files(
@@ -36,13 +23,12 @@ def get_data_files(
     db: Session = Depends(get_db)
 ):
     """Get data files with optional filtering"""
-    # Query DataFile and IntegrationSource.type
-    query = db.query(DataFile, IntegrationSource.type.label("integration_type"))\
-        .outerjoin(IntegrationSource, DataFile.integration_id == IntegrationSource.id)
+    query = db.query(DataFile)
     
-    # Apply filters
+    # If filtering by protocol, join with IntegrationSource
+    # If filtering by protocol, filter by DataFile.protocol_id
     if protocol_id:
-        query = query.filter(IntegrationSource.protocol_id == protocol_id)
+        query = query.filter(DataFile.protocol_id == protocol_id)
     
     if section:
         query = query.filter(DataFile.section == section)
@@ -53,42 +39,13 @@ def get_data_files(
     if integration_id:
         query = query.filter(DataFile.integration_id == integration_id)
     
-    if section:
-        query = query.filter(DataFile.section == section)
-    
-    if status:
-        query = query.filter(DataFile.status == status)
-    
-    if integration_id:
-        query = query.filter(DataFile.integration_id == integration_id)
-    
-    results = query.order_by(DataFile.created_at.desc()).all()
-    
-    # Transform to response schema
-    response_files = []
-    for data_file_orm, integration_type in results:
-        # Create schema instance from ORM
-        # We need to manually inject integration_type since it's not on the model
-        file_data = DataFileSchema.from_orm(data_file_orm)
-        file_data.integration_type = integration_type
-        response_files.append(file_data)
-        
-    return response_files
+    return query.order_by(DataFile.created_at.desc()).all()
 
 
 @router.get("/sections", response_model=List[str])
-def get_sections(
-    protocol_id: Optional[str] = Query(None),
-    db: Session = Depends(get_db)
-):
-    """Get list of unique sections, optionally filtered by protocol"""
-    query = db.query(DataFile.section).distinct().filter(DataFile.section != None)
-    
-    if protocol_id:
-        query = query.join(IntegrationSource, DataFile.integration_id == IntegrationSource.id)\
-                     .filter(IntegrationSource.protocol_id == protocol_id)
-                     
-    sections = query.all()
+def get_sections(db: Session = Depends(get_db)):
+    """Get list of all unique sections"""
+    sections = db.query(DataFile.section).distinct().filter(DataFile.section != None).all()
     return sorted([s[0] for s in sections if s[0]])
 
 
@@ -127,32 +84,6 @@ def scan_integration_folder(
         stored_files = []
         
         for result in results:
-            # Generate table name and ingest data if imported
-            table_name = None
-            if result.status == 'Imported' and result.file_path and os.path.exists(result.file_path):
-                try:
-                    # Determine table name
-                    table_name = get_safe_table_name(result.filename)
-                    
-                    # Read file
-                    df = None
-                    if result.filename.lower().endswith('.csv'):
-                        df = pd.read_csv(result.file_path)
-                    elif result.filename.lower().endswith(('.xlsx', '.xls')):
-                        df = pd.read_excel(result.file_path)
-                    
-                    if df is not None:
-                        # Add metadata columns
-                        df['_imported_at'] = datetime.utcnow()
-                        df['_source_file'] = result.filename
-                        
-                        # Write to DB
-                        df.to_sql(table_name, engine, if_exists='replace', index=False)
-                        logger.info(f"Ingested {result.filename} into table {table_name}")
-                except Exception as e:
-                    logger.error(f"Failed to ingest {result.filename}: {e}")
-                    pass
-
             data_file = DataFile(
                 filename=result.filename,
                 prefix=result.prefix,
@@ -160,12 +91,11 @@ def scan_integration_folder(
                 file_path=result.file_path if result.file_path else 
                           f"{integration.folder_path}/{result.filename}",
                 file_size=result.file_size,
-                created_at=result.timestamp if isinstance(result.timestamp, datetime) else datetime.utcnow(),
+                created_at=result.timestamp if isinstance(result.timestamp, datetime) else datetime.now(),
                 status=result.status,
                 protocol_id=result.protocol_id,
                 integration_id=integration_id,
-                record_count=result.record_count,
-                table_name=table_name
+                record_count=result.record_count
             )
             db.add(data_file)
             
@@ -185,7 +115,7 @@ def scan_integration_folder(
             db.refresh(f)
         
         # Update integration's last_sync
-        integration.last_sync = datetime.utcnow()
+        integration.last_sync = datetime.now()
         db.commit()
         
         logger.info(f"Successfully saved {len(stored_files)} files to database")
@@ -195,7 +125,7 @@ def scan_integration_folder(
             imported_files=imported_count,
             unclassified_files=unclassified_count,
             duplicate_files=duplicate_count,
-            files=[DataFileSchema.from_orm(f) for f in stored_files],
+            files=stored_files,
             warnings=warnings
         )
     except HTTPException:
@@ -217,10 +147,8 @@ def get_section_metadata(
         # query for the latest file in this section
         query = db.query(DataFile)
         
-        # Join with IntegrationSource if protocol_id is provided
         if protocol_id:
-            query = query.join(IntegrationSource, DataFile.integration_id == IntegrationSource.id)\
-                         .filter(IntegrationSource.protocol_id == protocol_id)
+            query = query.filter(DataFile.protocol_id == protocol_id)
         
         # Filter by section and get latest
         latest_file = query.filter(DataFile.section == section)\
@@ -378,39 +306,3 @@ def delete_data_file(file_id: int, db: Session = Depends(get_db)):
     db.delete(data_file)
     db.commit()
     return {"message": "Data file deleted successfully"}
-
-@router.get("/{file_id}/data")
-def get_file_data(
-    file_id: int, 
-    limit: int = 100, 
-    offset: int = 0,
-    db: Session = Depends(get_db)
-):
-    """Get content of the data file from the database table"""
-    data_file = db.query(DataFile).filter(DataFile.id == file_id).first()
-    if not data_file:
-        raise HTTPException(status_code=404, detail="Data file not found")
-    
-    # Check if table exists
-    if not data_file.table_name:
-        raise HTTPException(status_code=400, detail="Data not ingested into database for this file.")
-
-    try:
-        query = f'SELECT * FROM "{data_file.table_name}" LIMIT {limit} OFFSET {offset}'
-        df = pd.read_sql_query(query, engine)
-        
-        # Convert to records
-        # Handle NaN/Inf for JSON
-        records = df.replace({float('inf'): None, float('-inf'): None}).where(pd.notnull(df), None).to_dict(orient='records')
-        columns = list(df.columns)
-        
-        return {
-            "columns": columns,
-            "rows": records,
-            "total_rows_fetched": len(records),
-            "source_table": data_file.table_name
-        }
-        
-    except Exception as e:
-        logger.error(f"Error fetching data from table {data_file.table_name}: {e}")
-        raise HTTPException(status_code=500, detail=f"Error retrieving data: {str(e)}")

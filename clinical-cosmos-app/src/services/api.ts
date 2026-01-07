@@ -84,12 +84,10 @@ export const integrationService = {
         const response = await api.get('/integrations/filters/types');
         return response.data;
     },
-
     getIntegrationStatuses: async () => {
         const response = await api.get('/integrations/filters/statuses');
         return response.data;
     },
-
     getProtocols: async () => {
         const response = await api.get('/integrations/filters/protocols');
         return response.data;
@@ -126,8 +124,8 @@ export const dataFileService = {
         return response.data;
     },
 
-    getSections: async (protocol_id?: string) => {
-        const response = await api.get(`/data-files/sections${protocol_id ? `?protocol_id=${protocol_id}` : ''}`);
+    getSections: async () => {
+        const response = await api.get('/data-files/sections');
         return response.data;
     },
 
@@ -143,11 +141,6 @@ export const dataFileService = {
 
     getFilePreview: async (filePath: string) => {
         const response = await api.get(`/preview?file_path=${encodeURIComponent(filePath)}&nrows=10`);
-        return response.data;
-    },
-
-    getFileData: async (fileId: number, limit: number = 100, offset: number = 0) => {
-        const response = await api.get(`/data-files/${fileId}/data?limit=${limit}&offset=${offset}`);
         return response.data;
     },
 
@@ -183,56 +176,29 @@ export const activityService = {
     }
 };
 
-export const databaseConnectionService = {
-    testConnection: async (connectionData: {
-        db_type: string;
-        host: string;
-        port: number;
-        database_name: string;
-        username: string;
-        password: string;
-    }) => {
-        const response = await api.post('/database-connections/test', connectionData);
+export const scheduleService = {
+    getSchedules: async () => {
+        const response = await api.get('/schedules/');
         return response.data;
     },
-
-    fetchTables: async (connectionData: {
-        db_type: string;
-        host: string;
-        port: number;
-        database_name: string;
-        username: string;
-        password: string;
-    }) => {
-        const response = await api.post('/database-connections/fetch-tables', connectionData);
+    createSchedule: async (data: any) => {
+        const response = await api.post('/schedules/', data);
         return response.data;
     },
-
-    saveCredentials: async (credentialsData: {
-        integration_id: number;
-        db_type: string;
-        host: string;
-        port: number;
-        database_name: string;
-        username: string;
-        password: string;
-    }) => {
-        const response = await api.post('/database-connections/save', credentialsData);
+    updateSchedule: async (id: number, data: any) => {
+        const response = await api.put(`/schedules/${id}`, data);
         return response.data;
     },
-
-    getCredentials: async (integrationId: number) => {
-        const response = await api.get(`/database-connections/${integrationId}`);
+    deleteSchedule: async (id: number) => {
+        const response = await api.delete(`/schedules/${id}`);
         return response.data;
     },
-
-    importDatabaseTables: async (integrationId: number, tableNames: string[]) => {
-        const response = await api.post(`/database-connections/import-data/${integrationId}`, tableNames);
+    togglePause: async (id: number) => {
+        const response = await api.post(`/schedules/${id}/pause`);
         return response.data;
     },
-
-    deleteCredentials: async (integrationId: number) => {
-        const response = await api.delete(`/database-connections/${integrationId}`);
+    refreshSchedule: async (id: number) => {
+        const response = await api.post(`/schedules/${id}/refresh`);
         return response.data;
     }
 };

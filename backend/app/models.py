@@ -20,7 +20,7 @@ class Study(Base):
     indication = Column(String, nullable=True)
     completion_percentage = Column(Integer)
     file_url = Column(String, nullable=True) # URL to PDF in Blob Storage
-    created_at = Column(DateTime, default=datetime.utcnow)
+    created_at = Column(DateTime, default=datetime.now)
     
     # Relationship
     documents = relationship("Document", back_populates="study", cascade="all, delete-orphan")
@@ -34,7 +34,7 @@ class Document(Base):
     type = Column(String) # pdf, doc, etc
     source = Column(String) # 'Manual upload', 'eTMF Sync'
     file_url = Column(String)
-    upload_date = Column(DateTime, default=datetime.utcnow)
+    upload_date = Column(DateTime, default=datetime.now)
     version = Column(String, default="1.0")
 
     study = relationship("Study", back_populates="documents")
@@ -47,44 +47,44 @@ class IntegrationSource(Base):
     vendor = Column(String)
     type = Column(String)
     frequency = Column(String)
-    last_sync = Column(DateTime, default=datetime.utcnow)
+    last_sync = Column(DateTime, default=datetime.now)
     status = Column(String)
-    protocol_id = Column(String, nullable=True) # E.g., PRO001
-    folder_path = Column(String, nullable=True)  # Path to data source folder
+    protocol_id = Column(String, nullable=True)
+    folder_path = Column(String, nullable=True)
 
-class DatabaseCredential(Base):
-    __tablename__ = "database_credentials"
+    schedules = relationship("IntegrationSchedule", back_populates="integration", cascade="all, delete-orphan")
+
+class IntegrationSchedule(Base):
+    __tablename__ = "integration_schedules"
 
     id = Column(Integer, primary_key=True, index=True)
-    integration_id = Column(Integer, ForeignKey("integrations.id"), unique=True)
-    db_type = Column(String)  # sqlserver, postgresql, mysql, oracle
-    host = Column(String)
-    port = Column(Integer)
-    database_name = Column(String)
-    username = Column(String)
-    encrypted_password = Column(String)  # Encrypted password
-    created_at = Column(DateTime, default=datetime.utcnow)
-    last_updated = Column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
+    integration_id = Column(Integer, ForeignKey("integrations.id"))
+    schedule_type = Column(String)  # Hourly, Daily, Weekly, Monthly, Custom
+    schedule_config = Column(String) # Storing as JSON string for SQLite/Postgres compatibility without specific JSON type issues
+    last_run = Column(DateTime, nullable=True)
+    next_run = Column(DateTime, nullable=True)
+    status = Column(String, default="Active") # Active, Paused, Error
+    created_at = Column(DateTime, default=datetime.now)
+    updated_at = Column(DateTime, default=datetime.now, onupdate=datetime.now)
+
+    integration = relationship("IntegrationSource", back_populates="schedules")
 
 class DataFile(Base):
     __tablename__ = "data_files"
 
     id = Column(Integer, primary_key=True, index=True)
     filename = Column(String, index=True)
-    prefix = Column(String, index=True, nullable=True)  # e.g., ae, dm, sv
-    section = Column(String, index=True)  # e.g., AE, DM, SV
-    status = Column(String, default="Imported")
+    prefix = Column(String, nullable=True)
+    section = Column(String, index=True) # DM, AE, etc.
+    status = Column(String)
     file_path = Column(String)
-    table_name = Column(String, nullable=True)
-    file_size = Column(Integer, nullable=True)  # in bytes
-    timestamp = Column(String, nullable=True)  # extracted from filename
-    
+    file_size = Column(Integer, nullable=True)
+    timestamp = Column(String, nullable=True)
+    last_updated = Column(DateTime, nullable=True)
+    created_at = Column(DateTime, default=datetime.utcnow)
     protocol_id = Column(String, nullable=True)
     integration_id = Column(Integer, ForeignKey("integrations.id"), nullable=True)
     record_count = Column(Integer, default=0)
-    
-    created_at = Column(DateTime, default=datetime.utcnow)
-    last_updated = Column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
 
     integration = relationship("IntegrationSource")
 
@@ -102,6 +102,6 @@ class Activity(Base):
     action_type = Column(String, index=True)  # e.g., "study_created", "query_raised", "task_closed"
     description = Column(String)
     user_name = Column(String, default="User")  # Can be enhanced with actual user tracking
-    timestamp = Column(DateTime, default=datetime.utcnow, index=True)
+    timestamp = Column(DateTime, default=datetime.now, index=True)
     related_entity_id = Column(String, nullable=True)  # Study ID, Query ID, Task ID, etc.
     related_entity_type = Column(String, nullable=True)  # 'study', 'query', 'task', 'document'

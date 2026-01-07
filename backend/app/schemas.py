@@ -1,5 +1,5 @@
 from pydantic import BaseModel, ConfigDict
-from typing import Optional, List, Union, Dict, Any
+from typing import Optional, List, Union
 from datetime import date, datetime
 
 class StudyBase(BaseModel):
@@ -63,7 +63,6 @@ class IntegrationBase(BaseModel):
 
 class IntegrationCreate(IntegrationBase):
     pass
-    database_credentials: Optional["DatabaseCredentialCreate"] = None
 
 class IntegrationUpdate(BaseModel):
     name: Optional[str] = None
@@ -72,13 +71,11 @@ class IntegrationUpdate(BaseModel):
     frequency: Optional[str] = None
     status: Optional[str] = None
     protocol_id: Optional[str] = None
-    last_sync: Optional[datetime] = None
     folder_path: Optional[str] = None
 
 class Integration(IntegrationBase):
     id: int
-    last_sync: datetime
-    folder_path: Optional[str] = None
+    last_sync: Optional[datetime] = None
     
     model_config = ConfigDict(from_attributes=True)
 
@@ -98,13 +95,13 @@ class Activity(ActivityBase):
     
     model_config = ConfigDict(from_attributes=True)
 
+# Data File Schemas
 class DataFileBase(BaseModel):
     filename: str
     prefix: Optional[str] = None
-    section: Optional[str] = None
+    section: str
     status: str
     file_path: Optional[str] = None
-    table_name: Optional[str] = None
     file_size: Optional[Union[str, int]] = None
     timestamp: Optional[str] = None
     protocol_id: Optional[str] = None
@@ -114,8 +111,6 @@ class DataFileBase(BaseModel):
 class DataFile(DataFileBase):
     id: int
     created_at: datetime
-    last_updated: Optional[datetime] = None
-    integration_type: Optional[str] = None
     
     model_config = ConfigDict(from_attributes=True)
 
@@ -139,62 +134,27 @@ class SectionMetadataResponse(BaseModel):
     description: Optional[str] = None
     record_count: int
     variable_count: int
-    sample_data: List[Dict[str, Any]] = []
+    sample_data: List[dict] = []
 
-# Database Connection Schemas
-class DatabaseCredentialCreate(BaseModel):
+class IntegrationScheduleBase(BaseModel):
+    schedule_type: str
+    schedule_config: Optional[str] = None # JSON string
+    
+class IntegrationScheduleCreate(IntegrationScheduleBase):
     integration_id: int
-    db_type: str  # sqlserver, postgresql, mysql, oracle
-    host: str
-    port: int
-    database_name: str
-    username: str
-    password: str  # Will be encrypted before storage
 
-class DatabaseCredentialUpdate(BaseModel):
-    db_type: Optional[str] = None
-    host: Optional[str] = None
-    port: Optional[int] = None
-    database_name: Optional[str] = None
-    username: Optional[str] = None
-    password: Optional[str] = None
+class IntegrationScheduleUpdate(IntegrationScheduleBase):
+    status: Optional[str] = None
 
-class DatabaseCredential(BaseModel):
+class IntegrationSchedule(IntegrationScheduleBase):
     id: int
     integration_id: int
-    db_type: str
-    host: str
-    port: int
-    database_name: str
-    username: str
+    last_run: Optional[datetime] = None
+    next_run: Optional[datetime] = None
+    status: str
     created_at: datetime
-    last_updated: datetime
+    updated_at: Optional[datetime] = None
     
+    integration: Optional[Integration] = None # Optional relationship
+
     model_config = ConfigDict(from_attributes=True)
-
-class DatabaseTestConnectionRequest(BaseModel):
-    db_type: str
-    host: str
-    port: int
-    database_name: str
-    username: str
-    password: str
-
-class DatabaseTestConnectionResponse(BaseModel):
-    success: bool
-    message: str
-    error: Optional[str] = None
-
-class ClassifiedTable(BaseModel):
-    table_name: str
-    prefix: Optional[str] = None
-    domain: Optional[str] = None
-    category: str  # e.g., "Trial Data Management", "Unclassified"
-    description: Optional[str] = None
-
-class DatabaseTablesResponse(BaseModel):
-    success: bool
-    tables: List[ClassifiedTable]
-    total_count: int
-    classified_count: int
-    unclassified_count: int
