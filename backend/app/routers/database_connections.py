@@ -446,6 +446,7 @@ def import_database_tables(
                 logger.info(f"Imported {len(df)} records from {table_name} to {filename} and local table {local_table_name}")
                 
             except Exception as e:
+                db.rollback()  # Rollback transaction to allow subsequent operations
                 logger.error(f"Error importing table {table_name}: {str(e)}")
                 errors.append({
                     "table_name": table_name,

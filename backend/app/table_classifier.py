@@ -4,6 +4,7 @@ Classifies tables based on naming patterns (e.g., Study_ae -> Adverse Events)
 """
 
 from typing import Dict, Optional, Tuple
+import re
 
 
 # Domain mapping for clinical trial data
@@ -98,6 +99,29 @@ def classify_table(table_name: str) -> Tuple[Optional[str], Optional[str], str, 
             domain_info['category'],
             f"{domain_info['name']} data from clinical trial"
         )
+        
+    # Regex Matching for complex patterns (e.g., study_rawlb1, ae1, rawdm)
+    # Pattern looks for:
+    # 1. Preceded by start of string (^), underscore (_), or 'raw'
+    # 2. One of the domain keys
+    # 3. Optional digits
+    # 4. End of string ($) or underscore (_)
+    
+    # Construct regex pattern from keys
+    domain_keys = sorted(DOMAIN_MAPPING.keys(), key=len, reverse=True)
+    pattern = r'(?:^|_|raw)(' + '|'.join(domain_keys) + r')\d*(?:$|_)'
+    
+    match = re.search(pattern, table_lower)
+    if match:
+        domain_code = match.group(1)
+        if domain_code in DOMAIN_MAPPING:
+            domain_info = DOMAIN_MAPPING[domain_code]
+            return (
+                domain_code,
+                domain_info['name'],
+                domain_info['category'],
+                f"{domain_info['name']} data from clinical trial"
+            )
     
     # Unclassified
     return (None, None, "Unclassified", None)
