@@ -47,7 +47,7 @@ export default function DataIntegration() {
     const [scanSuccess, setScanSuccess] = useState<{ [key: number]: boolean }>({});
 
     // New State for Source Selection & Protocols
-    const [sourceType, setSourceType] = useState<'Local' | 'Database'>('Local');
+
     const [availableProtocols, setAvailableProtocols] = useState<string[]>([]);
 
     // DB Credentials State
@@ -66,7 +66,7 @@ export default function DataIntegration() {
     const [activeActionMenuId, setActiveActionMenuId] = useState<number | null>(null);
 
     // Predefined options
-    const integrationTypes = ['API', 'SFTP', 'S3', 'EDC', 'CTMS', 'Lab'];
+    const integrationTypes = ['API', 'SFTP', 'S3', 'Local', 'Database'];
     const vendors = ['Medidata Rave', 'Labcorp', 'Calyx', 'Veeva Vault CTMS', 'Parexel Informatics', 'SAE Central', 'Other'];
     const frequencies = ['Daily at 2:00 AM', 'Every 12 hours', 'Hourly', 'Weekly on Monday', 'Real-time', 'Custom'];
 
@@ -274,7 +274,7 @@ export default function DataIntegration() {
                 protocol_id: formData.protocolId || null,
             };
 
-            if (sourceType === 'Local') {
+            if (formData.type !== 'Database') {
                 payload.folder_path = formData.folderPath || null;
             } else {
                 // Validate DB creds
@@ -304,7 +304,7 @@ export default function DataIntegration() {
                 folderPath: '',
                 launchImmediately: false
             });
-            setSourceType('Local');
+
             setDbCredentials({
                 db_type: 'postgresql',
                 host: '',
@@ -724,38 +724,7 @@ export default function DataIntegration() {
                                     </select>
                                 </div>
 
-                                {/* Source Type Selection */}
-                                <div>
-                                    <label className="block text-sm font-medium text-gray-700 mb-2">
-                                        Source Type
-                                    </label>
-                                    <div className="flex bg-gray-100 p-1 rounded-md">
-                                        <button
-                                            type="button"
-                                            onClick={() => setSourceType('Local')}
-                                            className={cn(
-                                                "flex-1 py-1.5 text-sm font-medium rounded-md transition-all",
-                                                sourceType === 'Local'
-                                                    ? "bg-white text-blue-600 shadow-sm"
-                                                    : "text-gray-500 hover:text-gray-900"
-                                            )}
-                                        >
-                                            Local Folder
-                                        </button>
-                                        <button
-                                            type="button"
-                                            onClick={() => setSourceType('Database')}
-                                            className={cn(
-                                                "flex-1 py-1.5 text-sm font-medium rounded-md transition-all",
-                                                sourceType === 'Database'
-                                                    ? "bg-white text-blue-600 shadow-sm"
-                                                    : "text-gray-500 hover:text-gray-900"
-                                            )}
-                                        >
-                                            Database
-                                        </button>
-                                    </div>
-                                </div>
+
 
                                 {/* Integration Type */}
                                 <div>
@@ -810,7 +779,7 @@ export default function DataIntegration() {
                                 </div>
 
                                 {/* Data Source Folder Path (Conditional) */}
-                                {sourceType === 'Local' && (
+                                {formData.type !== 'Database' && (
                                     <div>
                                         <label className="block text-sm font-medium text-gray-700 mb-2">
                                             Data Source Folder Path
@@ -830,7 +799,7 @@ export default function DataIntegration() {
                                 )}
 
                                 {/* Database Credentials Form (Conditional) */}
-                                {sourceType === 'Database' && (
+                                {formData.type === 'Database' && (
                                     <div className="space-y-3 p-4 bg-gray-50 rounded-lg border border-gray-200">
                                         <h3 className="text-sm font-medium text-gray-900 mb-2">Database Connection</h3>
 
