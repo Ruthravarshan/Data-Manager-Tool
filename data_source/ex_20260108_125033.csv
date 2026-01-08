@@ -1,0 +1,251 @@
+study_id,subject_id,visit_name,administration_date,administration_time,study_drug_name,dose_administered,dose_unit,route_of_administration,formulation,lot_number,compliance_percent,missed_doses,dose_modification,modification_reason,administered_by,storage_condition_met,TRTGroup,_imported_at,_source_file
+STUDY001,SUB0001,Day 1,15-02-2024,12:23,Investigational Product,10,mg,Oral,Tablet,LOT9469,99,0,No,,Study Staff,Yes,A,2026-01-06 07:25:11.615928,ex_raw_20251126_074704.csv
+STUDY001,SUB0001,Week 2,29-02-2024,08:11,Investigational Product,50,mg,Oral,Tablet,LOT7414,89,1,No,,Study Staff,Yes,A,2026-01-06 07:25:11.615928,ex_raw_20251126_074704.csv
+STUDY001,SUB0001,Week 4,14-03-2024,08:03,Investigational Product,100,mg,Oral,Tablet,LOT7662,95,1,No,,Subject,Yes,A,2026-01-06 07:25:11.615928,ex_raw_20251126_074704.csv
+STUDY001,SUB0001,Week 8,28-03-2024,10:30,Investigational Product,10,mg,Oral,Tablet,LOT7482,90,0,No,,Study Staff,Yes,A,2026-01-06 07:25:11.615928,ex_raw_20251126_074704.csv
+STUDY001,SUB0001,Week 12,11-04-2024,10:16,Investigational Product,20,mg,Oral,Tablet,LOT2692,98,0,No,,Subject,Yes,A,2026-01-06 07:25:11.615928,ex_raw_20251126_074704.csv
+STUDY001,SUB0002,Day 1,15-02-2024,11:29,Investigational Product,100,mg,Oral,Tablet,LOT5603,87,0,No,,Study Staff,Yes,B,2026-01-06 07:25:11.615928,ex_raw_20251126_074704.csv
+STUDY001,SUB0002,Week 2,29-02-2024,10:20,Investigational Product,50,mg,Oral,Tablet,LOT6686,98,1,No,,Study Staff,Yes,B,2026-01-06 07:25:11.615928,ex_raw_20251126_074704.csv
+STUDY001,SUB0002,Week 4,14-03-2024,08:16,Investigational Product,100,mg,Oral,Tablet,LOT1125,92,0,No,,Subject,Yes,B,2026-01-06 07:25:11.615928,ex_raw_20251126_074704.csv
+STUDY001,SUB0002,Week 8,28-03-2024,09:36,Investigational Product,20,mg,Oral,Tablet,LOT3253,89,2,No,,Subject,Yes,B,2026-01-06 07:25:11.615928,ex_raw_20251126_074704.csv
+STUDY001,SUB0002,Week 12,11-04-2024,11:26,Investigational Product,20,mg,Oral,Tablet,LOT6888,85,0,No,,Subject,Yes,B,2026-01-06 07:25:11.615928,ex_raw_20251126_074704.csv
+STUDY001,SUB0003,Day 1,15-02-2024,12:27,Investigational Product,20,mg,Oral,Tablet,LOT1519,96,2,No,,Subject,Yes,A,2026-01-06 07:25:11.615928,ex_raw_20251126_074704.csv
+STUDY001,SUB0003,Week 2,29-02-2024,08:29,Investigational Product,20,mg,Oral,Tablet,LOT7410,99,0,No,,Study Staff,Yes,A,2026-01-06 07:25:11.615928,ex_raw_20251126_074704.csv
+STUDY001,SUB0003,Week 4,14-03-2024,11:40,Investigational Product,50,mg,Oral,Tablet,LOT6842,93,1,No,,Study Staff,Yes,A,2026-01-06 07:25:11.615928,ex_raw_20251126_074704.csv
+STUDY001,SUB0003,Week 8,28-03-2024,12:45,Investigational Product,50,mg,Oral,Tablet,LOT9944,87,2,No,,Subject,Yes,A,2026-01-06 07:25:11.615928,ex_raw_20251126_074704.csv
+STUDY001,SUB0003,Week 12,11-04-2024,11:38,Investigational Product,25,mg,Oral,Tablet,LOT3721,88,2,Yes,Adverse Event,Subject,Yes,A,2026-01-06 07:25:11.615928,ex_raw_20251126_074704.csv
+STUDY001,SUB0004,Day 1,15-02-2024,12:17,Investigational Product,50,mg,Oral,Tablet,LOT8062,85,2,No,,Study Staff,Yes,B,2026-01-06 07:25:11.615928,ex_raw_20251126_074704.csv
+STUDY001,SUB0004,Week 2,29-02-2024,08:52,Investigational Product,100,mg,Oral,Tablet,LOT3136,93,1,No,,Subject,Yes,B,2026-01-06 07:25:11.615928,ex_raw_20251126_074704.csv
+STUDY001,SUB0004,Week 4,14-03-2024,09:56,Investigational Product,50,mg,Oral,Tablet,LOT2208,90,2,No,,Study Staff,Yes,B,2026-01-06 07:25:11.615928,ex_raw_20251126_074704.csv
+STUDY001,SUB0004,Week 8,28-03-2024,12:36,Investigational Product,20,mg,Oral,Tablet,LOT7017,98,2,No,,Subject,Yes,B,2026-01-06 07:25:11.615928,ex_raw_20251126_074704.csv
+STUDY001,SUB0004,Week 12,11-04-2024,12:08,Investigational Product,10,mg,Oral,Tablet,LOT6322,99,1,Yes,Adverse Event,Study Staff,Yes,B,2026-01-06 07:25:11.615928,ex_raw_20251126_074704.csv
+STUDY001,SUB0005,Day 1,15-02-2024,09:16,Investigational Product,100,mg,Oral,Tablet,LOT5439,85,2,No,,Subject,Yes,A,2026-01-06 07:25:11.615928,ex_raw_20251126_074704.csv
+STUDY001,SUB0005,Week 2,29-02-2024,09:43,Investigational Product,20,mg,Oral,Tablet,LOT5436,89,2,No,,Study Staff,Yes,A,2026-01-06 07:25:11.615928,ex_raw_20251126_074704.csv
+STUDY001,SUB0005,Week 4,14-03-2024,09:33,Investigational Product,100,mg,Oral,Tablet,LOT1348,91,0,No,,Study Staff,Yes,A,2026-01-06 07:25:11.615928,ex_raw_20251126_074704.csv
+STUDY001,SUB0005,Week 8,28-03-2024,11:23,Investigational Product,15,mg,Oral,Tablet,LOT3985,87,0,Yes,Adverse Event,Subject,Yes,A,2026-01-06 07:25:11.615928,ex_raw_20251126_074704.csv
+STUDY001,SUB0005,Week 12,11-04-2024,08:47,Investigational Product,100,mg,Oral,Tablet,LOT4982,91,2,No,,Study Staff,Yes,A,2026-01-06 07:25:11.615928,ex_raw_20251126_074704.csv
+STUDY001,SUB0006,Day 1,15-02-2024,08:06,Investigational Product,50,mg,Oral,Tablet,LOT9916,94,2,No,,Study Staff,Yes,B,2026-01-06 07:25:11.615928,ex_raw_20251126_074704.csv
+STUDY001,SUB0006,Week 2,29-02-2024,10:19,Investigational Product,50,mg,Oral,Tablet,LOT6502,85,0,No,,Study Staff,Yes,B,2026-01-06 07:25:11.615928,ex_raw_20251126_074704.csv
+STUDY001,SUB0006,Week 4,14-03-2024,08:08,Investigational Product,100,mg,Oral,Tablet,LOT9483,98,2,No,,Study Staff,Yes,B,2026-01-06 07:25:11.615928,ex_raw_20251126_074704.csv
+STUDY001,SUB0006,Week 8,28-03-2024,08:50,Investigational Product,20,mg,Oral,Tablet,LOT4436,91,1,No,,Subject,Yes,B,2026-01-06 07:25:11.615928,ex_raw_20251126_074704.csv
+STUDY001,SUB0006,Week 12,11-04-2024,12:21,Investigational Product,50,mg,Oral,Tablet,LOT9448,99,0,Yes,Adverse Event,Subject,Yes,B,2026-01-06 07:25:11.615928,ex_raw_20251126_074704.csv
+STUDY001,SUB0007,Day 1,15-02-2024,09:38,Investigational Product,10,mg,Oral,Tablet,LOT4139,98,1,No,,Study Staff,Yes,A,2026-01-06 07:25:11.615928,ex_raw_20251126_074704.csv
+STUDY001,SUB0007,Week 2,29-02-2024,08:27,Investigational Product,100,mg,Oral,Tablet,LOT5445,92,0,No,,Study Staff,Yes,A,2026-01-06 07:25:11.615928,ex_raw_20251126_074704.csv
+STUDY001,SUB0007,Week 4,14-03-2024,12:04,Investigational Product,100,mg,Oral,Tablet,LOT7479,94,0,No,,Study Staff,Yes,A,2026-01-06 07:25:11.615928,ex_raw_20251126_074704.csv
+STUDY001,SUB0007,Week 8,28-03-2024,10:27,Investigational Product,37,mg,Oral,Tablet,LOT9513,100,0,Yes,Adverse Event,Subject,Yes,A,2026-01-06 07:25:11.615928,ex_raw_20251126_074704.csv
+STUDY001,SUB0007,Week 12,11-04-2024,11:55,Investigational Product,50,mg,Oral,Tablet,LOT4993,93,0,No,,Study Staff,Yes,A,2026-01-06 07:25:11.615928,ex_raw_20251126_074704.csv
+STUDY001,SUB0008,Day 1,15-02-2024,10:18,Investigational Product,100,mg,Oral,Tablet,LOT5156,90,2,No,,Subject,Yes,B,2026-01-06 07:25:11.615928,ex_raw_20251126_074704.csv
+STUDY001,SUB0008,Week 2,29-02-2024,11:47,Investigational Product,10,mg,Oral,Tablet,LOT3560,99,2,No,,Subject,Yes,B,2026-01-06 07:25:11.615928,ex_raw_20251126_074704.csv
+STUDY001,SUB0008,Week 4,14-03-2024,12:40,Investigational Product,10,mg,Oral,Tablet,LOT4615,85,1,No,,Study Staff,Yes,B,2026-01-06 07:25:11.615928,ex_raw_20251126_074704.csv
+STUDY001,SUB0008,Week 8,28-03-2024,10:54,Investigational Product,10,mg,Oral,Tablet,LOT3466,91,0,Yes,Adverse Event,Subject,Yes,B,2026-01-06 07:25:11.615928,ex_raw_20251126_074704.csv
+STUDY001,SUB0008,Week 12,11-04-2024,11:21,Investigational Product,50,mg,Oral,Tablet,LOT8339,97,0,Yes,Adverse Event,Subject,Yes,B,2026-01-06 07:25:11.615928,ex_raw_20251126_074704.csv
+STUDY001,SUB0009,Day 1,15-02-2024,12:35,Investigational Product,100,mg,Oral,Tablet,LOT4489,87,1,No,,Study Staff,Yes,A,2026-01-06 07:25:11.615928,ex_raw_20251126_074704.csv
+STUDY001,SUB0009,Week 2,29-02-2024,08:25,Investigational Product,10,mg,Oral,Tablet,LOT1801,86,0,No,,Subject,Yes,A,2026-01-06 07:25:11.615928,ex_raw_20251126_074704.csv
+STUDY001,SUB0009,Week 4,14-03-2024,11:53,Investigational Product,100,mg,Oral,Tablet,LOT8879,95,0,No,,Study Staff,Yes,A,2026-01-06 07:25:11.615928,ex_raw_20251126_074704.csv
+STUDY001,SUB0009,Week 8,28-03-2024,08:59,Investigational Product,5,mg,Oral,Tablet,LOT9590,99,0,Yes,Adverse Event,Study Staff,Yes,A,2026-01-06 07:25:11.615928,ex_raw_20251126_074704.csv
+STUDY001,SUB0009,Week 12,11-04-2024,08:49,Investigational Product,7,mg,Oral,Tablet,LOT9582,91,1,Yes,Adverse Event,Subject,Yes,A,2026-01-06 07:25:11.615928,ex_raw_20251126_074704.csv
+STUDY001,SUB0010,Day 1,15-02-2024,09:04,Investigational Product,50,mg,Oral,Tablet,LOT3116,99,2,No,,Study Staff,Yes,B,2026-01-06 07:25:11.615928,ex_raw_20251126_074704.csv
+STUDY001,SUB0010,Week 2,29-02-2024,11:22,Investigational Product,50,mg,Oral,Tablet,LOT1093,91,0,No,,Subject,Yes,B,2026-01-06 07:25:11.615928,ex_raw_20251126_074704.csv
+STUDY001,SUB0010,Week 4,14-03-2024,11:40,Investigational Product,10,mg,Oral,Tablet,LOT8095,93,0,No,,Subject,Yes,B,2026-01-06 07:25:11.615928,ex_raw_20251126_074704.csv
+STUDY001,SUB0010,Week 8,28-03-2024,09:07,Investigational Product,5,mg,Oral,Tablet,LOT1381,86,1,Yes,Adverse Event,Study Staff,Yes,B,2026-01-06 07:25:11.615928,ex_raw_20251126_074704.csv
+STUDY001,SUB0010,Week 12,11-04-2024,10:41,Investigational Product,50,mg,Oral,Tablet,LOT3704,93,2,Yes,Adverse Event,Subject,Yes,B,2026-01-06 07:25:11.615928,ex_raw_20251126_074704.csv
+STUDY001,SUB0011,Day 1,15-02-2024,12:28,Investigational Product,100,mg,Oral,Tablet,LOT5109,98,1,No,,Study Staff,Yes,A,2026-01-06 07:25:11.615928,ex_raw_20251126_074704.csv
+STUDY001,SUB0011,Week 2,29-02-2024,11:41,Investigational Product,10,mg,Oral,Tablet,LOT1364,93,2,No,,Study Staff,Yes,A,2026-01-06 07:25:11.615928,ex_raw_20251126_074704.csv
+STUDY001,SUB0011,Week 4,14-03-2024,09:37,Investigational Product,20,mg,Oral,Tablet,LOT9390,86,1,No,,Study Staff,Yes,A,2026-01-06 07:25:11.615928,ex_raw_20251126_074704.csv
+STUDY001,SUB0011,Week 8,28-03-2024,12:34,Investigational Product,25,mg,Oral,Tablet,LOT8770,95,1,Yes,Adverse Event,Study Staff,Yes,A,2026-01-06 07:25:11.615928,ex_raw_20251126_074704.csv
+STUDY001,SUB0011,Week 12,11-04-2024,09:46,Investigational Product,100,mg,Oral,Tablet,LOT8264,87,2,No,,Subject,Yes,A,2026-01-06 07:25:11.615928,ex_raw_20251126_074704.csv
+STUDY001,SUB0012,Day 1,15-02-2024,12:36,Investigational Product,100,mg,Oral,Tablet,LOT5026,85,2,No,,Study Staff,Yes,B,2026-01-06 07:25:11.615928,ex_raw_20251126_074704.csv
+STUDY001,SUB0012,Week 2,29-02-2024,12:14,Investigational Product,20,mg,Oral,Tablet,LOT6829,93,2,No,,Subject,Yes,B,2026-01-06 07:25:11.615928,ex_raw_20251126_074704.csv
+STUDY001,SUB0012,Week 4,14-03-2024,08:06,Investigational Product,20,mg,Oral,Tablet,LOT8188,88,1,No,,Study Staff,Yes,B,2026-01-06 07:25:11.615928,ex_raw_20251126_074704.csv
+STUDY001,SUB0012,Week 8,28-03-2024,10:28,Investigational Product,50,mg,Oral,Tablet,LOT5123,88,0,No,,Study Staff,Yes,B,2026-01-06 07:25:11.615928,ex_raw_20251126_074704.csv
+STUDY001,SUB0012,Week 12,11-04-2024,11:27,Investigational Product,10,mg,Oral,Tablet,LOT9955,100,1,Yes,Adverse Event,Subject,Yes,B,2026-01-06 07:25:11.615928,ex_raw_20251126_074704.csv
+STUDY001,SUB0013,Day 1,15-02-2024,11:40,Investigational Product,20,mg,Oral,Tablet,LOT6297,97,2,No,,Study Staff,Yes,A,2026-01-06 07:25:11.615928,ex_raw_20251126_074704.csv
+STUDY001,SUB0013,Week 2,29-02-2024,11:24,Investigational Product,20,mg,Oral,Tablet,LOT1690,93,0,No,,Study Staff,Yes,A,2026-01-06 07:25:11.615928,ex_raw_20251126_074704.csv
+STUDY001,SUB0013,Week 4,14-03-2024,08:28,Investigational Product,20,mg,Oral,Tablet,LOT9438,96,0,No,,Subject,Yes,A,2026-01-06 07:25:11.615928,ex_raw_20251126_074704.csv
+STUDY001,SUB0013,Week 8,28-03-2024,09:44,Investigational Product,10,mg,Oral,Tablet,LOT3850,97,0,Yes,Adverse Event,Subject,Yes,A,2026-01-06 07:25:11.615928,ex_raw_20251126_074704.csv
+STUDY001,SUB0013,Week 12,11-04-2024,08:56,Investigational Product,10,mg,Oral,Tablet,LOT9099,87,0,Yes,Adverse Event,Study Staff,Yes,A,2026-01-06 07:25:11.615928,ex_raw_20251126_074704.csv
+STUDY001,SUB0014,Day 1,15-02-2024,12:21,Investigational Product,100,mg,Oral,Tablet,LOT3953,91,0,No,,Study Staff,Yes,B,2026-01-06 07:25:11.615928,ex_raw_20251126_074704.csv
+STUDY001,SUB0014,Week 2,29-02-2024,09:23,Investigational Product,50,mg,Oral,Tablet,LOT7294,88,0,No,,Study Staff,Yes,B,2026-01-06 07:25:11.615928,ex_raw_20251126_074704.csv
+STUDY001,SUB0014,Week 4,14-03-2024,10:18,Investigational Product,100,mg,Oral,Tablet,LOT4306,98,1,No,,Subject,Yes,B,2026-01-06 07:25:11.615928,ex_raw_20251126_074704.csv
+STUDY001,SUB0014,Week 8,28-03-2024,10:08,Investigational Product,7,mg,Oral,Tablet,LOT4389,92,2,Yes,Adverse Event,Subject,Yes,B,2026-01-06 07:25:11.615928,ex_raw_20251126_074704.csv
+STUDY001,SUB0014,Week 12,11-04-2024,11:17,Investigational Product,75,mg,Oral,Tablet,LOT2035,95,1,Yes,Adverse Event,Study Staff,Yes,B,2026-01-06 07:25:11.615928,ex_raw_20251126_074704.csv
+STUDY001,SUB0015,Day 1,15-02-2024,08:28,Investigational Product,10,mg,Oral,Tablet,LOT2823,98,0,No,,Subject,Yes,A,2026-01-06 07:25:11.615928,ex_raw_20251126_074704.csv
+STUDY001,SUB0015,Week 2,29-02-2024,12:12,Investigational Product,20,mg,Oral,Tablet,LOT7889,98,1,No,,Subject,Yes,A,2026-01-06 07:25:11.615928,ex_raw_20251126_074704.csv
+STUDY001,SUB0015,Week 4,14-03-2024,08:59,Investigational Product,10,mg,Oral,Tablet,LOT5109,99,1,No,,Study Staff,Yes,A,2026-01-06 07:25:11.615928,ex_raw_20251126_074704.csv
+STUDY001,SUB0015,Week 8,28-03-2024,09:48,Investigational Product,20,mg,Oral,Tablet,LOT9183,98,0,No,,Study Staff,Yes,A,2026-01-06 07:25:11.615928,ex_raw_20251126_074704.csv
+STUDY001,SUB0015,Week 12,11-04-2024,10:02,Investigational Product,100,mg,Oral,Tablet,LOT8928,96,0,No,,Study Staff,Yes,A,2026-01-06 07:25:11.615928,ex_raw_20251126_074704.csv
+STUDY001,SUB0016,Day 1,15-02-2024,10:45,Investigational Product,50,mg,Oral,Tablet,LOT9053,91,1,No,,Study Staff,Yes,B,2026-01-06 07:25:11.615928,ex_raw_20251126_074704.csv
+STUDY001,SUB0016,Week 2,29-02-2024,08:56,Investigational Product,50,mg,Oral,Tablet,LOT8935,97,1,No,,Study Staff,Yes,B,2026-01-06 07:25:11.615928,ex_raw_20251126_074704.csv
+STUDY001,SUB0016,Week 4,14-03-2024,10:10,Investigational Product,10,mg,Oral,Tablet,LOT9338,90,2,No,,Subject,Yes,B,2026-01-06 07:25:11.615928,ex_raw_20251126_074704.csv
+STUDY001,SUB0016,Week 8,28-03-2024,09:06,Investigational Product,20,mg,Oral,Tablet,LOT6836,93,2,No,,Subject,Yes,B,2026-01-06 07:25:11.615928,ex_raw_20251126_074704.csv
+STUDY001,SUB0016,Week 12,11-04-2024,12:30,Investigational Product,50,mg,Oral,Tablet,LOT1414,85,2,Yes,Adverse Event,Study Staff,Yes,B,2026-01-06 07:25:11.615928,ex_raw_20251126_074704.csv
+STUDY001,SUB0017,Day 1,15-02-2024,10:50,Investigational Product,10,mg,Oral,Tablet,LOT9279,85,0,No,,Study Staff,Yes,A,2026-01-06 07:25:11.615928,ex_raw_20251126_074704.csv
+STUDY001,SUB0017,Week 2,29-02-2024,11:03,Investigational Product,10,mg,Oral,Tablet,LOT2092,86,2,No,,Study Staff,Yes,A,2026-01-06 07:25:11.615928,ex_raw_20251126_074704.csv
+STUDY001,SUB0017,Week 4,14-03-2024,11:57,Investigational Product,100,mg,Oral,Tablet,LOT5951,99,2,No,,Study Staff,Yes,A,2026-01-06 07:25:11.615928,ex_raw_20251126_074704.csv
+STUDY001,SUB0017,Week 8,28-03-2024,12:45,Investigational Product,75,mg,Oral,Tablet,LOT7565,93,2,Yes,Adverse Event,Study Staff,Yes,A,2026-01-06 07:25:11.615928,ex_raw_20251126_074704.csv
+STUDY001,SUB0017,Week 12,11-04-2024,08:45,Investigational Product,20,mg,Oral,Tablet,LOT4935,86,1,No,,Study Staff,Yes,A,2026-01-06 07:25:11.615928,ex_raw_20251126_074704.csv
+STUDY001,SUB0018,Day 1,15-02-2024,11:34,Investigational Product,20,mg,Oral,Tablet,LOT3235,87,2,No,,Study Staff,Yes,B,2026-01-06 07:25:11.615928,ex_raw_20251126_074704.csv
+STUDY001,SUB0018,Week 2,29-02-2024,09:34,Investigational Product,50,mg,Oral,Tablet,LOT4588,86,1,No,,Subject,Yes,B,2026-01-06 07:25:11.615928,ex_raw_20251126_074704.csv
+STUDY001,SUB0018,Week 4,14-03-2024,12:03,Investigational Product,10,mg,Oral,Tablet,LOT1458,85,0,No,,Study Staff,Yes,B,2026-01-06 07:25:11.615928,ex_raw_20251126_074704.csv
+STUDY001,SUB0018,Week 8,28-03-2024,11:07,Investigational Product,75,mg,Oral,Tablet,LOT1280,98,1,Yes,Adverse Event,Subject,Yes,B,2026-01-06 07:25:11.615928,ex_raw_20251126_074704.csv
+STUDY001,SUB0018,Week 12,11-04-2024,08:37,Investigational Product,50,mg,Oral,Tablet,LOT4066,89,0,Yes,Adverse Event,Study Staff,Yes,B,2026-01-06 07:25:11.615928,ex_raw_20251126_074704.csv
+STUDY001,SUB0019,Day 1,15-02-2024,11:23,Investigational Product,20,mg,Oral,Tablet,LOT4378,98,0,No,,Study Staff,Yes,A,2026-01-06 07:25:11.615928,ex_raw_20251126_074704.csv
+STUDY001,SUB0019,Week 2,29-02-2024,11:22,Investigational Product,20,mg,Oral,Tablet,LOT9325,92,2,No,,Study Staff,Yes,A,2026-01-06 07:25:11.615928,ex_raw_20251126_074704.csv
+STUDY001,SUB0019,Week 4,14-03-2024,09:05,Investigational Product,20,mg,Oral,Tablet,LOT2764,94,2,No,,Subject,Yes,A,2026-01-06 07:25:11.615928,ex_raw_20251126_074704.csv
+STUDY001,SUB0019,Week 8,28-03-2024,10:39,Investigational Product,5,mg,Oral,Tablet,LOT8904,91,2,Yes,Adverse Event,Study Staff,Yes,A,2026-01-06 07:25:11.615928,ex_raw_20251126_074704.csv
+STUDY001,SUB0019,Week 12,11-04-2024,12:07,Investigational Product,15,mg,Oral,Tablet,LOT9211,95,1,Yes,Adverse Event,Subject,Yes,A,2026-01-06 07:25:11.615928,ex_raw_20251126_074704.csv
+STUDY001,SUB0020,Day 1,15-02-2024,12:36,Investigational Product,10,mg,Oral,Tablet,LOT1920,85,1,No,,Study Staff,Yes,B,2026-01-06 07:25:11.615928,ex_raw_20251126_074704.csv
+STUDY001,SUB0020,Week 2,29-02-2024,12:44,Investigational Product,10,mg,Oral,Tablet,LOT8655,95,2,No,,Study Staff,Yes,B,2026-01-06 07:25:11.615928,ex_raw_20251126_074704.csv
+STUDY001,SUB0020,Week 4,14-03-2024,12:12,Investigational Product,100,mg,Oral,Tablet,LOT8195,99,1,No,,Study Staff,Yes,B,2026-01-06 07:25:11.615928,ex_raw_20251126_074704.csv
+STUDY001,SUB0020,Week 8,28-03-2024,09:46,Investigational Product,7,mg,Oral,Tablet,LOT4557,86,2,Yes,Adverse Event,Subject,Yes,B,2026-01-06 07:25:11.615928,ex_raw_20251126_074704.csv
+STUDY001,SUB0020,Week 12,11-04-2024,09:54,Investigational Product,100,mg,Oral,Tablet,LOT8385,96,2,No,,Study Staff,Yes,B,2026-01-06 07:25:11.615928,ex_raw_20251126_074704.csv
+STUDY001,SUB0021,Day 1,15-02-2024,10:13,Investigational Product,20,mg,Oral,Tablet,LOT5935,93,2,No,,Subject,Yes,A,2026-01-06 07:25:11.615928,ex_raw_20251126_074704.csv
+STUDY001,SUB0021,Week 2,29-02-2024,09:56,Investigational Product,100,mg,Oral,Tablet,LOT5587,97,1,No,,Subject,Yes,A,2026-01-06 07:25:11.615928,ex_raw_20251126_074704.csv
+STUDY001,SUB0021,Week 4,14-03-2024,10:55,Investigational Product,50,mg,Oral,Tablet,LOT7476,93,2,No,,Subject,Yes,A,2026-01-06 07:25:11.615928,ex_raw_20251126_074704.csv
+STUDY001,SUB0021,Week 8,28-03-2024,12:13,Investigational Product,50,mg,Oral,Tablet,LOT7265,90,0,No,,Subject,Yes,A,2026-01-06 07:25:11.615928,ex_raw_20251126_074704.csv
+STUDY001,SUB0021,Week 12,11-04-2024,09:52,Investigational Product,75,mg,Oral,Tablet,LOT1088,91,1,Yes,Adverse Event,Subject,Yes,A,2026-01-06 07:25:11.615928,ex_raw_20251126_074704.csv
+STUDY001,SUB0022,Day 1,15-02-2024,09:06,Investigational Product,20,mg,Oral,Tablet,LOT8956,88,1,No,,Subject,Yes,A,2026-01-06 07:25:11.615928,ex_raw_20251126_074704.csv
+STUDY001,SUB0022,Week 2,29-02-2024,10:21,Investigational Product,10,mg,Oral,Tablet,LOT8815,86,0,No,,Subject,Yes,A,2026-01-06 07:25:11.615928,ex_raw_20251126_074704.csv
+STUDY001,SUB0022,Week 4,14-03-2024,08:43,Investigational Product,10,mg,Oral,Tablet,LOT1797,100,0,No,,Study Staff,Yes,A,2026-01-06 07:25:11.615928,ex_raw_20251126_074704.csv
+STUDY001,SUB0022,Week 8,28-03-2024,10:08,Investigational Product,100,mg,Oral,Tablet,LOT4889,88,0,No,,Study Staff,Yes,A,2026-01-06 07:25:11.615928,ex_raw_20251126_074704.csv
+STUDY001,SUB0022,Week 12,11-04-2024,10:52,Investigational Product,75,mg,Oral,Tablet,LOT6897,85,0,Yes,Adverse Event,Study Staff,Yes,A,2026-01-06 07:25:11.615928,ex_raw_20251126_074704.csv
+STUDY001,SUB0023,Day 1,15-02-2024,09:33,Investigational Product,50,mg,Oral,Tablet,LOT6790,90,0,No,,Study Staff,Yes,A,2026-01-06 07:25:11.615928,ex_raw_20251126_074704.csv
+STUDY001,SUB0023,Week 2,29-02-2024,09:17,Investigational Product,100,mg,Oral,Tablet,LOT5971,89,2,No,,Subject,Yes,A,2026-01-06 07:25:11.615928,ex_raw_20251126_074704.csv
+STUDY001,SUB0023,Week 4,14-03-2024,10:21,Investigational Product,20,mg,Oral,Tablet,LOT6823,87,1,No,,Study Staff,Yes,A,2026-01-06 07:25:11.615928,ex_raw_20251126_074704.csv
+STUDY001,SUB0023,Week 8,28-03-2024,12:40,Investigational Product,75,mg,Oral,Tablet,LOT4124,99,2,Yes,Adverse Event,Study Staff,Yes,A,2026-01-06 07:25:11.615928,ex_raw_20251126_074704.csv
+STUDY001,SUB0023,Week 12,11-04-2024,12:40,Investigational Product,10,mg,Oral,Tablet,LOT8381,96,1,No,,Study Staff,Yes,A,2026-01-06 07:25:11.615928,ex_raw_20251126_074704.csv
+STUDY001,SUB0024,Day 1,15-02-2024,08:09,Investigational Product,10,mg,Oral,Tablet,LOT2154,86,0,No,,Study Staff,Yes,A,2026-01-06 07:25:11.615928,ex_raw_20251126_074704.csv
+STUDY001,SUB0024,Week 2,29-02-2024,12:04,Investigational Product,50,mg,Oral,Tablet,LOT2613,91,0,No,,Study Staff,Yes,A,2026-01-06 07:25:11.615928,ex_raw_20251126_074704.csv
+STUDY001,SUB0024,Week 4,14-03-2024,11:44,Investigational Product,20,mg,Oral,Tablet,LOT4427,89,1,No,,Study Staff,Yes,A,2026-01-06 07:25:11.615928,ex_raw_20251126_074704.csv
+STUDY001,SUB0024,Week 8,28-03-2024,12:03,Investigational Product,15,mg,Oral,Tablet,LOT8227,96,2,Yes,Adverse Event,Study Staff,Yes,A,2026-01-06 07:25:11.615928,ex_raw_20251126_074704.csv
+STUDY001,SUB0024,Week 12,11-04-2024,11:03,Investigational Product,25,mg,Oral,Tablet,LOT3391,88,2,Yes,Adverse Event,Study Staff,Yes,A,2026-01-06 07:25:11.615928,ex_raw_20251126_074704.csv
+STUDY001,SUB0025,Day 1,15-02-2024,12:17,Investigational Product,10,mg,Oral,Tablet,LOT8747,100,2,No,,Subject,Yes,A,2026-01-06 07:25:11.615928,ex_raw_20251126_074704.csv
+STUDY001,SUB0025,Week 2,29-02-2024,08:49,Investigational Product,10,mg,Oral,Tablet,LOT7358,93,0,No,,Subject,Yes,A,2026-01-06 07:25:11.615928,ex_raw_20251126_074704.csv
+STUDY001,SUB0025,Week 4,14-03-2024,09:22,Investigational Product,100,mg,Oral,Tablet,LOT8144,94,2,No,,Subject,Yes,A,2026-01-06 07:25:11.615928,ex_raw_20251126_074704.csv
+STUDY001,SUB0025,Week 8,28-03-2024,11:55,Investigational Product,37,mg,Oral,Tablet,LOT1452,95,1,Yes,Adverse Event,Study Staff,Yes,A,2026-01-06 07:25:11.615928,ex_raw_20251126_074704.csv
+STUDY001,SUB0025,Week 12,11-04-2024,08:45,Investigational Product,50,mg,Oral,Tablet,LOT7945,88,1,No,,Subject,Yes,A,2026-01-06 07:25:11.615928,ex_raw_20251126_074704.csv
+STUDY001,SUB0026,Day 1,15-02-2024,10:02,Investigational Product,50,mg,Oral,Tablet,LOT8905,91,1,No,,Subject,Yes,A,2026-01-06 07:25:11.615928,ex_raw_20251126_074704.csv
+STUDY001,SUB0026,Week 2,29-02-2024,08:31,Investigational Product,10,mg,Oral,Tablet,LOT5864,86,1,No,,Study Staff,Yes,A,2026-01-06 07:25:11.615928,ex_raw_20251126_074704.csv
+STUDY001,SUB0026,Week 4,14-03-2024,12:16,Investigational Product,10,mg,Oral,Tablet,LOT6115,91,0,No,,Subject,Yes,A,2026-01-06 07:25:11.615928,ex_raw_20251126_074704.csv
+STUDY001,SUB0026,Week 8,28-03-2024,12:53,Investigational Product,25,mg,Oral,Tablet,LOT5374,86,0,Yes,Adverse Event,Study Staff,Yes,A,2026-01-06 07:25:11.615928,ex_raw_20251126_074704.csv
+STUDY001,SUB0026,Week 12,11-04-2024,08:14,Investigational Product,37,mg,Oral,Tablet,LOT5558,94,0,Yes,Adverse Event,Study Staff,Yes,A,2026-01-06 07:25:11.615928,ex_raw_20251126_074704.csv
+STUDY001,SUB0027,Day 1,15-02-2024,11:09,Investigational Product,20,mg,Oral,Tablet,LOT1228,90,0,No,,Study Staff,Yes,A,2026-01-06 07:25:11.615928,ex_raw_20251126_074704.csv
+STUDY001,SUB0027,Week 2,29-02-2024,10:04,Investigational Product,20,mg,Oral,Tablet,LOT6086,90,0,No,,Subject,Yes,A,2026-01-06 07:25:11.615928,ex_raw_20251126_074704.csv
+STUDY001,SUB0027,Week 4,14-03-2024,10:02,Investigational Product,20,mg,Oral,Tablet,LOT7888,97,1,No,,Study Staff,Yes,A,2026-01-06 07:25:11.615928,ex_raw_20251126_074704.csv
+STUDY001,SUB0027,Week 8,28-03-2024,11:21,Investigational Product,37,mg,Oral,Tablet,LOT9623,85,1,Yes,Adverse Event,Study Staff,Yes,A,2026-01-06 07:25:11.615928,ex_raw_20251126_074704.csv
+STUDY001,SUB0027,Week 12,11-04-2024,12:40,Investigational Product,50,mg,Oral,Tablet,LOT7541,99,0,Yes,Adverse Event,Subject,Yes,A,2026-01-06 07:25:11.615928,ex_raw_20251126_074704.csv
+STUDY001,SUB0028,Day 1,15-02-2024,08:29,Investigational Product,10,mg,Oral,Tablet,LOT5356,93,1,No,,Study Staff,Yes,A,2026-01-06 07:25:11.615928,ex_raw_20251126_074704.csv
+STUDY001,SUB0028,Week 2,29-02-2024,11:06,Investigational Product,10,mg,Oral,Tablet,LOT9805,94,0,No,,Subject,Yes,A,2026-01-06 07:25:11.615928,ex_raw_20251126_074704.csv
+STUDY001,SUB0028,Week 4,14-03-2024,10:16,Investigational Product,100,mg,Oral,Tablet,LOT3706,89,2,No,,Subject,Yes,A,2026-01-06 07:25:11.615928,ex_raw_20251126_074704.csv
+STUDY001,SUB0028,Week 8,28-03-2024,08:27,Investigational Product,100,mg,Oral,Tablet,LOT2082,96,0,No,,Study Staff,Yes,A,2026-01-06 07:25:11.615928,ex_raw_20251126_074704.csv
+STUDY001,SUB0028,Week 12,11-04-2024,08:06,Investigational Product,25,mg,Oral,Tablet,LOT4579,98,0,Yes,Adverse Event,Subject,Yes,A,2026-01-06 07:25:11.615928,ex_raw_20251126_074704.csv
+STUDY001,SUB0029,Day 1,15-02-2024,12:21,Investigational Product,20,mg,Oral,Tablet,LOT6517,92,2,No,,Subject,Yes,A,2026-01-06 07:25:11.615928,ex_raw_20251126_074704.csv
+STUDY001,SUB0029,Week 2,29-02-2024,10:23,Investigational Product,50,mg,Oral,Tablet,LOT4096,97,1,No,,Study Staff,Yes,A,2026-01-06 07:25:11.615928,ex_raw_20251126_074704.csv
+STUDY001,SUB0029,Week 4,14-03-2024,12:06,Investigational Product,100,mg,Oral,Tablet,LOT9427,100,2,No,,Subject,Yes,A,2026-01-06 07:25:11.615928,ex_raw_20251126_074704.csv
+STUDY001,SUB0029,Week 8,28-03-2024,08:12,Investigational Product,75,mg,Oral,Tablet,LOT9624,89,0,Yes,Adverse Event,Study Staff,Yes,A,2026-01-06 07:25:11.615928,ex_raw_20251126_074704.csv
+STUDY001,SUB0029,Week 12,11-04-2024,09:53,Investigational Product,10,mg,Oral,Tablet,LOT7808,97,0,Yes,Adverse Event,Subject,Yes,A,2026-01-06 07:25:11.615928,ex_raw_20251126_074704.csv
+STUDY001,SUB0030,Day 1,15-02-2024,12:37,Investigational Product,50,mg,Oral,Tablet,LOT2344,85,1,No,,Subject,Yes,A,2026-01-06 07:25:11.615928,ex_raw_20251126_074704.csv
+STUDY001,SUB0030,Week 2,29-02-2024,11:47,Investigational Product,100,mg,Oral,Tablet,LOT6527,85,1,No,,Subject,Yes,A,2026-01-06 07:25:11.615928,ex_raw_20251126_074704.csv
+STUDY001,SUB0030,Week 4,14-03-2024,11:15,Investigational Product,100,mg,Oral,Tablet,LOT8797,90,1,No,,Subject,Yes,A,2026-01-06 07:25:11.615928,ex_raw_20251126_074704.csv
+STUDY001,SUB0030,Week 8,28-03-2024,09:08,Investigational Product,10,mg,Oral,Tablet,LOT4931,92,0,Yes,Adverse Event,Study Staff,Yes,A,2026-01-06 07:25:11.615928,ex_raw_20251126_074704.csv
+STUDY001,SUB0030,Week 12,11-04-2024,08:00,Investigational Product,10,mg,Oral,Tablet,LOT3334,94,0,Yes,Adverse Event,Subject,Yes,A,2026-01-06 07:25:11.615928,ex_raw_20251126_074704.csv
+STUDY001,SUB0031,Day 1,15-02-2024,11:55,Investigational Product,20,mg,Oral,Tablet,LOT6099,98,1,No,,Subject,Yes,A,2026-01-06 07:25:11.615928,ex_raw_20251126_074704.csv
+STUDY001,SUB0031,Week 2,29-02-2024,09:28,Investigational Product,100,mg,Oral,Tablet,LOT9301,98,2,No,,Subject,Yes,A,2026-01-06 07:25:11.615928,ex_raw_20251126_074704.csv
+STUDY001,SUB0031,Week 4,14-03-2024,12:31,Investigational Product,100,mg,Oral,Tablet,LOT4203,90,2,No,,Study Staff,Yes,A,2026-01-06 07:25:11.615928,ex_raw_20251126_074704.csv
+STUDY001,SUB0031,Week 8,28-03-2024,12:25,Investigational Product,75,mg,Oral,Tablet,LOT7094,89,0,Yes,Adverse Event,Study Staff,Yes,A,2026-01-06 07:25:11.615928,ex_raw_20251126_074704.csv
+STUDY001,SUB0031,Week 12,11-04-2024,11:21,Investigational Product,100,mg,Oral,Tablet,LOT5266,95,1,No,,Subject,Yes,A,2026-01-06 07:25:11.615928,ex_raw_20251126_074704.csv
+STUDY001,SUB0032,Day 1,15-02-2024,11:31,Investigational Product,10,mg,Oral,Tablet,LOT7426,99,0,No,,Subject,Yes,A,2026-01-06 07:25:11.615928,ex_raw_20251126_074704.csv
+STUDY001,SUB0032,Week 2,29-02-2024,09:12,Investigational Product,50,mg,Oral,Tablet,LOT7479,99,2,No,,Study Staff,Yes,A,2026-01-06 07:25:11.615928,ex_raw_20251126_074704.csv
+STUDY001,SUB0032,Week 4,14-03-2024,10:39,Investigational Product,100,mg,Oral,Tablet,LOT4199,87,0,No,,Subject,Yes,A,2026-01-06 07:25:11.615928,ex_raw_20251126_074704.csv
+STUDY001,SUB0032,Week 8,28-03-2024,11:19,Investigational Product,37,mg,Oral,Tablet,LOT7560,98,2,Yes,Adverse Event,Study Staff,Yes,A,2026-01-06 07:25:11.615928,ex_raw_20251126_074704.csv
+STUDY001,SUB0032,Week 12,11-04-2024,11:56,Investigational Product,10,mg,Oral,Tablet,LOT4952,91,1,Yes,Adverse Event,Subject,Yes,A,2026-01-06 07:25:11.615928,ex_raw_20251126_074704.csv
+STUDY001,SUB0033,Day 1,15-02-2024,11:02,Investigational Product,20,mg,Oral,Tablet,LOT4168,99,1,No,,Study Staff,Yes,A,2026-01-06 07:25:11.615928,ex_raw_20251126_074704.csv
+STUDY001,SUB0033,Week 2,29-02-2024,10:04,Investigational Product,100,mg,Oral,Tablet,LOT2410,99,2,No,,Subject,Yes,A,2026-01-06 07:25:11.615928,ex_raw_20251126_074704.csv
+STUDY001,SUB0033,Week 4,14-03-2024,12:21,Investigational Product,20,mg,Oral,Tablet,LOT9408,94,0,No,,Study Staff,Yes,A,2026-01-06 07:25:11.615928,ex_raw_20251126_074704.csv
+STUDY001,SUB0033,Week 8,28-03-2024,12:59,Investigational Product,5,mg,Oral,Tablet,LOT6314,90,2,Yes,Adverse Event,Study Staff,Yes,A,2026-01-06 07:25:11.615928,ex_raw_20251126_074704.csv
+STUDY001,SUB0033,Week 12,11-04-2024,09:54,Investigational Product,15,mg,Oral,Tablet,LOT9479,96,2,Yes,Adverse Event,Subject,Yes,A,2026-01-06 07:25:11.615928,ex_raw_20251126_074704.csv
+STUDY001,SUB0034,Day 1,15-02-2024,09:33,Investigational Product,100,mg,Oral,Tablet,LOT1236,89,1,No,,Study Staff,Yes,A,2026-01-06 07:25:11.615928,ex_raw_20251126_074704.csv
+STUDY001,SUB0034,Week 2,29-02-2024,10:46,Investigational Product,20,mg,Oral,Tablet,LOT9504,87,0,No,,Subject,Yes,A,2026-01-06 07:25:11.615928,ex_raw_20251126_074704.csv
+STUDY001,SUB0034,Week 4,14-03-2024,12:17,Investigational Product,10,mg,Oral,Tablet,LOT3982,96,2,No,,Subject,Yes,A,2026-01-06 07:25:11.615928,ex_raw_20251126_074704.csv
+STUDY001,SUB0034,Week 8,28-03-2024,09:20,Investigational Product,10,mg,Oral,Tablet,LOT3083,97,0,Yes,Adverse Event,Study Staff,Yes,A,2026-01-06 07:25:11.615928,ex_raw_20251126_074704.csv
+STUDY001,SUB0034,Week 12,11-04-2024,11:22,Investigational Product,5,mg,Oral,Tablet,LOT4767,95,1,Yes,Adverse Event,Study Staff,Yes,A,2026-01-06 07:25:11.615928,ex_raw_20251126_074704.csv
+STUDY001,SUB0035,Day 1,15-02-2024,09:02,Investigational Product,20,mg,Oral,Tablet,LOT3670,86,2,No,,Subject,Yes,A,2026-01-06 07:25:11.615928,ex_raw_20251126_074704.csv
+STUDY001,SUB0035,Week 2,29-02-2024,12:06,Investigational Product,20,mg,Oral,Tablet,LOT7466,99,0,No,,Subject,Yes,A,2026-01-06 07:25:11.615928,ex_raw_20251126_074704.csv
+STUDY001,SUB0035,Week 4,14-03-2024,11:11,Investigational Product,100,mg,Oral,Tablet,LOT4238,92,0,No,,Study Staff,Yes,A,2026-01-06 07:25:11.615928,ex_raw_20251126_074704.csv
+STUDY001,SUB0035,Week 8,28-03-2024,08:53,Investigational Product,10,mg,Oral,Tablet,LOT9396,98,2,Yes,Adverse Event,Subject,Yes,A,2026-01-06 07:25:11.615928,ex_raw_20251126_074704.csv
+STUDY001,SUB0035,Week 12,11-04-2024,08:05,Investigational Product,7,mg,Oral,Tablet,LOT4514,98,1,Yes,Adverse Event,Subject,Yes,A,2026-01-06 07:25:11.615928,ex_raw_20251126_074704.csv
+STUDY001,SUB0036,Day 1,15-02-2024,12:23,Investigational Product,50,mg,Oral,Tablet,LOT3342,100,0,No,,Study Staff,Yes,A,2026-01-06 07:25:11.615928,ex_raw_20251126_074704.csv
+STUDY001,SUB0036,Week 2,29-02-2024,08:32,Investigational Product,50,mg,Oral,Tablet,LOT1016,87,0,No,,Subject,Yes,A,2026-01-06 07:25:11.615928,ex_raw_20251126_074704.csv
+STUDY001,SUB0036,Week 4,14-03-2024,08:52,Investigational Product,100,mg,Oral,Tablet,LOT7420,89,2,No,,Subject,Yes,A,2026-01-06 07:25:11.615928,ex_raw_20251126_074704.csv
+STUDY001,SUB0036,Week 8,28-03-2024,10:03,Investigational Product,50,mg,Oral,Tablet,LOT3252,100,1,Yes,Adverse Event,Study Staff,Yes,A,2026-01-06 07:25:11.615928,ex_raw_20251126_074704.csv
+STUDY001,SUB0036,Week 12,11-04-2024,11:37,Investigational Product,15,mg,Oral,Tablet,LOT6119,87,2,Yes,Adverse Event,Study Staff,Yes,A,2026-01-06 07:25:11.615928,ex_raw_20251126_074704.csv
+STUDY001,SUB0037,Day 1,15-02-2024,11:56,Investigational Product,100,mg,Oral,Tablet,LOT5412,97,0,No,,Subject,Yes,A,2026-01-06 07:25:11.615928,ex_raw_20251126_074704.csv
+STUDY001,SUB0037,Week 2,29-02-2024,11:38,Investigational Product,10,mg,Oral,Tablet,LOT1745,96,1,No,,Subject,Yes,A,2026-01-06 07:25:11.615928,ex_raw_20251126_074704.csv
+STUDY001,SUB0037,Week 4,14-03-2024,12:47,Investigational Product,100,mg,Oral,Tablet,LOT8134,85,1,No,,Study Staff,Yes,A,2026-01-06 07:25:11.615928,ex_raw_20251126_074704.csv
+STUDY001,SUB0037,Week 8,28-03-2024,10:05,Investigational Product,20,mg,Oral,Tablet,LOT2515,86,2,No,,Study Staff,Yes,A,2026-01-06 07:25:11.615928,ex_raw_20251126_074704.csv
+STUDY001,SUB0037,Week 12,11-04-2024,09:19,Investigational Product,15,mg,Oral,Tablet,LOT7853,86,2,Yes,Adverse Event,Subject,Yes,A,2026-01-06 07:25:11.615928,ex_raw_20251126_074704.csv
+STUDY001,SUB0038,Day 1,15-02-2024,11:07,Investigational Product,100,mg,Oral,Tablet,LOT3674,100,1,No,,Study Staff,Yes,A,2026-01-06 07:25:11.615928,ex_raw_20251126_074704.csv
+STUDY001,SUB0038,Week 2,29-02-2024,09:59,Investigational Product,10,mg,Oral,Tablet,LOT8536,88,1,No,,Study Staff,Yes,A,2026-01-06 07:25:11.615928,ex_raw_20251126_074704.csv
+STUDY001,SUB0038,Week 4,14-03-2024,10:49,Investigational Product,100,mg,Oral,Tablet,LOT2119,99,2,No,,Study Staff,Yes,A,2026-01-06 07:25:11.615928,ex_raw_20251126_074704.csv
+STUDY001,SUB0038,Week 8,28-03-2024,11:14,Investigational Product,50,mg,Oral,Tablet,LOT1690,89,1,Yes,Adverse Event,Subject,Yes,A,2026-01-06 07:25:11.615928,ex_raw_20251126_074704.csv
+STUDY001,SUB0038,Week 12,11-04-2024,11:29,Investigational Product,5,mg,Oral,Tablet,LOT8028,90,1,Yes,Adverse Event,Subject,Yes,A,2026-01-06 07:25:11.615928,ex_raw_20251126_074704.csv
+STUDY001,SUB0039,Day 1,15-02-2024,12:08,Investigational Product,10,mg,Oral,Tablet,LOT8183,92,0,No,,Subject,Yes,A,2026-01-06 07:25:11.615928,ex_raw_20251126_074704.csv
+STUDY001,SUB0039,Week 2,29-02-2024,08:26,Investigational Product,100,mg,Oral,Tablet,LOT4317,92,2,No,,Study Staff,Yes,A,2026-01-06 07:25:11.615928,ex_raw_20251126_074704.csv
+STUDY001,SUB0039,Week 4,14-03-2024,08:15,Investigational Product,50,mg,Oral,Tablet,LOT4540,96,1,No,,Study Staff,Yes,A,2026-01-06 07:25:11.615928,ex_raw_20251126_074704.csv
+STUDY001,SUB0039,Week 8,28-03-2024,09:54,Investigational Product,50,mg,Oral,Tablet,LOT1467,90,0,Yes,Adverse Event,Subject,Yes,A,2026-01-06 07:25:11.615928,ex_raw_20251126_074704.csv
+STUDY001,SUB0039,Week 12,11-04-2024,10:33,Investigational Product,20,mg,Oral,Tablet,LOT6205,95,2,No,,Study Staff,Yes,A,2026-01-06 07:25:11.615928,ex_raw_20251126_074704.csv
+STUDY001,SUB0040,Day 1,15-02-2024,12:47,Investigational Product,10,mg,Oral,Tablet,LOT8159,98,2,No,,Study Staff,Yes,A,2026-01-06 07:25:11.615928,ex_raw_20251126_074704.csv
+STUDY001,SUB0040,Week 2,29-02-2024,12:30,Investigational Product,10,mg,Oral,Tablet,LOT9314,93,2,No,,Subject,Yes,A,2026-01-06 07:25:11.615928,ex_raw_20251126_074704.csv
+STUDY001,SUB0040,Week 4,14-03-2024,08:47,Investigational Product,100,mg,Oral,Tablet,LOT5726,87,0,No,,Subject,Yes,A,2026-01-06 07:25:11.615928,ex_raw_20251126_074704.csv
+STUDY001,SUB0040,Week 8,28-03-2024,09:07,Investigational Product,10,mg,Oral,Tablet,LOT7741,93,0,Yes,Adverse Event,Study Staff,Yes,A,2026-01-06 07:25:11.615928,ex_raw_20251126_074704.csv
+STUDY001,SUB0040,Week 12,11-04-2024,08:00,Investigational Product,75,mg,Oral,Tablet,LOT1949,91,1,Yes,Adverse Event,Study Staff,Yes,A,2026-01-06 07:25:11.615928,ex_raw_20251126_074704.csv
+STUDY001,SUB0041,Day 1,15-02-2024,11:38,Investigational Product,100,mg,Oral,Tablet,LOT1861,95,2,No,,Subject,Yes,A,2026-01-06 07:25:11.615928,ex_raw_20251126_074704.csv
+STUDY001,SUB0041,Week 2,29-02-2024,12:16,Investigational Product,20,mg,Oral,Tablet,LOT1643,97,2,No,,Subject,Yes,A,2026-01-06 07:25:11.615928,ex_raw_20251126_074704.csv
+STUDY001,SUB0041,Week 4,14-03-2024,11:33,Investigational Product,50,mg,Oral,Tablet,LOT7912,96,1,No,,Subject,Yes,A,2026-01-06 07:25:11.615928,ex_raw_20251126_074704.csv
+STUDY001,SUB0041,Week 8,28-03-2024,10:52,Investigational Product,50,mg,Oral,Tablet,LOT8836,95,0,No,,Study Staff,Yes,A,2026-01-06 07:25:11.615928,ex_raw_20251126_074704.csv
+STUDY001,SUB0041,Week 12,11-04-2024,11:54,Investigational Product,37,mg,Oral,Tablet,LOT4173,87,1,Yes,Adverse Event,Subject,Yes,A,2026-01-06 07:25:11.615928,ex_raw_20251126_074704.csv
+STUDY001,SUB0042,Day 1,15-02-2024,09:17,Investigational Product,100,mg,Oral,Tablet,LOT8685,85,0,No,,Study Staff,Yes,A,2026-01-06 07:25:11.615928,ex_raw_20251126_074704.csv
+STUDY001,SUB0042,Week 2,29-02-2024,09:37,Investigational Product,20,mg,Oral,Tablet,LOT5500,87,2,No,,Subject,Yes,A,2026-01-06 07:25:11.615928,ex_raw_20251126_074704.csv
+STUDY001,SUB0042,Week 4,14-03-2024,12:37,Investigational Product,100,mg,Oral,Tablet,LOT6425,85,1,No,,Study Staff,Yes,A,2026-01-06 07:25:11.615928,ex_raw_20251126_074704.csv
+STUDY001,SUB0042,Week 8,28-03-2024,08:06,Investigational Product,15,mg,Oral,Tablet,LOT6813,90,1,Yes,Adverse Event,Study Staff,Yes,A,2026-01-06 07:25:11.615928,ex_raw_20251126_074704.csv
+STUDY001,SUB0042,Week 12,11-04-2024,09:11,Investigational Product,15,mg,Oral,Tablet,LOT8670,91,2,Yes,Adverse Event,Subject,Yes,A,2026-01-06 07:25:11.615928,ex_raw_20251126_074704.csv
+STUDY001,SUB0043,Day 1,15-02-2024,09:22,Investigational Product,100,mg,Oral,Tablet,LOT6926,100,0,No,,Study Staff,Yes,A,2026-01-06 07:25:11.615928,ex_raw_20251126_074704.csv
+STUDY001,SUB0043,Week 2,29-02-2024,09:19,Investigational Product,100,mg,Oral,Tablet,LOT1259,99,0,No,,Study Staff,Yes,A,2026-01-06 07:25:11.615928,ex_raw_20251126_074704.csv
+STUDY001,SUB0043,Week 4,14-03-2024,10:09,Investigational Product,10,mg,Oral,Tablet,LOT3670,94,2,No,,Subject,Yes,A,2026-01-06 07:25:11.615928,ex_raw_20251126_074704.csv
+STUDY001,SUB0043,Week 8,28-03-2024,09:48,Investigational Product,50,mg,Oral,Tablet,LOT3505,93,2,No,,Subject,Yes,A,2026-01-06 07:25:11.615928,ex_raw_20251126_074704.csv
+STUDY001,SUB0043,Week 12,11-04-2024,08:36,Investigational Product,25,mg,Oral,Tablet,LOT6436,90,0,Yes,Adverse Event,Subject,Yes,A,2026-01-06 07:25:11.615928,ex_raw_20251126_074704.csv
+STUDY001,SUB0044,Day 1,15-02-2024,09:57,Investigational Product,20,mg,Oral,Tablet,LOT6587,97,2,No,,Subject,Yes,A,2026-01-06 07:25:11.615928,ex_raw_20251126_074704.csv
+STUDY001,SUB0044,Week 2,29-02-2024,08:15,Investigational Product,20,mg,Oral,Tablet,LOT7805,88,2,No,,Subject,Yes,A,2026-01-06 07:25:11.615928,ex_raw_20251126_074704.csv
+STUDY001,SUB0044,Week 4,14-03-2024,10:44,Investigational Product,10,mg,Oral,Tablet,LOT5316,93,2,No,,Subject,Yes,A,2026-01-06 07:25:11.615928,ex_raw_20251126_074704.csv
+STUDY001,SUB0044,Week 8,28-03-2024,11:02,Investigational Product,75,mg,Oral,Tablet,LOT8155,96,2,Yes,Adverse Event,Subject,Yes,A,2026-01-06 07:25:11.615928,ex_raw_20251126_074704.csv
+STUDY001,SUB0044,Week 12,11-04-2024,09:51,Investigational Product,25,mg,Oral,Tablet,LOT9267,85,0,Yes,Adverse Event,Subject,Yes,A,2026-01-06 07:25:11.615928,ex_raw_20251126_074704.csv
+STUDY001,SUB0045,Day 1,15-02-2024,12:43,Investigational Product,100,mg,Oral,Tablet,LOT1210,94,2,No,,Study Staff,Yes,A,2026-01-06 07:25:11.615928,ex_raw_20251126_074704.csv
+STUDY001,SUB0045,Week 2,29-02-2024,10:12,Investigational Product,50,mg,Oral,Tablet,LOT9444,89,1,No,,Study Staff,Yes,A,2026-01-06 07:25:11.615928,ex_raw_20251126_074704.csv
+STUDY001,SUB0045,Week 4,14-03-2024,12:43,Investigational Product,100,mg,Oral,Tablet,LOT4501,90,1,No,,Subject,Yes,A,2026-01-06 07:25:11.615928,ex_raw_20251126_074704.csv
+STUDY001,SUB0045,Week 8,28-03-2024,11:45,Investigational Product,100,mg,Oral,Tablet,LOT5507,90,1,No,,Study Staff,Yes,A,2026-01-06 07:25:11.615928,ex_raw_20251126_074704.csv
+STUDY001,SUB0045,Week 12,11-04-2024,08:41,Investigational Product,37,mg,Oral,Tablet,LOT3913,96,0,Yes,Adverse Event,Subject,Yes,A,2026-01-06 07:25:11.615928,ex_raw_20251126_074704.csv
+STUDY001,SUB0046,Day 1,15-02-2024,09:18,Investigational Product,100,mg,Oral,Tablet,LOT8100,99,1,No,,Subject,Yes,A,2026-01-06 07:25:11.615928,ex_raw_20251126_074704.csv
+STUDY001,SUB0046,Week 2,29-02-2024,11:59,Investigational Product,50,mg,Oral,Tablet,LOT3347,95,0,No,,Subject,Yes,A,2026-01-06 07:25:11.615928,ex_raw_20251126_074704.csv
+STUDY001,SUB0046,Week 4,14-03-2024,11:03,Investigational Product,50,mg,Oral,Tablet,LOT3716,96,1,No,,Study Staff,Yes,A,2026-01-06 07:25:11.615928,ex_raw_20251126_074704.csv
+STUDY001,SUB0046,Week 8,28-03-2024,12:16,Investigational Product,100,mg,Oral,Tablet,LOT1558,95,1,No,,Subject,Yes,A,2026-01-06 07:25:11.615928,ex_raw_20251126_074704.csv
+STUDY001,SUB0046,Week 12,11-04-2024,11:10,Investigational Product,10,mg,Oral,Tablet,LOT7334,96,1,Yes,Adverse Event,Study Staff,Yes,A,2026-01-06 07:25:11.615928,ex_raw_20251126_074704.csv
+STUDY001,SUB0047,Day 1,15-02-2024,10:43,Investigational Product,20,mg,Oral,Tablet,LOT4755,100,1,No,,Study Staff,Yes,A,2026-01-06 07:25:11.615928,ex_raw_20251126_074704.csv
+STUDY001,SUB0047,Week 2,29-02-2024,10:15,Investigational Product,20,mg,Oral,Tablet,LOT5123,88,1,No,,Subject,Yes,A,2026-01-06 07:25:11.615928,ex_raw_20251126_074704.csv
+STUDY001,SUB0047,Week 4,14-03-2024,09:11,Investigational Product,20,mg,Oral,Tablet,LOT4423,86,1,No,,Study Staff,Yes,A,2026-01-06 07:25:11.615928,ex_raw_20251126_074704.csv
+STUDY001,SUB0047,Week 8,28-03-2024,11:56,Investigational Product,10,mg,Oral,Tablet,LOT3164,93,1,Yes,Adverse Event,Subject,Yes,A,2026-01-06 07:25:11.615928,ex_raw_20251126_074704.csv
+STUDY001,SUB0047,Week 12,11-04-2024,09:18,Investigational Product,5,mg,Oral,Tablet,LOT1744,98,0,Yes,Adverse Event,Subject,Yes,A,2026-01-06 07:25:11.615928,ex_raw_20251126_074704.csv
+STUDY001,SUB0048,Day 1,15-02-2024,08:40,Investigational Product,50,mg,Oral,Tablet,LOT1733,87,1,No,,Study Staff,Yes,A,2026-01-06 07:25:11.615928,ex_raw_20251126_074704.csv
+STUDY001,SUB0048,Week 2,29-02-2024,12:35,Investigational Product,20,mg,Oral,Tablet,LOT8172,94,1,No,,Study Staff,Yes,A,2026-01-06 07:25:11.615928,ex_raw_20251126_074704.csv
+STUDY001,SUB0048,Week 4,14-03-2024,12:36,Investigational Product,10,mg,Oral,Tablet,LOT8389,94,0,No,,Study Staff,Yes,A,2026-01-06 07:25:11.615928,ex_raw_20251126_074704.csv
+STUDY001,SUB0048,Week 8,28-03-2024,12:12,Investigational Product,50,mg,Oral,Tablet,LOT2033,86,0,Yes,Adverse Event,Study Staff,Yes,A,2026-01-06 07:25:11.615928,ex_raw_20251126_074704.csv
+STUDY001,SUB0048,Week 12,11-04-2024,12:46,Investigational Product,37,mg,Oral,Tablet,LOT6505,87,0,Yes,Adverse Event,Study Staff,Yes,A,2026-01-06 07:25:11.615928,ex_raw_20251126_074704.csv
+STUDY001,SUB0049,Day 1,15-02-2024,10:23,Investigational Product,50,mg,Oral,Tablet,LOT7664,86,2,No,,Subject,Yes,A,2026-01-06 07:25:11.615928,ex_raw_20251126_074704.csv
+STUDY001,SUB0049,Week 2,29-02-2024,08:21,Investigational Product,50,mg,Oral,Tablet,LOT9845,96,1,No,,Study Staff,Yes,A,2026-01-06 07:25:11.615928,ex_raw_20251126_074704.csv
+STUDY001,SUB0049,Week 4,14-03-2024,11:21,Investigational Product,50,mg,Oral,Tablet,LOT5727,88,2,No,,Study Staff,Yes,A,2026-01-06 07:25:11.615928,ex_raw_20251126_074704.csv
+STUDY001,SUB0049,Week 8,28-03-2024,09:09,Investigational Product,5,mg,Oral,Tablet,LOT4378,96,1,Yes,Adverse Event,Subject,Yes,A,2026-01-06 07:25:11.615928,ex_raw_20251126_074704.csv
+STUDY001,SUB0049,Week 12,11-04-2024,09:39,Investigational Product,75,mg,Oral,Tablet,LOT8248,97,1,Yes,Adverse Event,Subject,Yes,A,2026-01-06 07:25:11.615928,ex_raw_20251126_074704.csv
+STUDY001,SUB0050,Day 1,15-02-2024,12:55,Investigational Product,10,mg,Oral,Tablet,LOT9321,88,2,No,,Subject,Yes,A,2026-01-06 07:25:11.615928,ex_raw_20251126_074704.csv
+STUDY001,SUB0050,Week 2,29-02-2024,12:29,Investigational Product,20,mg,Oral,Tablet,LOT4367,99,0,No,,Study Staff,Yes,A,2026-01-06 07:25:11.615928,ex_raw_20251126_074704.csv
+STUDY001,SUB0050,Week 4,14-03-2024,09:24,Investigational Product,10,mg,Oral,Tablet,LOT5915,86,2,No,,Subject,Yes,A,2026-01-06 07:25:11.615928,ex_raw_20251126_074704.csv
+STUDY001,SUB0050,Week 8,28-03-2024,11:18,Investigational Product,100,mg,Oral,Tablet,LOT2894,96,1,No,,Study Staff,Yes,A,2026-01-06 07:25:11.615928,ex_raw_20251126_074704.csv
+STUDY001,SUB0050,Week 12,11-04-2024,09:28,Investigational Product,37,mg,Oral,Tablet,LOT4753,92,0,Yes,Adverse Event,Study Staff,Yes,A,2026-01-06 07:25:11.615928,ex_raw_20251126_074704.csv

@@ -107,8 +107,19 @@ export const integrationService = {
         return response.data;
     },
     scanFolder: async (integrationId: number | string) => {
-        // This actually maps to the data_files router scan endpoint
         const response = await api.post(`/data-files/scan/${integrationId}`);
+        return response.data;
+    },
+    uploadFiles: async (integrationId: number, files: File[]) => {
+        const formData = new FormData();
+        files.forEach(file => {
+            formData.append('files', file);
+        });
+        const response = await api.post(`/integrations/${integrationId}/files`, formData, {
+            headers: {
+                'Content-Type': 'multipart/form-data',
+            },
+        });
         return response.data;
     }
 };

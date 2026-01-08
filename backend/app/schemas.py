@@ -77,7 +77,7 @@ class IntegrationUpdate(BaseModel):
 
 class Integration(IntegrationBase):
     id: int
-    last_sync: datetime
+    last_sync: Optional[datetime] = None
     folder_path: Optional[str] = None
     
     model_config = ConfigDict(from_attributes=True)

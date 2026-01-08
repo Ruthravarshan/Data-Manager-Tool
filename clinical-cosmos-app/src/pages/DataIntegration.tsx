@@ -3,7 +3,7 @@ import {
     ServerCog, History, SlidersVertical, Mail,
     TriangleAlert, ChevronDown, Download, RefreshCw,
     PauseCircle, PlayCircle, MoreHorizontal, FileText,
-    Key, Settings, Trash2, StopCircle
+    Key, Settings, Trash2, StopCircle, Upload
 } from 'lucide-react';
 import { clsx, type ClassValue } from "clsx";
 import { twMerge } from "tailwind-merge";
@@ -59,6 +59,7 @@ export default function DataIntegration() {
         username: '',
         password: ''
     });
+    const [selectedFiles, setSelectedFiles] = useState<File[]>([]);
 
     // Credentials Modal state
     const [showCredentialsModal, setShowCredentialsModal] = useState(false);
@@ -274,7 +275,10 @@ export default function DataIntegration() {
                 protocol_id: formData.protocolId || null,
             };
 
-            if (formData.type !== 'Database') {
+            if (formData.type === 'Local') {
+                // For Local, we don't set folder_path initially, we let the upload set it
+                payload.folder_path = '';
+            } else if (formData.type !== 'Database') {
                 payload.folder_path = formData.folderPath || null;
             } else {
                 // Validate DB creds
@@ -291,6 +295,13 @@ export default function DataIntegration() {
 
             const newIntegration = await integrationService.createIntegration(payload);
 
+            // Handle file upload for Local type
+            if (formData.type === 'Local' && selectedFiles.length > 0) {
+                await integrationService.uploadFiles(newIntegration.id, selectedFiles);
+                // Scan immediately to populate data files
+                await integrationService.scanFolder(newIntegration.id);
+            }
+
             // Refresh the list
             await fetchData(typeFilter, statusFilter);
 
@@ -304,6 +315,7 @@ export default function DataIntegration() {
                 folderPath: '',
                 launchImmediately: false
             });
+            setSelectedFiles([]);
 
             setDbCredentials({
                 db_type: 'postgresql',
@@ -778,8 +790,39 @@ export default function DataIntegration() {
                                     </select>
                                 </div>
 
-                                {/* Data Source Folder Path (Conditional) */}
-                                {formData.type !== 'Database' && (
+                                {/* Data Source Input based on Type */}
+                                {formData.type === 'Local' && (
+                                    <div>
+                                        <label className="block text-sm font-medium text-gray-700 mb-2">
+                                            Select Files
+                                        </label>
+                                        <div className="border-2 border-dashed border-gray-300 rounded-lg p-6 text-center hover:bg-gray-50 transition-colors">
+                                            <input
+                                                type="file"
+                                                multiple
+                                                className="hidden"
+                                                id="file-upload"
+                                                onChange={(e) => {
+                                                    if (e.target.files) {
+                                                        setSelectedFiles(Array.from(e.target.files));
+                                                    }
+                                                }}
+                                            />
+                                            <label htmlFor="file-upload" className="cursor-pointer">
+                                                <Upload className="h-8 w-8 mx-auto text-gray-400 mb-2" />
+                                                <p className="text-sm text-gray-600 font-medium">Click to select files</p>
+                                                <p className="text-xs text-gray-400 mt-1">{selectedFiles.length > 0 ? `${selectedFiles.length} files selected` : "Excel or CSV files"}</p>
+                                            </label>
+                                            {selectedFiles.length > 0 && (
+                                                <div className="mt-2 text-sm text-blue-600">
+                                                    {selectedFiles.map(f => f.name).join(', ')}
+                                                </div>
+                                            )}
+                                        </div>
+                                    </div>
+                                )}
+
+                                {formData.type !== 'Database' && formData.type !== 'Local' && (
                                     <div>
                                         <label className="block text-sm font-medium text-gray-700 mb-2">
                                             Data Source Folder Path

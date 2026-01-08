@@ -127,6 +127,8 @@ def scan_integration_folder(
         stored_files = []
         
         for result in results:
+            logger.info(f"Processing file: {result.filename} | Status: {result.status} | Section: {result.section}")
+            
             # Generate table name and ingest data if imported
             table_name = None
             if result.status == 'Imported' and result.file_path and os.path.exists(result.file_path):
@@ -162,7 +164,7 @@ def scan_integration_folder(
                 file_size=result.file_size,
                 created_at=result.timestamp if isinstance(result.timestamp, datetime) else datetime.utcnow(),
                 status=result.status,
-                protocol_id=result.protocol_id,
+                protocol_id=result.protocol_id or integration.protocol_id,
                 integration_id=integration_id,
                 record_count=result.record_count,
                 table_name=table_name

@@ -52,6 +52,10 @@ class IntegrationSource(Base):
     protocol_id = Column(String, nullable=True) # E.g., PRO001
     folder_path = Column(String, nullable=True)  # Path to data source folder
 
+    # Relationships
+    database_credentials = relationship("DatabaseCredential", back_populates="integration", cascade="all, delete-orphan", uselist=False)
+    data_files = relationship("DataFile", back_populates="integration", cascade="all, delete-orphan")
+
 class DatabaseCredential(Base):
     __tablename__ = "database_credentials"
 
@@ -65,6 +69,8 @@ class DatabaseCredential(Base):
     encrypted_password = Column(String)  # Encrypted password
     created_at = Column(DateTime, default=datetime.utcnow)
     last_updated = Column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
+
+    integration = relationship("IntegrationSource", back_populates="database_credentials")
 
 class DataFile(Base):
     __tablename__ = "data_files"
@@ -86,7 +92,7 @@ class DataFile(Base):
     created_at = Column(DateTime, default=datetime.utcnow)
     last_updated = Column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
 
-    integration = relationship("IntegrationSource")
+    integration = relationship("IntegrationSource", back_populates="data_files")
 
 class Metric(Base):
     __tablename__ = "metrics"

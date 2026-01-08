@@ -1,6 +1,8 @@
-from fastapi import APIRouter, Depends, Query
+from fastapi import APIRouter, Depends, Query, UploadFile, File
 from sqlalchemy.orm import Session
 from typing import List, Optional
+import os
+import shutil
 from app.database import get_db
 from app.models import IntegrationSource
 from app.schemas import Integration, IntegrationCreate, IntegrationUpdate
@@ -114,6 +116,49 @@ def delete_integration(integration_id: int, db: Session = Depends(get_db)):
     if not db_integration:
         raise Exception("Integration not found")
     
+    # Remove upload directory if exists
+    base_dir = os.path.abspath("data/uploads")
+    upload_dir = os.path.join(base_dir, str(integration_id))
+    if os.path.exists(upload_dir):
+        try:
+            shutil.rmtree(upload_dir)
+        except Exception as e:
+            # Log error but don't fail deletion
+            print(f"Failed to delete upload directory {upload_dir}: {e}")
+
     db.delete(db_integration)
     db.commit()
     return {"message": "Integration deleted successfully"}
+
+@router.post("/{integration_id}/files", response_model=Integration)
+def upload_integration_files(
+    integration_id: int,
+    files: List[UploadFile] = File(...),
+    db: Session = Depends(get_db)
+):
+    """Upload files for an integration and update its folder path"""
+    # Get integration
+    integration = db.query(IntegrationSource).filter(IntegrationSource.id == integration_id).first()
+    if not integration:
+        raise Exception("Integration not found")
+
+    # Create directory for integration
+    # Use absolute path relative to backend root or a specific data directory
+    # For Windows, let's use a safe path like ./data/uploads/{id}
+    base_dir = os.path.abspath("data/uploads")
+    upload_dir = os.path.join(base_dir, str(integration_id))
+    os.makedirs(upload_dir, exist_ok=True)
+
+    # Save files
+    for file in files:
+        file_path = os.path.join(upload_dir, file.filename)
+        with open(file_path, "wb") as buffer:
+            shutil.copyfileobj(file.file, buffer)
+    
+    # Update integration folder path
+    integration.folder_path = upload_dir
+    integration.last_sync = None # Reset sync status as new files are added
+    db.commit()
+    db.refresh(integration)
+    
+    return integration

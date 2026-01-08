@@ -61,7 +61,15 @@ def parse_filename(filename: str) -> Tuple[Optional[str], Optional[str], Optiona
     match = re.search(FILE_PATTERN, filename.lower())
     
     if not match:
-        return None, None, None, f"Invalid filename format: {filename}"
+        # Fallback: Try to find any known prefix at the start of the filename
+        # e.g., "AE_data.csv" -> prefix: "ae"
+        clean_name = filename.lower()
+        for p in PREFIX_TO_SECTION.keys():
+            if clean_name.startswith(p):
+                return p, PREFIX_TO_SECTION[p], None, None
+        
+        # If no known prefix, default to "OTHER"
+        return None, "OTHER (Unclassified)", None, None
     
     prefix = match.group(1)
     timestamp = match.group(2)
@@ -75,7 +83,6 @@ def parse_filename(filename: str) -> Tuple[Optional[str], Optional[str], Optiona
     # Check if prefix is known
     if clean_prefix not in PREFIX_TO_SECTION:
         # Dynamic section creation: Use uppercase prefix
-        # This allows new sections like TU, PK, RS to be created automatically
         section_name = clean_prefix.upper()
         return prefix, section_name, timestamp, None
     
@@ -118,23 +125,19 @@ def classify_file(file_path: str) -> FileClassificationResult:
         # Parse filename
         prefix, section, timestamp, error = parse_filename(filename)
         
-        if error:
-            status = 'Unclassified'
-            record_count = 0
-        else:
-            status = 'Imported'
-            # Count records
-            record_count = 0
-            try:
-                if ext.lower() in ['.xlsx', '.xls']:
-                    df = pd.read_excel(file_path, nrows=None) # Read all to count
-                    record_count = len(df)
-                elif ext.lower() == '.csv':
-                    df = pd.read_csv(file_path, nrows=None)
-                    record_count = len(df)
-            except Exception as e:
-                # If cannot read, just log/ignore count
-                pass
+        # Count records
+        record_count = 0
+        try:
+            if ext.lower() in ['.xlsx', '.xls']:
+                df = pd.read_excel(file_path, nrows=None)
+                record_count = len(df)
+            elif ext.lower() == '.csv':
+                df = pd.read_csv(file_path, nrows=None)
+                record_count = len(df)
+        except Exception as e:
+            # If cannot read, record_count stays 0
+            print(f"Error counting records for {filename}: {e}")
+            pass
         
         return FileClassificationResult(
             filename=filename,
@@ -142,7 +145,7 @@ def classify_file(file_path: str) -> FileClassificationResult:
             section=section,
             timestamp=timestamp,
             file_size=file_size,
-            status=status,
+            status='Imported' if not error else 'Unclassified',
             error=error,
             record_count=record_count
         )
