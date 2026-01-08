@@ -7,7 +7,7 @@ import {
 import { Link } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { dashboardService, studyService, activityService, dataFileService } from '../services/api';
+import { dashboardService, studyService, activityService, dataFileService, integrationService } from '../services/api';
 
 export default function Dashboard() {
     const navigate = useNavigate();
@@ -22,6 +22,9 @@ export default function Dashboard() {
     const [sdtmFiles, setSdtmFiles] = useState<any[]>([]);
     const [selectedProtocol, setSelectedProtocol] = useState<string>('all');
     const [sdtmDomains, setSdtmDomains] = useState<any[]>([]);
+
+    // Integrations State
+    const [integrations, setIntegrations] = useState<any[]>([]);
 
     useEffect(() => {
         const fetchSDTMData = async () => {
@@ -81,13 +84,7 @@ export default function Dashboard() {
                 setMetrics(data);
             } catch (error) {
                 console.error("Failed to fetch metrics", error);
-                // Fallback to mock data if API fails (for demo purposes if backend isn't running)
-                setMetrics([
-                    { "key": "data_quality", "value": "86%", "label": "Overall data quality score", "trend": "up" },
-                    { "key": "operational", "value": "72%", "label": "Site operational efficiency", "trend": "stable" },
-                    { "key": "safety", "value": "91%", "label": "Protocol safety adherence", "trend": "up" },
-                    { "key": "compliance", "value": "83%", "label": "Regulatory compliance score", "trend": "down" },
-                ]);
+                setMetrics([]);
             } finally {
                 setLoading(false);
             }
@@ -130,7 +127,6 @@ export default function Dashboard() {
                 setRecentActivities(data);
             } catch (error) {
                 console.error("Failed to fetch recent activities", error);
-                // Fallback to empty array if API fails
                 setRecentActivities([]);
             }
         };
@@ -138,6 +134,19 @@ export default function Dashboard() {
         // Refresh activities every 5 seconds
         const interval = setInterval(fetchRecentActivities, 5000);
         return () => clearInterval(interval);
+    }, []);
+
+    useEffect(() => {
+        const fetchIntegrations = async () => {
+            try {
+                const data = await integrationService.getIntegrations();
+                setIntegrations(data);
+            } catch (error) {
+                console.error("Failed to fetch integrations", error);
+                setIntegrations([]);
+            }
+        };
+        fetchIntegrations();
     }, []);
 
     return (
@@ -168,40 +177,40 @@ export default function Dashboard() {
                         value={activeStudiesCount.toString()}
                         icon={FlaskConical}
                         color="blue"
-                        subtext="1 new this month"
-                        subtextColor="text-green-600"
-                        subtextIcon={CircleArrowUp}
-                        progress={53}
+                        subtext="Fetched from DB"
+                        subtextColor="text-neutral-500"
+                        subtextIcon={CircleCheck}
+                        progress={0}
                     />
                     <StatCard
                         title="Open Queries"
-                        value="42"
+                        value="0"
                         icon={MessagesSquare}
                         color="indigo"
-                        subtext="8 requiring attention"
-                        subtextColor="text-amber-600"
-                        subtextIcon={Clock}
-                        progress={76}
+                        subtext="No data"
+                        subtextColor="text-neutral-400"
+                        subtextIcon={CircleDashed}
+                        progress={0}
                     />
                     <StatCard
                         title="Tasks"
-                        value="27"
+                        value="0"
                         icon={ListChecks}
                         color="emerald"
-                        subtext="5 overdue tasks"
-                        subtextColor="text-red-600"
-                        subtextIcon={AlarmClock}
-                        progress={68}
+                        subtext="No new tasks"
+                        subtextColor="text-neutral-400"
+                        subtextIcon={CircleDashed}
+                        progress={0}
                     />
                     <StatCard
                         title="Signals Detected"
-                        value="14"
+                        value="0"
                         icon={Flag}
                         color="rose"
-                        subtext="3 critical signals"
-                        subtextColor="text-blue-600"
-                        subtextIcon={Activity}
-                        progress={62}
+                        subtext="No signals"
+                        subtextColor="text-neutral-400"
+                        subtextIcon={CircleDashed}
+                        progress={0}
                     />
                 </div>
 
@@ -261,42 +270,15 @@ export default function Dashboard() {
                                             phase={study.phase}
                                             sites={`${study.sites_count} sites`}
                                             subjects={`${study.subjects_count} subjects`}
-                                            risk="Medium Risk"
-                                            riskColor="amber"
+                                            risk={study.risk_level || "Low Risk"}
+                                            riskColor={study.risk_color || "green"}
                                             progress={study.completion_percentage || 0}
                                         />
                                     ))
                                 ) : (
-                                    <>
-                                        <StudyItem
-                                            title="Diabetes Type 2 Study"
-                                            description="Investigating efficacy of GLP-1 receptor agonists in glycemic control for T2DM patients"
-                                            phase="Phase III" sites="28 sites" subjects="342 subjects"
-                                            risk="Low Risk" riskColor="green"
-                                            progress={76}
-                                        />
-                                        <StudyItem
-                                            title="Rheumatoid Arthritis Study"
-                                            description="Evaluation of JAK inhibitor in moderate to severe rheumatoid arthritis"
-                                            phase="Phase II" sites="15 sites" subjects="187 subjects"
-                                            risk="Medium Risk" riskColor="amber"
-                                            progress={45}
-                                        />
-                                        <StudyItem
-                                            title="Advanced Breast Cancer"
-                                            description="CDK4/6 inhibitor combination therapy in HR+/HER2- advanced breast cancer"
-                                            phase="Phase III" sites="32 sites" subjects="274 subjects"
-                                            risk="High Risk" riskColor="red"
-                                            progress={28}
-                                        />
-                                        <StudyItem
-                                            title="Alzheimer's Disease"
-                                            description="Beta-amyloid monoclonal antibody for early-stage Alzheimer's disease"
-                                            phase="Phase II" sites="12 sites" subjects="156 subjects"
-                                            risk="Low Risk" riskColor="green"
-                                            progress={64}
-                                        />
-                                    </>
+                                    <div className="text-center py-6 text-neutral-500 text-sm">
+                                        No active studies found.
+                                    </div>
                                 )}
                             </div>
                             <div className="flex items-center p-6 pt-0 pb-3">
@@ -321,10 +303,9 @@ export default function Dashboard() {
                             </div>
                             <div className="p-6 pt-0">
                                 <div className="space-y-4">
-                                    <EndpointItem title="HbA1c Reduction" study="Diabetes Type 2 Study" status="On Track" statusColor="green" target="≥ 1.0%" current="0.85%" />
-                                    <EndpointItem title="ACR20 Response" study="Rheumatoid Arthritis Study" status="Monitoring" statusColor="amber" target="≥ 60%" current="42%" />
-                                    <EndpointItem title="Progression-free Survival" study="Advanced Breast Cancer" status="Concern" statusColor="red" target="≥ 12 months" current="9.7 months" />
-                                    <EndpointItem title="ADAS-Cog Change" study="Alzheimer's Disease" status="On Track" statusColor="green" target="≤ -3.5 points" current="-2.8 points" />
+                                    <div className="text-center py-4 text-neutral-500 text-sm">
+                                        No primary endpoints data available.
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -377,19 +358,15 @@ export default function Dashboard() {
                                     )}
 
                                     {activeTab === 'tasks' && (
-                                        <>
-                                            {RECENT_TASKS.map((task) => (
-                                                <TaskItem key={task.id} {...task} />
-                                            ))}
-                                        </>
+                                        <div className="text-center text-sm text-neutral-500 py-4">
+                                            No recent tasks
+                                        </div>
                                     )}
 
                                     {activeTab === 'queries' && (
-                                        <>
-                                            {RECENT_QUERIES.map((query) => (
-                                                <QueryItem key={query.id} {...query} />
-                                            ))}
-                                        </>
+                                        <div className="text-center text-sm text-neutral-500 py-4">
+                                            No recent queries
+                                        </div>
                                     )}
                                 </div>
 
@@ -412,9 +389,9 @@ export default function Dashboard() {
                                 </h3>
                             </div>
                             <div className="p-6 pt-0 space-y-3">
-                                <DeviationItem code="PD-101: Eligibility" severity="Minor" severityColor="amber" desc="Subject enrolled outside inclusion criteria #4" site="Site: Boston Medical" />
-                                <DeviationItem code="PD-102: Treatment" severity="Major" severityColor="red" desc="Missed dose on day 14±2" site="Site: NYC Research" />
-                                <DeviationItem code="PD-103: Procedure" severity="Minor" severityColor="amber" desc="Blood sample collected outside window" site="Site: Chicago Clinical" />
+                                <div className="text-center py-4 text-neutral-500 text-sm">
+                                    No protocol deviations detected.
+                                </div>
                             </div>
                         </div>
 
@@ -476,9 +453,22 @@ export default function Dashboard() {
                                 </h3>
                             </div>
                             <div className="p-6 pt-0 space-y-3">
-                                <IntegrationItem name="Medidata Rave EDC" status="Connected" time="30 min ago" count="4,352" label="CRF forms" />
-                                <IntegrationItem name="Veeva Vault CTMS" status="Connected" time="1 hour ago" count="1,865" label="Site activities" />
-                                <IntegrationItem name="TransPerfect TMF" status="Connected" time="2 hours ago" count="12,450" label="Documents" />
+                                {integrations.length > 0 ? (
+                                    integrations.slice(0, 3).map((integration) => (
+                                        <IntegrationItem
+                                            key={integration.id}
+                                            name={integration.name}
+                                            status={integration.status}
+                                            time={new Date(integration.last_sync).toLocaleString()}
+                                            count={integration.data_count || "0"}
+                                            label={integration.description || "Records"}
+                                        />
+                                    ))
+                                ) : (
+                                    <div className="text-center py-4 text-neutral-500 text-sm">
+                                        No integrations configured.
+                                    </div>
+                                )}
                             </div>
                         </div>
 
@@ -574,56 +564,7 @@ function StudyItem({ title, description, phase, sites, subjects, risk, riskColor
     )
 }
 
-function EndpointItem({ title, study, status, statusColor, target, current }: any) {
-    return (
-        <div className="border rounded-lg p-3">
-            <div className="flex justify-between mb-2">
-                <div>
-                    <p className="text-sm font-medium">{title}</p>
-                    <p className="text-xs text-neutral-500">{study}</p>
-                </div>
-                <div className={`inline-flex items-center rounded-full border px-2.5 py-0.5 text-xs font-semibold bg-${statusColor}-100 text-${statusColor}-800`}>
-                    {status}
-                </div>
-            </div>
-            <div className="flex items-center justify-between text-xs">
-                <span>Target: {target}</span>
-                <span>Current: {current}</span>
-            </div>
-        </div>
-    )
-}
 
-function TaskItem({ id, priority, priorityColor, title, due, assignee, status, statusColor }: any) {
-    return (
-        <div className="flex items-center justify-between p-3 border rounded-lg hover:bg-slate-50">
-            <div className="flex items-center">
-                <div className="mr-3">
-                    <div className={`bg-${priority === 'High' ? 'red' : 'blue'}-100 p-2 rounded-full`}>
-                        <ListChecks className={`h-5 w-5 text-${priority === 'High' ? 'red' : 'blue'}-600`} />
-                    </div>
-                </div>
-                <div>
-                    <div className="flex items-center">
-                        <span className="text-sm font-medium">{id}</span>
-                        <div className={`inline-flex items-center rounded-full border px-2.5 py-0.5 font-semibold ml-2 text-xs bg-${priorityColor}-100 text-${priorityColor}-800`}>
-                            {priority}
-                        </div>
-                    </div>
-                    <p className="text-sm text-gray-700">{title}</p>
-                    <div className="flex items-center mt-1 text-xs text-gray-500">
-                        <span>Due: {due}</span>
-                        <span className="mx-2">•</span>
-                        <span>Assigned to: {assignee}</span>
-                    </div>
-                </div>
-            </div>
-            <div className={`inline-flex items-center rounded-full border px-2.5 py-0.5 text-xs font-semibold bg-${statusColor}-50 text-${statusColor}-800 border-${statusColor}-200`}>
-                {status}
-            </div>
-        </div>
-    )
-}
 
 function ActivityItem({ action_type, description, user_name, timestamp, related_entity_type }: any) {
     const getActionIcon = (type: string) => {
@@ -676,27 +617,7 @@ function ActivityItem({ action_type, description, user_name, timestamp, related_
     )
 }
 
-function DeviationItem({ code, severity, severityColor, desc, site }: any) {
-    return (
-        <div className="flex items-center p-3 border rounded-lg hover:bg-slate-50">
-            <div className="mr-3">
-                <div className={`p-2 rounded-full bg-${severityColor}-100`}>
-                    <CircleDashed className={`h-4 w-4 text-${severityColor}-600`} />
-                </div>
-            </div>
-            <div className="flex-1">
-                <div className="flex items-center justify-between">
-                    <p className="text-sm font-medium">{code}</p>
-                    <div className={`inline-flex items-center rounded-full border px-2.5 py-0.5 text-xs font-semibold bg-${severityColor}-100 text-${severityColor}-800`}>
-                        {severity}
-                    </div>
-                </div>
-                <p className="text-xs text-neutral-500 mt-1">{desc}</p>
-                <p className="text-xs text-neutral-400 mt-0.5">{site}</p>
-            </div>
-        </div>
-    )
-}
+
 
 function SDTMDomainItem({ code, name, records, fileCount }: any) {
     return (
@@ -747,85 +668,3 @@ function IntegrationItem({ name, status, time, count, label }: any) {
 }
 
 // Mock Data
-const RECENT_TASKS = [
-    { id: "T-123", priority: "High", priorityColor: "red", title: "Review protocol deviation in Subject 1078", due: "May 2, 2025", assignee: "J. Wilson", status: "In Progress", statusColor: "blue" },
-    { id: "T-124", priority: "Medium", priorityColor: "amber", title: "Verify vital signs data queries from Site 3", due: "May 5, 2025", assignee: "M. Johnson", status: "Pending", statusColor: "gray" },
-    { id: "T-125", priority: "High", priorityColor: "red", title: "Reconcile liver enzyme test discrepancies in Lab Results", due: "May 1, 2025", assignee: "A. Martinez", status: "Overdue", statusColor: "red" },
-    { id: "T-126", priority: "Low", priorityColor: "blue", title: "Update risk-based monitoring plan for Boston site", due: "May 10, 2025", assignee: "S. Patel", status: "Completed", statusColor: "green" },
-];
-
-const RECENT_QUERIES = [
-    { id: "Q-402", priority: "High", priorityColor: "red", title: "Missing DOB for Subject 201-004", due: "2 days", assignee: "Site Coordinator", status: "Open", statusColor: "blue" },
-    { id: "Q-405", priority: "Medium", priorityColor: "amber", title: "Lab Reference Range mismatch", due: "5 days", assignee: "Data Manager", status: "Answered", statusColor: "purple" },
-    { id: "Q-409", priority: "High", priorityColor: "red", title: "Concomitant Medication dose missing", due: "1 day", assignee: "PI", status: "Open", statusColor: "blue" },
-    { id: "Q-411", priority: "Low", priorityColor: "blue", title: "Visit date prior to consent date check", due: "7 days", assignee: "CRA", status: "Closed", statusColor: "green" },
-];
-
-const RECENT_SIGNALS = [
-    { id: "SIG-01", priority: "Critical", priorityColor: "red", title: "QTc prolongation >15ms", due: "Immediate", assignee: "Safety Lead", status: "New", statusColor: "blue" },
-    { id: "SIG-03", priority: "High", priorityColor: "orange", title: "Liver Enzyme Elevation Cluster", due: "24h", assignee: "Medical Monitor", status: "Review", statusColor: "amber" },
-    { id: "SIG-07", priority: "Medium", priorityColor: "amber", title: "Anomalous BP Readings at Site 12", due: "3 days", assignee: "Central Monitor", status: "Assigned", statusColor: "blue" },
-    { id: "SIG-12", priority: "Low", priorityColor: "blue", title: "Protocol Deviation Trend - Visit Windows", due: "1 week", assignee: "Study Manager", status: "Triaged", statusColor: "green" },
-];
-
-function QueryItem({ id, priority, priorityColor, title, due, assignee, status, statusColor }: any) {
-    return (
-        <div className="flex items-center justify-between p-3 border rounded-lg hover:bg-slate-50">
-            <div className="flex items-center">
-                <div className="mr-3">
-                    <div className={`bg-${priorityColor}-100 p-2 rounded-full`}>
-                        <MessagesSquare className={`h-5 w-5 text-${priorityColor}-600`} />
-                    </div>
-                </div>
-                <div>
-                    <div className="flex items-center">
-                        <span className="text-sm font-medium">{id}</span>
-                        <div className={`inline-flex items-center rounded-full border px-2.5 py-0.5 font-semibold ml-2 text-xs bg-${priorityColor}-100 text-${priorityColor}-800`}>
-                            {priority}
-                        </div>
-                    </div>
-                    <p className="text-sm text-gray-700">{title}</p>
-                    <div className="flex items-center mt-1 text-xs text-gray-500">
-                        <span>Due: {due}</span>
-                        <span className="mx-2">•</span>
-                        <span>Assigned to: {assignee}</span>
-                    </div>
-                </div>
-            </div>
-            <div className={`inline-flex items-center rounded-full border px-2.5 py-0.5 text-xs font-semibold bg-${statusColor}-50 text-${statusColor}-800 border-${statusColor}-200`}>
-                {status}
-            </div>
-        </div>
-    )
-}
-
-function SignalItem({ id, priority, priorityColor, title, due, assignee, status, statusColor }: any) {
-    return (
-        <div className="flex items-center justify-between p-3 border rounded-lg hover:bg-slate-50">
-            <div className="flex items-center">
-                <div className="mr-3">
-                    <div className={`bg-${priorityColor}-100 p-2 rounded-full`}>
-                        <Activity className={`h-5 w-5 text-${priorityColor}-600`} />
-                    </div>
-                </div>
-                <div>
-                    <div className="flex items-center">
-                        <span className="text-sm font-medium">{id}</span>
-                        <div className={`inline-flex items-center rounded-full border px-2.5 py-0.5 font-semibold ml-2 text-xs bg-${priorityColor}-100 text-${priorityColor}-800`}>
-                            {priority}
-                        </div>
-                    </div>
-                    <p className="text-sm text-gray-700">{title}</p>
-                    <div className="flex items-center mt-1 text-xs text-gray-500">
-                        <span>Due: {due}</span>
-                        <span className="mx-2">•</span>
-                        <span>Assigned to: {assignee}</span>
-                    </div>
-                </div>
-            </div>
-            <div className={`inline-flex items-center rounded-full border px-2.5 py-0.5 text-xs font-semibold bg-${statusColor}-50 text-${statusColor}-800 border-${statusColor}-200`}>
-                {status}
-            </div>
-        </div>
-    )
-}

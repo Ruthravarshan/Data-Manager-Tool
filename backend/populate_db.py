@@ -46,9 +46,34 @@ def get_next_table_name(base_name):
         next_num = result + 1
         return f"{base_name}_sub{next_num}"
 
+def init_metrics_table():
+    """Seeds the metrics table with default 0/null values if empty."""
+    with engine.connect() as conn:
+        # Check if we have any metrics
+        result = conn.execute(text("SELECT COUNT(*) FROM metrics")).scalar()
+        if result == 0:
+            print("Seeding metrics table with default values...")
+            metrics_data = [
+                {"key": "data_quality", "value": "0%", "label": "Overall data quality score", "trend": None},
+                {"key": "operational", "value": "0%", "label": "Site operational efficiency", "trend": None},
+                {"key": "safety", "value": "0%", "label": "Protocol safety adherence", "trend": None},
+                {"key": "compliance", "value": "0%", "label": "Regulatory compliance score", "trend": None},
+            ]
+            
+            for metric in metrics_data:
+                conn.execute(text("""
+                    INSERT INTO metrics (key, value, label, trend)
+                    VALUES (:key, :value, :label, :trend)
+                """), metric)
+            conn.commit()
+            print("Metrics seeded successfully.")
+        else:
+            print("Metrics table already populated. Skipping seed.")
+
 def populate_db():
     print("Starting data population...")
     init_tracking_table()
+    init_metrics_table()
     
     # Get all CSV files
     csv_files = glob.glob(os.path.join(DATA_SOURCE_DIR, "*.csv"))

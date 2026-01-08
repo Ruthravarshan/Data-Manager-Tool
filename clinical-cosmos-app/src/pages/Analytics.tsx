@@ -1,6 +1,60 @@
 import { ChartNoAxesColumnIncreasing, Download, ChartLine, ChartColumn } from 'lucide-react';
+import { useEffect, useState } from 'react';
+import { studyService, dashboardService, activityService } from '../services/api';
 
 export default function Analytics() {
+    const [stats, setStats] = useState({
+        totalStudies: 0,
+        activeSites: 0,
+        totalSubjects: 0,
+        avgCompletion: 0
+    });
+    const [metrics, setMetrics] = useState<any[]>([]);
+    const [activities, setActivities] = useState<any[]>([]);
+    const [loading, setLoading] = useState(true);
+
+    useEffect(() => {
+        const fetchData = async () => {
+            try {
+                const [studiesData, metricsData, activitiesData] = await Promise.all([
+                    studyService.getStudies(),
+                    dashboardService.getMetrics(),
+                    activityService.getRecentActivities()
+                ]);
+
+                // Calculate aggregates
+                const studies = studiesData || [];
+                const totalStudies = studies.length;
+                const activeSites = studies.reduce((acc: number, study: any) => acc + (study.sites_count || 0), 0);
+                const totalSubjects = studies.reduce((acc: number, study: any) => acc + (study.subjects_count || 0), 0);
+                const avgCompletion = totalStudies > 0
+                    ? Math.round(studies.reduce((acc: number, study: any) => acc + (study.completion_percentage || 0), 0) / totalStudies)
+                    : 0;
+
+                setStats({
+                    totalStudies,
+                    activeSites,
+                    totalSubjects,
+                    avgCompletion
+                });
+
+                setMetrics(metricsData || []);
+                setActivities(activitiesData || []);
+            } catch (error) {
+                console.error("Failed to fetch analytics data", error);
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        fetchData();
+    }, []);
+
+    // Helper to get specific metric value
+    const getMetricValue = (key: string) => {
+        const metric = metrics.find(m => m.key === key);
+        return metric ? metric.value : "0%";
+    };
     return (
         <div className="p-6">
             <div className="container mx-auto py-6 space-y-6">
@@ -34,23 +88,23 @@ export default function Analytics() {
                         <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
                             <div className="p-4 border rounded-lg bg-blue-50 border-blue-100">
                                 <div className="text-sm font-medium text-gray-500">Total Studies</div>
-                                <div className="text-2xl font-bold text-blue-700 mt-1">12</div>
-                                <div className="text-xs text-gray-500 mt-1">3 active, 9 completed</div>
+                                <div className="text-2xl font-bold text-blue-700 mt-1">{stats.totalStudies}</div>
+                                <div className="text-xs text-gray-500 mt-1">Fetched from DB</div>
                             </div>
                             <div className="p-4 border rounded-lg bg-green-50 border-green-100">
                                 <div className="text-sm font-medium text-gray-500">Data Quality Score</div>
-                                <div className="text-2xl font-bold text-green-700 mt-1">94.5%</div>
-                                <div className="text-xs text-gray-500 mt-1">↑ 2.3% from last month</div>
+                                <div className="text-2xl font-bold text-green-700 mt-1">{getMetricValue('data_quality')}</div>
+                                <div className="text-xs text-gray-500 mt-1">Overall score</div>
                             </div>
                             <div className="p-4 border rounded-lg bg-purple-50 border-purple-100">
                                 <div className="text-sm font-medium text-gray-500">Total Subjects</div>
-                                <div className="text-2xl font-bold text-purple-700 mt-1">1,247</div>
+                                <div className="text-2xl font-bold text-purple-700 mt-1">{stats.totalSubjects}</div>
                                 <div className="text-xs text-gray-500 mt-1">Across all studies</div>
                             </div>
                             <div className="p-4 border rounded-lg bg-amber-50 border-amber-100">
-                                <div className="text-sm font-medium text-gray-500">Open Queries</div>
-                                <div className="text-2xl font-bold text-amber-700 mt-1">24</div>
-                                <div className="text-xs text-gray-500 mt-1">8 high priority</div>
+                                <div className="text-sm font-medium text-gray-500">Average Completion</div>
+                                <div className="text-2xl font-bold text-amber-700 mt-1">{stats.avgCompletion}%</div>
+                                <div className="text-xs text-gray-500 mt-1">Global progress</div>
                             </div>
                         </div>
 
@@ -61,13 +115,8 @@ export default function Analytics() {
                                     <ChartLine className="h-4 w-4 mr-2 text-blue-600" />
                                     Enrollment Trend
                                 </h4>
-                                <div className="h-48 flex items-end justify-around gap-2">
-                                    {[45, 62, 78, 85, 92, 88].map((height, i) => (
-                                        <div key={i} className="flex-1 flex flex-col items-center">
-                                            <div className="w-full bg-blue-500 rounded-t" style={{ height: `${height}%` }} />
-                                            <span className="text-xs text-gray-500 mt-2">M{i + 1}</span>
-                                        </div>
-                                    ))}
+                                <div className="h-48 flex items-center justify-center bg-slate-50 rounded text-neutral-400 text-sm">
+                                    No enrollment trend data available
                                 </div>
                             </div>
 
@@ -76,22 +125,8 @@ export default function Analytics() {
                                     <ChartColumn className="h-4 w-4 mr-2 text-blue-600" />
                                     Query Resolution Rate
                                 </h4>
-                                <div className="space-y-3">
-                                    {[
-                                        { label: 'Resolved', value: 156, percent: 85, color: 'bg-green-500' },
-                                        { label: 'In Progress', value: 18, percent: 10, color: 'bg-blue-500' },
-                                        { label: 'Open', value: 10, percent: 5, color: 'bg-amber-500' }
-                                    ].map((item, i) => (
-                                        <div key={i}>
-                                            <div className="flex justify-between text-sm mb-1">
-                                                <span>{item.label}</span>
-                                                <span className="font-medium">{item.value}</span>
-                                            </div>
-                                            <div className="w-full bg-gray-200 rounded-full h-2">
-                                                <div className={`h-2 rounded-full ${item.color}`} style={{ width: `${item.percent}%` }} />
-                                            </div>
-                                        </div>
-                                    ))}
+                                <div className="h-48 flex items-center justify-center bg-slate-50 rounded text-neutral-400 text-sm">
+                                    No query data available
                                 </div>
                             </div>
                         </div>
@@ -100,19 +135,21 @@ export default function Analytics() {
                         <div className="border rounded-lg p-4">
                             <h4 className="font-medium mb-3">Recent Activity</h4>
                             <div className="space-y-2">
-                                {[
-                                    { action: 'Data integration completed', study: 'ABC-123', time: '2 hours ago' },
-                                    { action: 'Query resolved', study: 'XYZ-789', time: '4 hours ago' },
-                                    { action: 'New subject enrolled', study: 'ABC-123', time: '6 hours ago' },
-                                ].map((item, i) => (
-                                    <div key={i} className="flex items-center justify-between p-2 hover:bg-gray-50 rounded">
-                                        <div>
-                                            <span className="font-medium">{item.action}</span>
-                                            <span className="text-sm text-gray-500 ml-2">• {item.study}</span>
+                                {activities.length > 0 ? (
+                                    activities.slice(0, 5).map((item, i) => (
+                                        <div key={i} className="flex items-center justify-between p-2 hover:bg-gray-50 rounded">
+                                            <div>
+                                                <span className="font-medium">{item.description}</span>
+                                                <span className="text-sm text-gray-500 ml-2">• {item.related_entity_type || 'System'}</span>
+                                            </div>
+                                            <span className="text-xs text-gray-500">{new Date(item.timestamp).toLocaleTimeString()}</span>
                                         </div>
-                                        <span className="text-xs text-gray-500">{item.time}</span>
+                                    ))
+                                ) : (
+                                    <div className="text-center py-4 text-neutral-500 text-sm">
+                                        No recent activity logged.
                                     </div>
-                                ))}
+                                )}
                             </div>
                         </div>
                     </div>

@@ -1,15 +1,15 @@
-from fastapi import APIRouter
+from fastapi import APIRouter, Depends
 from typing import List
+from sqlalchemy.orm import Session
 from app.schemas import Metric
+from app.database import get_db
+from app import models
 
 router = APIRouter(prefix="/api/dashboard", tags=["dashboard"])
 
 @router.get("/metrics", response_model=List[Metric])
-def get_metrics():
-    # Mock data for initial prototype phase
-    return [
-        {"key": "data_quality", "value": "86%", "label": "Overall data quality score", "trend": "up"},
-        {"key": "operational", "value": "72%", "label": "Site operational efficiency", "trend": "stable"},
-        {"key": "safety", "value": "91%", "label": "Protocol safety adherence", "trend": "up"},
-        {"key": "compliance", "value": "83%", "label": "Regulatory compliance score", "trend": "down"},
-    ]
+def get_metrics(db: Session = Depends(get_db)):
+    metrics = db.query(models.Metric).all()
+    # Return metrics if they exist, otherwise return empty list
+    # (Though populate_db should have seeded them)
+    return metrics
