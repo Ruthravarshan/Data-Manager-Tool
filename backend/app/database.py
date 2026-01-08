@@ -8,7 +8,7 @@ load_dotenv()
 
 # Fallback to the user provided string if env var is missing
 # Note: In production you should ensure .env exists or variables are set
-DATABASE_URL = os.getenv("DATABASE_URL", "postgresql://user:postgres@localhost:5432/clinical_cosmos")
+DATABASE_URL = os.getenv("DATABASE_URL", "postgresql://user:postgres@localhost:5433/clinical_cosmos")
 
 engine = create_engine(DATABASE_URL)
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)

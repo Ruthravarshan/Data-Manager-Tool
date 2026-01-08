@@ -54,7 +54,7 @@ export default function DataIntegration() {
     const [dbCredentials, setDbCredentials] = useState({
         db_type: 'postgresql',
         host: '',
-        port: 5432,
+        port: 5433,
         database_name: '',
         username: '',
         password: ''
@@ -308,7 +308,7 @@ export default function DataIntegration() {
             setDbCredentials({
                 db_type: 'postgresql',
                 host: '',
-                port: 5432,
+                port: 5433,
                 database_name: '',
                 username: '',
                 password: ''

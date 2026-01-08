@@ -170,7 +170,7 @@ export default function CredentialsModal({ isOpen, onClose, integrationName = "I
     const getDbPortPlaceholder = () => {
         switch (dbType) {
             case 'sqlserver': return '1433';
-            case 'postgresql': return '5432';
+            case 'postgresql': return '5433';
             case 'mysql': return '3306';
             case 'oracle': return '1521';
             default: return '1433';
@@ -485,7 +485,7 @@ export default function CredentialsModal({ isOpen, onClose, integrationName = "I
                                             // Update port based on database type
                                             const portMap: any = {
                                                 'sqlserver': 1433,
-                                                'postgresql': 5432,
+                                                'postgresql': 5433,
                                                 'mysql': 3306,
                                                 'oracle': 1521
                                             };

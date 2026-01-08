@@ -8,7 +8,7 @@ from dotenv import load_dotenv
 # Load environment variables
 load_dotenv()
 
-DATABASE_URL = os.getenv("DATABASE_URL", "postgresql://user:postgres@localhost:5432/clinical_cosmos")
+DATABASE_URL = os.getenv("DATABASE_URL", "postgresql://user:postgres@localhost:5433/clinical_cosmos")
 engine = create_engine(DATABASE_URL)
 
 DATA_SOURCE_DIR = os.path.join(os.path.dirname(__file__), "data_source")

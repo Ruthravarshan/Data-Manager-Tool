@@ -4,7 +4,7 @@ import os
 
 load_dotenv()
 
-DATABASE_URL = os.getenv("DATABASE_URL", "postgresql://user:postgres@localhost:5432/clinical_cosmos")
+DATABASE_URL = os.getenv("DATABASE_URL", "postgresql://user:postgres@localhost:5433/clinical_cosmos")
 engine = create_engine(DATABASE_URL)
 
 def upgrade():
