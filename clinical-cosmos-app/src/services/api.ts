@@ -12,6 +12,14 @@ export const dashboardService = {
         const response = await api.get('/dashboard/metrics');
         return response.data;
     },
+    getEnrollmentTrend: async () => {
+        const response = await api.get('/dashboard/enrollment-trend');
+        return response.data;
+    },
+    getQueryResolution: async () => {
+        const response = await api.get('/dashboard/query-resolution');
+        return response.data;
+    }
 };
 
 export const studyService = {
@@ -39,6 +47,33 @@ export const studyService = {
     },
     deleteStudy: async (studyId: string) => {
         const response = await api.delete(`/studies/${studyId}`);
+        return response.data;
+    },
+    // Sites
+    getSites: async (studyId: string) => {
+        const response = await api.get(`/studies/${studyId}/sites`);
+        return response.data;
+    },
+    addSite: async (studyId: string, siteData: any) => {
+        const response = await api.post(`/studies/${studyId}/sites`, siteData);
+        return response.data;
+    },
+    // Contacts
+    getContacts: async (studyId: string) => {
+        const response = await api.get(`/studies/${studyId}/contacts`);
+        return response.data;
+    },
+    addContact: async (studyId: string, contactData: any) => {
+        const response = await api.post(`/studies/${studyId}/contacts`, contactData);
+        return response.data;
+    },
+    // Vendors
+    getVendors: async (studyId: string) => {
+        const response = await api.get(`/studies/${studyId}/vendors`);
+        return response.data;
+    },
+    addVendor: async (studyId: string, vendorData: any) => {
+        const response = await api.post(`/studies/${studyId}/vendors`, vendorData);
         return response.data;
     }
 };

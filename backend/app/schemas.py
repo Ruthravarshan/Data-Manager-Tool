@@ -40,6 +40,62 @@ class Study(StudyBase):
     id: str
     file_url: Optional[str] = None
     documents: List[Document] = []
+    sites: List["Site"] = []
+    contacts: List["StudyContact"] = []
+    vendors: List["Vendor"] = []
+    
+    model_config = ConfigDict(from_attributes=True)
+
+class SiteBase(BaseModel):
+    site_id: str
+    name: str
+    location: str
+    status: str
+    enrollment: str
+    pi_name: str
+
+class SiteCreate(SiteBase):
+    pass
+
+class Site(SiteBase):
+    id: int
+    study_id: str
+    
+    model_config = ConfigDict(from_attributes=True)
+
+class StudyContactBase(BaseModel):
+    name: str
+    role: str
+    organization: str
+    email: str
+    phone: str
+    availability: Optional[str] = "100"
+
+class StudyContactCreate(StudyContactBase):
+    pass
+
+class StudyContact(StudyContactBase):
+    id: int
+    study_id: str
+    
+    model_config = ConfigDict(from_attributes=True)
+
+class VendorBase(BaseModel):
+    name: str
+    type: str # CRO, Lab, etc
+    trial_role: str
+    contact_person: str
+    contact_email: Optional[str] = None
+    status: str
+    start_date: Optional[str] = None
+    end_date: Optional[str] = None
+
+class VendorCreate(VendorBase):
+    pass
+
+class Vendor(VendorBase):
+    id: int
+    study_id: str
     
     model_config = ConfigDict(from_attributes=True)
 

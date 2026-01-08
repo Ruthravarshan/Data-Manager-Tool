@@ -6,22 +6,20 @@ import { studyService, documentService } from '../services/api';
 function StudyDetail({ study, onBack }: { study: any, onBack: () => void }) {
     const [activeTab, setActiveTab] = useState('overview');
 
-    // Sites Tab State (Mock Data)
-    const [sites] = useState([
-        { id: 'SITE001-001', name: 'Memorial Research Hospital', location: 'Boston, MA', status: 'Active', enrollment: '0/0', pi: 'Dr. James Wilson' },
-        { id: 'SITE001-002', name: 'City Medical Center', location: 'Chicago, IL', status: 'Active', enrollment: '0/0', pi: 'Dr. Sarah Johnson' },
-        { id: 'SITE001-003', name: 'University Hospital', location: 'San Francisco, CA', status: 'Active', enrollment: '0/0', pi: 'Dr. Robert Chen' },
-        { id: 'SITE001-004', name: 'Pacific Research Institute', location: 'Seattle, WA', status: 'Active', enrollment: '0/0', pi: 'Dr. Emily Parker' },
-        { id: 'SITE001-005', name: 'Southside Medical Center', location: 'Atlanta, GA', status: 'Active', enrollment: '0/0', pi: 'Dr. Michael Davis' },
-    ]);
+    // Sites Tab State
+    const [sites, setSites] = useState<any[]>([]);
+    const [isAddSiteModalOpen, setIsAddSiteModalOpen] = useState(false);
+    const [newSite, setNewSite] = useState({
+        site_id: '',
+        name: '',
+        location: '',
+        status: 'Active',
+        enrollment: '0/0',
+        pi_name: ''
+    });
 
     // Study Contacts State
-    const [contacts, setContacts] = useState([
-        { name: 'Maria Rodriguez', role: 'Clinical Operations Manager', org: 'Internal', email: 'maria@cboat.example.com', phone: '555-123-4567' },
-        { name: 'David Park', role: 'Clinical Monitor', org: 'Internal', email: 'david@cboat.example.com', phone: '555-123-4567' },
-        { name: 'Lisa Wong', role: 'Medical Advisor', org: 'Internal', email: 'lisa@cboat.example.com', phone: '555-123-4567' },
-        { name: 'Mark Johnson', role: 'Project Manager', org: 'Internal', email: 'mark@cboat.example.com', phone: '555-123-4567' },
-    ]);
+    const [contacts, setContacts] = useState<any[]>([]);
     const [isAddContactModalOpen, setIsAddContactModalOpen] = useState(false);
     const [newContact, setNewContact] = useState({
         name: '',
@@ -32,6 +30,20 @@ function StudyDetail({ study, onBack }: { study: any, onBack: () => void }) {
         availability: '100'
     });
 
+    // Vendors Tab State
+    const [vendors, setVendors] = useState<any[]>([]);
+    const [isAddVendorModalOpen, setIsAddVendorModalOpen] = useState(false);
+    const [newVendor, setNewVendor] = useState({
+        name: '',
+        type: '',
+        trial_role: '',
+        contact_person: '',
+        contact_email: '',
+        status: 'Active',
+        start_date: '',
+        end_date: ''
+    });
+
     // Document Management State
     const [documents, setDocuments] = useState<any[]>([]);
     const [isPreviewOpen, setIsPreviewOpen] = useState(false);
@@ -40,12 +52,46 @@ function StudyDetail({ study, onBack }: { study: any, onBack: () => void }) {
     const [editingDoc, setEditingDoc] = useState<any>(null);
     const [editName, setEditName] = useState('');
 
-    // Fetch documents when tab is 'documents'
+    // Fetch data when tab is active
     useEffect(() => {
-        if (study && activeTab === 'documents') {
+        if (!study) return;
+        if (activeTab === 'documents') {
             loadDocuments();
+        } else if (activeTab === 'sites') {
+            loadSites();
+        } else if (activeTab === 'study contacts') {
+            loadContacts();
+        } else if (activeTab === 'vendors & services') {
+            loadVendors();
         }
     }, [study, activeTab]);
+
+    const loadSites = async () => {
+        try {
+            const data = await studyService.getSites(study.id);
+            setSites(data);
+        } catch (error) {
+            console.error("Failed to load sites", error);
+        }
+    };
+
+    const loadContacts = async () => {
+        try {
+            const data = await studyService.getContacts(study.id);
+            setContacts(data);
+        } catch (error) {
+            console.error("Failed to load contacts", error);
+        }
+    };
+
+    const loadVendors = async () => {
+        try {
+            const data = await studyService.getVendors(study.id);
+            setVendors(data);
+        } catch (error) {
+            console.error("Failed to load vendors", error);
+        }
+    };
 
     const loadDocuments = async () => {
         if (!study) return;
@@ -99,21 +145,72 @@ function StudyDetail({ study, onBack }: { study: any, onBack: () => void }) {
         }
     };
 
-    const handleSaveContact = () => {
+    const handleSaveContact = async () => {
         if (!newContact.name || !newContact.role) {
             alert("Name and Role are required");
             return;
         }
-        setContacts([...contacts, { ...newContact }]);
-        setIsAddContactModalOpen(false);
-        setNewContact({
-            name: '',
-            role: '',
-            email: '',
-            phone: '',
-            org: 'Internal',
-            availability: '100'
-        });
+        try {
+            await studyService.addContact(study.id, newContact);
+            setIsAddContactModalOpen(false);
+            setNewContact({
+                name: '',
+                role: '',
+                email: '',
+                phone: '',
+                org: 'Internal',
+                availability: '100'
+            });
+            loadContacts();
+        } catch (error) {
+            console.error("Failed to add contact", error);
+        }
+    };
+
+    const handleSaveSite = async () => {
+        if (!newSite.site_id || !newSite.name) {
+            alert("Site ID and Name are required");
+            return;
+        }
+        try {
+            await studyService.addSite(study.id, newSite);
+            setIsAddSiteModalOpen(false);
+            setNewSite({
+                site_id: '',
+                name: '',
+                location: '',
+                status: 'Active',
+                enrollment: '0/0',
+                pi_name: ''
+            });
+            loadSites();
+        } catch (error) {
+            console.error("Failed to add site", error);
+        }
+    };
+
+    const handleSaveVendor = async () => {
+        if (!newVendor.name || !newVendor.type) {
+            alert("Vendor Name and Type are required");
+            return;
+        }
+        try {
+            await studyService.addVendor(study.id, newVendor);
+            setIsAddVendorModalOpen(false);
+            setNewVendor({
+                name: '',
+                type: '',
+                trial_role: '',
+                contact_person: '',
+                contact_email: '',
+                status: 'Active',
+                start_date: '',
+                end_date: ''
+            });
+            loadVendors();
+        } catch (error) {
+            console.error("Failed to add vendor", error);
+        }
     };
 
     return (
@@ -306,7 +403,10 @@ function StudyDetail({ study, onBack }: { study: any, onBack: () => void }) {
                     <div className="bg-white border border-gray-200 rounded-lg overflow-hidden">
                         <div className="p-4 border-b border-gray-200 flex justify-between items-center">
                             <h3 className="text-lg font-bold text-gray-900">Study Sites</h3>
-                            <button className="px-3 py-1.5 bg-blue-600 text-white text-sm font-medium rounded hover:bg-blue-700">
+                            <button
+                                onClick={() => setIsAddSiteModalOpen(true)}
+                                className="px-3 py-1.5 bg-blue-600 text-white text-sm font-medium rounded hover:bg-blue-700"
+                            >
                                 Add Site
                             </button>
                         </div>
@@ -324,7 +424,7 @@ function StudyDetail({ study, onBack }: { study: any, onBack: () => void }) {
                             <tbody className="divide-y divide-gray-200">
                                 {sites.map((site, idx) => (
                                     <tr key={idx} className="hover:bg-gray-50">
-                                        <td className="px-6 py-4 font-medium text-gray-900">{site.id}</td>
+                                        <td className="px-6 py-4 font-medium text-gray-900">{site.site_id}</td>
                                         <td className="px-6 py-4 text-gray-900">{site.name}</td>
                                         <td className="px-6 py-4 text-gray-600">{site.location}</td>
                                         <td className="px-6 py-4">
@@ -333,7 +433,7 @@ function StudyDetail({ study, onBack }: { study: any, onBack: () => void }) {
                                             </span>
                                         </td>
                                         <td className="px-6 py-4 text-gray-600">{site.enrollment}</td>
-                                        <td className="px-6 py-4 text-gray-600">{site.pi}</td>
+                                        <td className="px-6 py-4 text-gray-600">{site.pi_name}</td>
                                     </tr>
                                 ))}
                             </tbody>
@@ -381,7 +481,10 @@ function StudyDetail({ study, onBack }: { study: any, onBack: () => void }) {
                     <div className="bg-white border border-gray-200 rounded-lg overflow-hidden">
                         <div className="p-4 border-b border-gray-200 flex justify-between items-center">
                             <h3 className="text-lg font-bold text-gray-900">Vendors & Services</h3>
-                            <button className="px-3 py-1.5 bg-blue-600 text-white text-sm font-medium rounded hover:bg-blue-700">
+                            <button
+                                onClick={() => setIsAddVendorModalOpen(true)}
+                                className="px-3 py-1.5 bg-blue-600 text-white text-sm font-medium rounded hover:bg-blue-700"
+                            >
                                 Add Vendor
                             </button>
                         </div>
@@ -397,18 +500,14 @@ function StudyDetail({ study, onBack }: { study: any, onBack: () => void }) {
                                 </tr>
                             </thead>
                             <tbody className="divide-y divide-gray-200">
-                                {[
-                                    { name: 'Parexel', type: 'CRO', role: 'CRO', contact: 'David Miller', status: 'Active', start: '10/1/2023', end: '10/1/2025' },
-                                    { name: 'Covance', type: 'Lab', role: 'Central Lab', contact: 'Jennifer Adams', status: 'Active', start: '11/1/2023', end: '11/1/2025' },
-                                    { name: 'LabCorp', type: 'Imaging', role: 'Imaging Core', contact: 'Thomas Wilson', status: 'Active', start: '12/1/2023', end: '12/1/2025' },
-                                ].map((vendor, idx) => (
+                                {vendors.map((vendor, idx) => (
                                     <tr key={idx} className="hover:bg-gray-50">
                                         <td className="px-6 py-4 font-medium text-gray-900">{vendor.name}</td>
                                         <td className="px-6 py-4 text-gray-600">{vendor.type}</td>
-                                        <td className="px-6 py-4 text-gray-600">{vendor.role}</td>
+                                        <td className="px-6 py-4 text-gray-600">{vendor.trial_role}</td>
                                         <td className="px-6 py-4">
-                                            <div className="text-gray-900">{vendor.contact}</div>
-                                            <div className="text-xs text-blue-600">contact@example.com</div>
+                                            <div className="text-gray-900">{vendor.contact_person}</div>
+                                            <div className="text-xs text-blue-600">{vendor.contact_email}</div>
                                         </td>
                                         <td className="px-6 py-4">
                                             <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
@@ -416,11 +515,12 @@ function StudyDetail({ study, onBack }: { study: any, onBack: () => void }) {
                                             </span>
                                         </td>
                                         <td className="px-6 py-4 text-xs text-gray-500">
-                                            <div>Start: {vendor.start}</div>
-                                            <div>End: {vendor.end}</div>
+                                            <div>Start: {vendor.start_date}</div>
+                                            <div>End: {vendor.end_date}</div>
                                         </td>
                                     </tr>
                                 ))}
+
                             </tbody>
                         </table>
                     </div>
@@ -616,6 +716,179 @@ function StudyDetail({ study, onBack }: { study: any, onBack: () => void }) {
                                     className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
                                 >
                                     Save Changes
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            )}
+            {/* Add Site Modal */}
+            {isAddSiteModalOpen && (
+
+                <div className="fixed inset-0 bg-black/50 z-[70] flex items-center justify-center p-4">
+                    <div className="bg-white rounded-lg p-6 w-full max-w-md max-h-[90vh] overflow-y-auto">
+                        <div className="flex justify-between items-center mb-4">
+                            <h3 className="text-xl font-bold text-gray-900">Add Study Site</h3>
+                            <button onClick={() => setIsAddSiteModalOpen(false)} className="text-gray-400 hover:text-gray-600">
+                                <X className="h-5 w-5" />
+                            </button>
+                        </div>
+                        <div className="space-y-4">
+                            <div>
+                                <label className="block text-sm font-bold text-gray-900 mb-1">Site ID</label>
+                                <input
+                                    type="text"
+                                    placeholder="e.g. SITE001-001"
+                                    value={newSite.site_id}
+                                    onChange={(e) => setNewSite({ ...newSite, site_id: e.target.value })}
+                                    className="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 outline-none"
+                                />
+                            </div>
+                            <div>
+                                <label className="block text-sm font-bold text-gray-900 mb-1">Name</label>
+                                <input
+                                    type="text"
+                                    placeholder="Site Name"
+                                    value={newSite.name}
+                                    onChange={(e) => setNewSite({ ...newSite, name: e.target.value })}
+                                    className="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 outline-none"
+                                />
+                            </div>
+                            <div>
+                                <label className="block text-sm font-bold text-gray-900 mb-1">Location</label>
+                                <input
+                                    type="text"
+                                    placeholder="City, State"
+                                    value={newSite.location}
+                                    onChange={(e) => setNewSite({ ...newSite, location: e.target.value })}
+                                    className="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 outline-none"
+                                />
+                            </div>
+                            <div>
+                                <label className="block text-sm font-bold text-gray-900 mb-1">Principal Investigator</label>
+                                <input
+                                    type="text"
+                                    placeholder="PI Name"
+                                    value={newSite.pi_name}
+                                    onChange={(e) => setNewSite({ ...newSite, pi_name: e.target.value })}
+                                    className="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 outline-none"
+                                />
+                            </div>
+                            <div className="flex justify-end gap-3 mt-6">
+                                <button
+                                    onClick={() => setIsAddSiteModalOpen(false)}
+                                    className="px-4 py-2 text-gray-600 hover:text-gray-800"
+                                >
+                                    Cancel
+                                </button>
+                                <button
+                                    onClick={handleSaveSite}
+                                    className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
+                                >
+                                    Add Site
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            )}
+
+            {/* Add Vendor Modal */}
+            {isAddVendorModalOpen && (
+                <div className="fixed inset-0 bg-black/50 z-[70] flex items-center justify-center p-4">
+                    <div className="bg-white rounded-lg p-6 w-full max-w-md max-h-[90vh] overflow-y-auto">
+                        <div className="flex justify-between items-center mb-4">
+                            <h3 className="text-xl font-bold text-gray-900">Add Vendor</h3>
+                            <button onClick={() => setIsAddVendorModalOpen(false)} className="text-gray-400 hover:text-gray-600">
+                                <X className="h-5 w-5" />
+                            </button>
+                        </div>
+                        <div className="space-y-4">
+                            <div>
+                                <label className="block text-sm font-bold text-gray-900 mb-1">Vendor Name</label>
+                                <input
+                                    type="text"
+                                    placeholder="Company Name"
+                                    value={newVendor.name}
+                                    onChange={(e) => setNewVendor({ ...newVendor, name: e.target.value })}
+                                    className="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 outline-none"
+                                />
+                            </div>
+                            <div>
+                                <label className="block text-sm font-bold text-gray-900 mb-1">Type</label>
+                                <select
+                                    value={newVendor.type}
+                                    onChange={(e) => setNewVendor({ ...newVendor, type: e.target.value })}
+                                    className="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 outline-none bg-white"
+                                >
+                                    <option value="">Select Type</option>
+                                    <option value="CRO">CRO</option>
+                                    <option value="Lab">Lab</option>
+                                    <option value="Imaging">Imaging</option>
+                                    <option value="eCOA">eCOA</option>
+                                    <option value="IRT">IRT</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label className="block text-sm font-bold text-gray-900 mb-1">Trial Role</label>
+                                <input
+                                    type="text"
+                                    placeholder="e.g. Central Lab"
+                                    value={newVendor.trial_role}
+                                    onChange={(e) => setNewVendor({ ...newVendor, trial_role: e.target.value })}
+                                    className="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 outline-none"
+                                />
+                            </div>
+                            <div>
+                                <label className="block text-sm font-bold text-gray-900 mb-1">Contact Person</label>
+                                <input
+                                    type="text"
+                                    placeholder="Name"
+                                    value={newVendor.contact_person}
+                                    onChange={(e) => setNewVendor({ ...newVendor, contact_person: e.target.value })}
+                                    className="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 outline-none"
+                                />
+                            </div>
+                            <div>
+                                <label className="block text-sm font-bold text-gray-900 mb-1">Contact Email</label>
+                                <input
+                                    type="email"
+                                    placeholder="email@example.com"
+                                    value={newVendor.contact_email}
+                                    onChange={(e) => setNewVendor({ ...newVendor, contact_email: e.target.value })}
+                                    className="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 outline-none"
+                                />
+                            </div>
+                            <div>
+                                <label className="block text-sm font-bold text-gray-900 mb-1">Start Date</label>
+                                <input
+                                    type="date"
+                                    value={newVendor.start_date}
+                                    onChange={(e) => setNewVendor({ ...newVendor, start_date: e.target.value })}
+                                    className="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 outline-none"
+                                />
+                            </div>
+                            <div>
+                                <label className="block text-sm font-bold text-gray-900 mb-1">End Date</label>
+                                <input
+                                    type="date"
+                                    value={newVendor.end_date}
+                                    onChange={(e) => setNewVendor({ ...newVendor, end_date: e.target.value })}
+                                    className="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 outline-none"
+                                />
+                            </div>
+                            <div className="flex justify-end gap-3 mt-6">
+                                <button
+                                    onClick={() => setIsAddVendorModalOpen(false)}
+                                    className="px-4 py-2 text-gray-600 hover:text-gray-800"
+                                >
+                                    Cancel
+                                </button>
+                                <button
+                                    onClick={handleSaveVendor}
+                                    className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
+                                >
+                                    Add Vendor
                                 </button>
                             </div>
                         </div>
@@ -1051,19 +1324,13 @@ export default function StudyManagement() {
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                                 <div>
                                     <label className="block text-sm font-semibold text-gray-900 mb-1">Therapeutic Area</label>
-                                    <select
+                                    <input
+                                        type="text"
                                         className="w-full border border-gray-300 rounded-md px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none"
-                                        value={formData.therapeutic_area || ''}
+                                        placeholder="e.g. Oncology, Cardiology"
+                                        value={formData.therapeutic_area}
                                         onChange={(e) => setFormData({ ...formData, therapeutic_area: e.target.value })}
-                                    >
-                                        <option value="">Select Area</option>
-                                        <option>Oncology</option>
-                                        <option>Cardiology</option>
-                                        <option>Endocrinology</option>
-                                        <option>Neurology</option>
-                                        <option>Immunology</option>
-                                        <option>Infectious Diseases</option>
-                                    </select>
+                                    />
                                 </div>
                                 <div>
                                     <label className="block text-sm font-semibold text-gray-900 mb-1">Indication</label>

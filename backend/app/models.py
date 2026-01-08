@@ -24,6 +24,9 @@ class Study(Base):
     
     # Relationship
     documents = relationship("Document", back_populates="study", cascade="all, delete-orphan")
+    sites = relationship("Site", back_populates="study", cascade="all, delete-orphan")
+    contacts = relationship("StudyContact", back_populates="study", cascade="all, delete-orphan")
+    vendors = relationship("Vendor", back_populates="study", cascade="all, delete-orphan")
 
 class Document(Base):
     __tablename__ = "documents"
@@ -38,6 +41,50 @@ class Document(Base):
     version = Column(String, default="1.0")
 
     study = relationship("Study", back_populates="documents")
+
+class Site(Base):
+    __tablename__ = "sites"
+
+    id = Column(Integer, primary_key=True, index=True)
+    study_id = Column(String, ForeignKey("studies.id"))
+    site_id = Column(String) # User entered ID like SITE001-001
+    name = Column(String)
+    location = Column(String)
+    status = Column(String)
+    enrollment = Column(String) # e.g. "0/0"
+    pi_name = Column(String)
+    
+    study = relationship("Study", back_populates="sites")
+
+class StudyContact(Base):
+    __tablename__ = "study_contacts"
+
+    id = Column(Integer, primary_key=True, index=True)
+    study_id = Column(String, ForeignKey("studies.id"))
+    name = Column(String)
+    role = Column(String)
+    organization = Column(String)
+    email = Column(String)
+    phone = Column(String)
+    availability = Column(String, nullable=True)
+    
+    study = relationship("Study", back_populates="contacts")
+
+class Vendor(Base):
+    __tablename__ = "vendors"
+
+    id = Column(Integer, primary_key=True, index=True)
+    study_id = Column(String, ForeignKey("studies.id"))
+    name = Column(String)
+    type = Column(String) # CRO, Lab, etc
+    trial_role = Column(String)
+    contact_person = Column(String)
+    contact_email = Column(String, nullable=True)
+    status = Column(String)
+    start_date = Column(String, nullable=True)
+    end_date = Column(String, nullable=True)
+    
+    study = relationship("Study", back_populates="vendors")
 
 class IntegrationSource(Base):
     __tablename__ = "integrations"

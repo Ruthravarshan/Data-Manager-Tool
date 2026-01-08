@@ -114,6 +114,16 @@ def delete_integration(integration_id: int, db: Session = Depends(get_db)):
     if not db_integration:
         raise Exception("Integration not found")
     
+    # Delete associated credentials
+    from app.models import DatabaseCredential
+    db.query(DatabaseCredential).filter(DatabaseCredential.integration_id == integration_id).delete()
+
+    # Unlink associated DataFiles (or delete them? For now, we unlink to preserve history if needed, or delete?)
+    # If the integration is gone, the link is invalid. 
+    # Let's set integration_id to NULL for DataFiles so they are preserved but "orphaned" from the source view
+    from app.models import DataFile
+    db.query(DataFile).filter(DataFile.integration_id == integration_id).update({DataFile.integration_id: None})
+    
     db.delete(db_integration)
     db.commit()
     return {"message": "Integration deleted successfully"}

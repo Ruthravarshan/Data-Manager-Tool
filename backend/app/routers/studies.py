@@ -2,8 +2,13 @@ from fastapi import APIRouter, Depends, HTTPException, File, UploadFile
 from sqlalchemy.orm import Session
 from typing import List
 from app.database import get_db
-from app.models import Study, Activity
-from app.schemas import Study as StudySchema, StudyCreate
+from app.models import Study, Activity, Site, StudyContact, Vendor
+from app.schemas import (
+    Study as StudySchema, StudyCreate,
+    Site as SiteSchema, SiteCreate,
+    StudyContact as ContactSchema, StudyContactCreate,
+    Vendor as VendorSchema, VendorCreate
+)
 from app.file_service import save_upload_file
 import uuid
 
@@ -144,3 +149,67 @@ def update_document(document_id: int, name: str, db: Session = Depends(get_db)):
     db.commit()
     db.refresh(document)
     return document
+
+
+# ----------------- SITES ----------------- #
+@router.get("/{study_id}/sites", response_model=List[SiteSchema])
+def read_study_sites(study_id: str, db: Session = Depends(get_db)):
+    study = db.query(Study).filter(Study.id == study_id).first()
+    if not study:
+        raise HTTPException(status_code=404, detail="Study not found")
+    return study.sites
+
+@router.post("/{study_id}/sites", response_model=SiteSchema)
+def create_site(study_id: str, site: SiteCreate, db: Session = Depends(get_db)):
+    study = db.query(Study).filter(Study.id == study_id).first()
+    if not study:
+        raise HTTPException(status_code=404, detail="Study not found")
+    
+    db_site = Site(**site.model_dump(), study_id=study_id)
+    db.add(db_site)
+    # Update study sites count
+    study.sites_count = (study.sites_count or 0) + 1
+    
+    db.commit()
+    db.refresh(db_site)
+    return db_site
+
+# ----------------- CONTACTS ----------------- #
+@router.get("/{study_id}/contacts", response_model=List[ContactSchema])
+def read_study_contacts(study_id: str, db: Session = Depends(get_db)):
+    study = db.query(Study).filter(Study.id == study_id).first()
+    if not study:
+        raise HTTPException(status_code=404, detail="Study not found")
+    return study.contacts
+
+@router.post("/{study_id}/contacts", response_model=ContactSchema)
+def create_contact(study_id: str, contact: StudyContactCreate, db: Session = Depends(get_db)):
+    study = db.query(Study).filter(Study.id == study_id).first()
+    if not study:
+        raise HTTPException(status_code=404, detail="Study not found")
+    
+    db_contact = StudyContact(**contact.model_dump(), study_id=study_id)
+    db.add(db_contact)
+    db.commit()
+    db.refresh(db_contact)
+    return db_contact
+
+# ----------------- VENDORS ----------------- #
+@router.get("/{study_id}/vendors", response_model=List[VendorSchema])
+def read_study_vendors(study_id: str, db: Session = Depends(get_db)):
+    study = db.query(Study).filter(Study.id == study_id).first()
+    if not study:
+        raise HTTPException(status_code=404, detail="Study not found")
+    return study.vendors
+
+@router.post("/{study_id}/vendors", response_model=VendorSchema)
+def create_vendor(study_id: str, vendor: VendorCreate, db: Session = Depends(get_db)):
+    study = db.query(Study).filter(Study.id == study_id).first()
+    if not study:
+        raise HTTPException(status_code=404, detail="Study not found")
+    
+    db_vendor = Vendor(**vendor.model_dump(), study_id=study_id)
+    db.add(db_vendor)
+    db.commit()
+    db.refresh(db_vendor)
+    return db_vendor

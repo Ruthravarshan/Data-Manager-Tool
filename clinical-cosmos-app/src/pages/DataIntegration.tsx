@@ -47,7 +47,7 @@ export default function DataIntegration() {
     const [scanSuccess, setScanSuccess] = useState<{ [key: number]: boolean }>({});
 
     // New State for Source Selection & Protocols
-    const [sourceType, setSourceType] = useState<'Local' | 'Database'>('Local');
+    // const [sourceType, setSourceType] = useState<'Local' | 'Database'>('Local'); // Removed in favor of Integration Type
     const [availableProtocols, setAvailableProtocols] = useState<string[]>([]);
 
     // DB Credentials State
@@ -59,6 +59,15 @@ export default function DataIntegration() {
         username: '',
         password: ''
     });
+
+    const [selectedFiles, setSelectedFiles] = useState<File[]>([]);
+    const fileInputRef = useRef<HTMLInputElement>(null);
+
+    const handleFileSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
+        if (e.target.files && e.target.files.length > 0) {
+            setSelectedFiles(Array.from(e.target.files));
+        }
+    };
 
     // Credentials Modal state
     const [showCredentialsModal, setShowCredentialsModal] = useState(false);
@@ -274,19 +283,30 @@ export default function DataIntegration() {
                 protocol_id: formData.protocolId || null,
             };
 
-            if (sourceType === 'Local') {
-                payload.folder_path = formData.folderPath || null;
-            } else {
+            if (formData.type === 'Database') {
                 // Validate DB creds
-                if (!dbCredentials.host || !dbCredentials.username || !dbCredentials.password) {
-                    setSubmitError('Please fill in all database credentials');
-                    setIsSubmitting(false);
-                    return;
+                if (!dbCredentials.host || (!dbCredentials.username && dbCredentials.db_type !== 'sqlite') || (!dbCredentials.password && dbCredentials.db_type !== 'sqlite')) {
+                    if (dbCredentials.db_type !== 'sqlite') {
+                        if (!dbCredentials.host || !dbCredentials.username || !dbCredentials.password) {
+                            setSubmitError('Please fill in all database credentials');
+                            setIsSubmitting(false);
+                            return;
+                        }
+                    }
                 }
                 payload.database_credentials = {
                     ...dbCredentials,
                     integration_id: 0
                 };
+            } else if (formData.type === 'Local') {
+                // If files are selected, use their names as metadata
+                const fileMetadata = selectedFiles.length > 0
+                    ? `[Files: ${selectedFiles.map(f => f.name).join(', ')}]`
+                    : 'Manual Upload';
+                payload.folder_path = formData.folderPath || fileMetadata;
+            } else {
+                // API, SFTP etc
+                payload.folder_path = null;
             }
 
             const newIntegration = await integrationService.createIntegration(payload);
@@ -304,7 +324,7 @@ export default function DataIntegration() {
                 folderPath: '',
                 launchImmediately: false
             });
-            setSourceType('Local');
+            setSelectedFiles([]);
             setDbCredentials({
                 db_type: 'postgresql',
                 host: '',
@@ -555,6 +575,7 @@ export default function DataIntegration() {
                                     <thead className="bg-blue-50/50 text-gray-500 font-medium border-b border-gray-100">
                                         <tr>
                                             <th className="h-12 px-6 align-middle">Name</th>
+                                            <th className="h-12 px-6 align-middle">Protocol ID</th>
                                             <th className="h-12 px-6 align-middle">Vendor</th>
                                             <th className="h-12 px-6 align-middle text-center">Type</th>
                                             <th className="h-12 px-6 align-middle">Frequency</th>
@@ -567,6 +588,7 @@ export default function DataIntegration() {
                                         {integrations.map((item) => (
                                             <tr key={item.id} className="hover:bg-gray-50/50 transition-colors group">
                                                 <td className="p-6 font-medium text-blue-600 cursor-pointer hover:underline">{item.name}</td>
+                                                <td className="p-6 text-gray-700">{item.protocol_id || '-'}</td>
                                                 <td className="p-6 text-gray-900 font-medium">{item.vendor}</td>
                                                 <td className="p-6 text-center">
                                                     <span className={cn("inline-flex items-center rounded-md border px-2.5 py-0.5 text-xs font-semibold", getItemColor(item.type, typeColors))}>
@@ -724,39 +746,6 @@ export default function DataIntegration() {
                                     </select>
                                 </div>
 
-                                {/* Source Type Selection */}
-                                <div>
-                                    <label className="block text-sm font-medium text-gray-700 mb-2">
-                                        Source Type
-                                    </label>
-                                    <div className="flex bg-gray-100 p-1 rounded-md">
-                                        <button
-                                            type="button"
-                                            onClick={() => setSourceType('Local')}
-                                            className={cn(
-                                                "flex-1 py-1.5 text-sm font-medium rounded-md transition-all",
-                                                sourceType === 'Local'
-                                                    ? "bg-white text-blue-600 shadow-sm"
-                                                    : "text-gray-500 hover:text-gray-900"
-                                            )}
-                                        >
-                                            Local Folder
-                                        </button>
-                                        <button
-                                            type="button"
-                                            onClick={() => setSourceType('Database')}
-                                            className={cn(
-                                                "flex-1 py-1.5 text-sm font-medium rounded-md transition-all",
-                                                sourceType === 'Database'
-                                                    ? "bg-white text-blue-600 shadow-sm"
-                                                    : "text-gray-500 hover:text-gray-900"
-                                            )}
-                                        >
-                                            Database
-                                        </button>
-                                    </div>
-                                </div>
-
                                 {/* Integration Type */}
                                 <div>
                                     <label className="block text-sm font-medium text-gray-700 mb-2">
@@ -766,11 +755,13 @@ export default function DataIntegration() {
                                         name="type"
                                         value={formData.type}
                                         onChange={handleFormChange}
-                                        className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                        className="w-full px-3 py-2 border border-blue-500 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white"
                                     >
-                                        {integrationTypes.map(type => (
-                                            <option key={type} value={type}>{type}</option>
-                                        ))}
+                                        <option value="Database">Database</option>
+                                        <option value="API">API</option>
+                                        <option value="SFTP">SFTP</option>
+                                        <option value="S3">S3</option>
+                                        <option value="Local">Local</option>
                                     </select>
                                 </div>
 
@@ -783,7 +774,7 @@ export default function DataIntegration() {
                                         name="vendor"
                                         value={formData.vendor}
                                         onChange={handleFormChange}
-                                        className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                        className="w-full px-3 py-2 border border-blue-500 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                                     >
                                         <option value="">Select vendor</option>
                                         {vendors.map(vendor => (
@@ -800,8 +791,8 @@ export default function DataIntegration() {
                                     <select
                                         name="frequency"
                                         value={formData.frequency}
-                                        onChange={handleFormChange}
-                                        className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                        onChange={(e) => setFormData({ ...formData, frequency: e.target.value })}
+                                        className="w-full px-3 py-2 border border-blue-500 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                                     >
                                         {frequencies.map(freq => (
                                             <option key={freq} value={freq}>{freq}</option>
@@ -809,28 +800,41 @@ export default function DataIntegration() {
                                     </select>
                                 </div>
 
-                                {/* Data Source Folder Path (Conditional) */}
-                                {sourceType === 'Local' && (
+                                {formData.type === 'Local' && (
                                     <div>
-                                        <label className="block text-sm font-medium text-gray-700 mb-2">
-                                            Data Source Folder Path
-                                        </label>
-                                        <input
-                                            type="text"
-                                            name="folderPath"
-                                            value={formData.folderPath}
-                                            onChange={handleFormChange}
-                                            placeholder="e.g., C:\\data_source or /home/data_source"
-                                            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm"
-                                        />
-                                        <p className="text-xs text-gray-500 mt-1">
-                                            Path to folder containing Excel files (.xlsx, .xls)
-                                        </p>
+                                        <label className="block text-sm font-medium text-gray-700 mb-2">Select Files</label>
+                                        <div
+                                            onClick={() => fileInputRef.current?.click()}
+                                            className="border-2 border-dashed border-gray-300 rounded-lg p-8 text-center bg-gray-50 hover:bg-gray-100 transition-colors cursor-pointer group"
+                                        >
+                                            <input
+                                                type="file"
+                                                className="hidden"
+                                                multiple
+                                                ref={fileInputRef}
+                                                onChange={handleFileSelect}
+                                                accept=".xlsx,.xls,.csv"
+                                            />
+                                            <div className="flex flex-col items-center justify-center">
+                                                <div className="p-3 bg-white rounded-full shadow-sm mb-3 group-hover:scale-110 transition-transform">
+                                                    <Download className="h-6 w-6 text-blue-500 rotate-180" />
+                                                </div>
+                                                <span className="text-sm font-medium text-gray-900">
+                                                    {selectedFiles.length > 0
+                                                        ? `${selectedFiles.length} file(s) selected`
+                                                        : "Click to select files"}
+                                                </span>
+                                                <span className="text-xs text-gray-500 mt-1">
+                                                    {selectedFiles.length > 0
+                                                        ? selectedFiles.map(f => f.name).join(', ')
+                                                        : "Excel or CSV files"}
+                                                </span>
+                                            </div>
+                                        </div>
                                     </div>
                                 )}
 
-                                {/* Database Credentials Form (Conditional) */}
-                                {sourceType === 'Database' && (
+                                {formData.type === 'Database' && (
                                     <div className="space-y-3 p-4 bg-gray-50 rounded-lg border border-gray-200">
                                         <h3 className="text-sm font-medium text-gray-900 mb-2">Database Connection</h3>
 
@@ -908,7 +912,8 @@ export default function DataIntegration() {
                                             </div>
                                         </div>
                                     </div>
-                                )}
+                                )
+                                }
 
                                 {/* Checkbox */}
                                 <div className="flex items-center">
@@ -925,11 +930,13 @@ export default function DataIntegration() {
                                 </div>
 
                                 {/* Error message */}
-                                {submitError && (
-                                    <div className="p-3 bg-red-50 border border-red-200 rounded-md text-red-700 text-sm">
-                                        {submitError}
-                                    </div>
-                                )}
+                                {
+                                    submitError && (
+                                        <div className="p-3 bg-red-50 border border-red-200 rounded-md text-red-700 text-sm">
+                                            {submitError}
+                                        </div>
+                                    )
+                                }
 
                                 {/* Buttons */}
                                 <div className="flex justify-end gap-3 mt-6">
@@ -948,9 +955,9 @@ export default function DataIntegration() {
                                         {isSubmitting ? 'Adding...' : 'Add Integration'}
                                     </button>
                                 </div>
-                            </form>
-                        </div>
-                    </div>
+                            </form >
+                        </div >
+                    </div >
                 )
             }
 

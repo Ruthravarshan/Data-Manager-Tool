@@ -11,6 +11,8 @@ export default function Analytics() {
     });
     const [metrics, setMetrics] = useState<any[]>([]);
     const [activities, setActivities] = useState<any[]>([]);
+    const [enrollmentTrend, setEnrollmentTrend] = useState<any[]>([]);
+    const [queryResolution, setQueryResolution] = useState<any>(null);
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
@@ -40,6 +42,14 @@ export default function Analytics() {
 
                 setMetrics(metricsData || []);
                 setActivities(activitiesData || []);
+
+                // Fetch Chart Data
+                const enrollmentData = await dashboardService.getEnrollmentTrend();
+                setEnrollmentTrend(enrollmentData || []);
+
+                const queryData = await dashboardService.getQueryResolution();
+                setQueryResolution(queryData);
+
             } catch (error) {
                 console.error("Failed to fetch analytics data", error);
             } finally {
@@ -110,24 +120,105 @@ export default function Analytics() {
 
                         {/* Charts */}
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                            <div className="border rounded-lg p-4">
+                            <div className="border rounded-lg p-4 bg-white">
                                 <h4 className="font-medium mb-4 flex items-center">
                                     <ChartLine className="h-4 w-4 mr-2 text-blue-600" />
-                                    Enrollment Trend
+                                    Enrollment Trend (Actual vs Expected)
                                 </h4>
-                                <div className="h-48 flex items-center justify-center bg-slate-50 rounded text-neutral-400 text-sm">
-                                    No enrollment trend data available
+                                <div className="h-48 flex items-end justify-between space-x-2 px-2">
+                                    {enrollmentTrend.length > 0 ? (
+                                        enrollmentTrend.map((item, idx) => {
+                                            const maxVal = Math.max(...enrollmentTrend.map((d: any) => Math.max(d.actual, d.expected)));
+                                            const actualHeight = (item.actual / maxVal) * 100;
+                                            const expectedHeight = (item.expected / maxVal) * 100;
+
+                                            return (
+                                                <div key={idx} className="flex flex-col items-center flex-1 group relative">
+                                                    <div className="w-full flex justify-center items-end h-32 space-x-1">
+                                                        {/* Expected Bar */}
+                                                        <div
+                                                            className="w-3 bg-gray-200 rounded-t transiton-all duration-500 relative"
+                                                            style={{ height: `${expectedHeight}%` }}
+                                                        >
+                                                            <div className="opacity-0 group-hover:opacity-100 absolute -top-8 left-1/2 -translate-x-1/2 bg-gray-800 text-white text-xs px-2 py-1 rounded z-10 whitespace-nowrap">
+                                                                Exp: {item.expected}
+                                                            </div>
+                                                        </div>
+                                                        {/* Actual Bar */}
+                                                        <div
+                                                            className="w-3 bg-blue-600 rounded-t transiton-all duration-500 relative"
+                                                            style={{ height: `${actualHeight}%` }}
+                                                        >
+                                                            <div className="opacity-0 group-hover:opacity-100 absolute -top-8 left-1/2 -translate-x-1/2 bg-blue-900 text-white text-xs px-2 py-1 rounded z-10 whitespace-nowrap">
+                                                                Act: {item.actual}
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <span className="text-xs text-slate-500 mt-2">{item.month}</span>
+                                                </div>
+                                            );
+                                        })
+                                    ) : (
+                                        <div className="w-full h-full flex items-center justify-center text-gray-400 text-sm">No data</div>
+                                    )}
                                 </div>
                             </div>
 
-                            <div className="border rounded-lg p-4">
+                            <div className="border rounded-lg p-4 bg-white">
                                 <h4 className="font-medium mb-4 flex items-center">
                                     <ChartColumn className="h-4 w-4 mr-2 text-blue-600" />
                                     Query Resolution Rate
                                 </h4>
-                                <div className="h-48 flex items-center justify-center bg-slate-50 rounded text-neutral-400 text-sm">
-                                    No query data available
-                                </div>
+                                {queryResolution ? (
+                                    <div className="flex h-48 items-center justify-around">
+                                        <div className="relative w-32 h-32 flex items-center justify-center">
+                                            {/* Simple CSS Pie representation - using a conic gradient would be better but simple circle for now or stat */}
+                                            <svg viewBox="0 0 36 36" className="w-full h-full text-blue-600 transform -rotate-90">
+                                                <path
+                                                    className="text-gray-200"
+                                                    d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"
+                                                    fill="none"
+                                                    stroke="currentColor"
+                                                    strokeWidth="3.8"
+                                                />
+                                                <path
+                                                    className="text-blue-600 drop-shadow-sm"
+                                                    strokeDasharray={`${queryResolution.rate}, 100`}
+                                                    d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"
+                                                    fill="none"
+                                                    stroke="currentColor"
+                                                    strokeWidth="3.8"
+                                                    strokeLinecap="round"
+                                                />
+                                            </svg>
+                                            <div className="absolute flex flex-col items-center">
+                                                <span className="text-2xl font-bold text-gray-800">{queryResolution.rate}%</span>
+                                                <span className="text-xs text-gray-500">Resolved</span>
+                                            </div>
+                                        </div>
+                                        <div className="space-y-3 text-sm">
+                                            <div className="flex items-center">
+                                                <div className="w-3 h-3 bg-green-500 rounded-full mr-2"></div>
+                                                <span className="text-gray-600 w-20">Resolved</span>
+                                                <span className="font-bold">{queryResolution.resolved}</span>
+                                            </div>
+                                            <div className="flex items-center">
+                                                <div className="w-3 h-3 bg-yellow-500 rounded-full mr-2"></div>
+                                                <span className="text-gray-600 w-20">Open</span>
+                                                <span className="font-bold">{queryResolution.open}</span>
+                                            </div>
+                                            <div className="flex items-center">
+                                                <div className="w-3 h-3 bg-red-500 rounded-full mr-2"></div>
+                                                <span className="text-gray-600 w-20">Pending</span>
+                                                <span className="font-bold">{queryResolution.pending}</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                ) : (
+                                    <div className="h-48 flex items-center justify-center bg-slate-50 rounded text-neutral-400 text-sm">
+                                        No query data available
+                                    </div>
+                                )}
                             </div>
                         </div>
 
